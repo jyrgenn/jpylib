@@ -25,15 +25,16 @@ class OptionValueContainer:
     def _copy_desc(self, descriptors):
         """Check and copy the descriptors."""
         result = {}
-        for optc, desc in descriptors.items():
-            print(desc)
+        for opt, desc in descriptors.items():
+            result[opt] = desc
+            if isinstance(desc, str):
+                continue
             assert isinstance(desc, collections.abc.Iterable) and len(desc) == 4,\
-                f"descriptor of option '{optc}' not iterable len 4"
-            assert isinstance(desc[0], str), f"name of option '{optc}' not a string"
-            assert desc[1] in (bool, int, str), f"invalid type option '{optc}': {desc[1]}"
-            result[optc] = desc             # single-char option
-            result[desc[0].replace("_", "-")] = desc # --long-option
-        for h_opt in "h", "help":
+                f"descriptor of option '{opt}' not iterable len 4"
+            assert isinstance(desc[0], str), f"name of option '{opt}' not a string"
+            assert desc[1] in (bool, int, str), f"invalid type option '{opt}': {desc[1]}"
+            result["-" + desc[0].replace("_", "-")] = desc # --long-option
+        for h_opt in "h", "-help":
             if h_opt not in result:
                 result[h_opt] = ("help", self._help, None, "show help on options")
         if '?' not in result:
@@ -48,7 +49,7 @@ class OptionValueContainer:
             if arg == "--":
                 break
             if arg.startswith("--"):
-                self._have_option(arg[2:])
+                self._have_option(arg[1:])
             else:
                 for c in arg[1:]:
                     self._have_option(c)
@@ -78,7 +79,19 @@ class OptionValueContainer:
 
 
     def _help(self):
-        sys.exit("help method")
+        print(self._program + ":", self._opts.get("_purpose", ""))
+        for opt in sorted(self._opts.keys()):
+            if opt.startswith("_"):
+                continue
+            sep = " "
+            if len(opt) > 1:
+                sep = "\n    " + sep
+            desc = self._opts[opt]
+            print(f" -{opt}:{sep}{desc[3]}", end="")
+            if desc[1] in (int, str):
+                print(f" ({desc[1].__name__} arg, default: {repr(desc[2])})", end="")
+            print()
+        sys.exit()
 
     def _usage(self):
         sys.exit("usage method")
@@ -98,6 +111,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
 if __name__ == "__main__":
     ovc, args = parse({
+        "_purpose": "test the option parser",
         "f": ("input_file", str, "/dev/stdin", "name of input file"),
-    }, False)
+    }, exit_on_error=False)
     print(ovc)

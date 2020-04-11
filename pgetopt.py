@@ -20,6 +20,7 @@ class OptionValueContainer:
         """
         self._program = os.path.basename(sys.argv[0])
         self._opts = descriptors
+        print(self)
         for opt, desc in descriptors.items():
             if opt.startswith("_"):
                 continue                # allow for _purpose and _help_footer
@@ -36,17 +37,17 @@ class OptionValueContainer:
         self._arguments = self._opts.get("_arguments", "")
         self._purpose = self._opts.get("_purpose", "")
         self._help_footer = self._opts.get("_help_footer", "")
-        self._long = { desc[0].replace("_", "-") : desc
-                       for desc in self._opts.values() }
+        self._long = { desc[0] : desc for desc in self._opts.values() }
         for desc in self._opts.values():
-            self.__dict__[desc[0]] = desc[2]
+            if not isinstance(desc, str):
+                self.__dict__[desc[0]] = desc[2]
         print(self)
 
     def __str__(self):
         sep = "\n    " if debug else ""
-        return self.__class__.__name__ + "(" + (", " + sep).join(
+        return self.__class__.__name__ + "(" + sep + (", " + sep).join(
             [f"{k}={repr(self.__dict__[k])}" for k in sorted(self.__dict__)])\
-            + ")"
+            + sep + ")"
 
 
     def _copy_desc(self, descriptors):
@@ -62,7 +63,7 @@ class OptionValueContainer:
             if arg == "--":
                 break
             if arg.startswith("--"):
-                self._have_option(arg[1:])
+                self._have_option(arg[2:].replace("-", "_"))
             else:
                 for c in arg[1:]:
                     self._have_option(c)
@@ -98,17 +99,21 @@ class OptionValueContainer:
         
     def _help_message(self):
         msg = self._usage_message() + "\n"
-        msg += self._purpose + "\n"
+        if self._purpose:
+            msg += self._purpose + "\n\n"
         for opt in sorted(self._opts.keys()):
             if opt.startswith("_"):
                 continue
             desc = self._opts[opt]
-            arg = desc[4] if len(desc) == 5 else "ARG"
-            msg += f" -{opt}, --{desc[0].replace('_', '-')} {arg}\n   {desc[3]}"
+            arg = ""
+            if desc[1] in (str, int):
+                arg = (desc[4] if len(desc) == 5 else "ARG")
+            msg += f" -{opt}, --{desc[0].replace('_', '-')} {arg}\n    {desc[3]}"
             if desc[1] in (int, str):
                 msg += f" ({desc[1].__name__} arg, default: {repr(desc[2])})"
             msg += "\n"
-        msg += self._help_footer
+        if self._help_footer:
+            msg += "\n" + self._help_footer
         return msg
 
     def _usage(self, exit_status=0):
@@ -135,8 +140,10 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 if __name__ == "__main__":
     ovc, args = parse({
         "_arguments": "[arg1 ...]",
-        "_purpose": "test the option parser",
-        "_help_footer": "if you like this, buy me a beer",
-        "f": ("input_file", str, "/dev/stdin", "name of input file"),
+#        "_purpose": "test the option parser",
+#        "_help_footer": "if you like this, buy me a beer",
+        "q": ("quiet", bool, False, "keep quiet (error output only)"),
+        "v": ("verbose", bool, 1, "increase verbosity"),
+        "f": ("input_file", str, "/dev/stdin", "name of input file", "PATHNAME"),
     }, exit_on_error=False)
     print(ovc)

@@ -14,8 +14,8 @@ class OptionValueContainer:
         The option descriptor is a tuple with the name, type (bool
         (argument-less, also counts), int (with int arg), str (with str arg)),
         default value, and help text; optional an argument name. The name will
-        be the name in the OVCs name space, and also the long option name after
-        s/_/-/g.
+        be the name in the OVCs name space, and also the long option name (with
+        underscores replaced by dashes(.
 
         """
         self._program = os.path.basename(sys.argv[0])
@@ -23,7 +23,7 @@ class OptionValueContainer:
         print(self)
         for opt, desc in descriptors.items():
             if opt.startswith("_"):
-                continue                # allow for _purpose and _help_footer
+                continue                # allow for _<keyword> entries
             assert isinstance(desc, Iterable) and len(desc) in (4, 5),\
                 f"descriptor of option '{opt}' not iterable len 4 or 5"
             assert isinstance(desc[0], str),\
@@ -35,7 +35,7 @@ class OptionValueContainer:
         if "?" not in self._opts:
             self._opts["?"] = ("usage", self._usage, None, "show usage briefly")
         self._arguments = self._opts.get("_arguments", "")
-        self._purpose = self._opts.get("_purpose", "")
+        self._help_header = self._opts.get("_help_header", "")
         self._help_footer = self._opts.get("_help_footer", "")
         self._long = { desc[0] : desc for desc in self._opts.values() }
         for desc in self._opts.values():
@@ -44,16 +44,11 @@ class OptionValueContainer:
         print(self)
 
     def __str__(self):
+        """Return a string representation of the OptionValueContainer."""
         sep = "\n    " if debug else ""
         return self.__class__.__name__ + "(" + sep + (", " + sep).join(
             [f"{k}={repr(self.__dict__[k])}" for k in sorted(self.__dict__)])\
             + sep + ")"
-
-
-    def _copy_desc(self, descriptors):
-        """Check and copy the descriptors."""
-        self._opts = {}
-        return self._opts
 
 
     def _parse(self, args):
@@ -63,27 +58,33 @@ class OptionValueContainer:
             if arg == "--":
                 break
             if arg.startswith("--"):
-                self._have_option(arg[2:].replace("-", "_"))
+                self._have_option(arg[2:].replace("-", "_"), True)
             else:
                 for c in arg[1:]:
-                    self._have_option(c)
+                    self._have_option(c, False)
         return self, self._args
 
 
-    def _have_option(self, opt):
+    def _have_option(self, opt, is_long_option):
+        value = None
+        if is_long_option:
+            parts = opt.split("=", 1)
+            if len(parts) > 1:
+                opt, value = parts
         if opt not in self._opts:
             raise KeyError(f"{self._program}: unknown option '-{opt}'")
         name, typ, *_ = self._opts[opt]
         if typ == bool:
             self.__dict__[name] += 1
         elif typ in (str, int):
-            self._set_optarg(opt)
+            self._set_optarg(opt, value)
         elif callable(typ):
             typ()
                 
         
-    def _set_optarg(self, opt):
-        value = self._args.pop(0)
+    def _set_optarg(self, opt, value):
+        if value is None:
+            value = self._args.pop(0)
         if self._opts[opt][1] == int:
             value = int(value)
         if isinstance(self.__dict__[self._opts[opt][0]], list):
@@ -99,8 +100,8 @@ class OptionValueContainer:
         
     def _help_message(self):
         msg = self._usage_message() + "\n"
-        if self._purpose:
-            msg += self._purpose + "\n\n"
+        if self._help_header:
+            msg += self._help_header + "\n\n"
         for opt in sorted(self._opts.keys()):
             if opt.startswith("_"):
                 continue
@@ -140,7 +141,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 if __name__ == "__main__":
     ovc, args = parse({
         "_arguments": "[arg1 ...]",
-#        "_purpose": "test the option parser",
+#        "_help_header": "test the option parser",
 #        "_help_footer": "if you like this, buy me a beer",
         "q": ("quiet", bool, False, "keep quiet (error output only)"),
         "v": ("verbose", bool, 1, "increase verbosity"),

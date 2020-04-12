@@ -54,10 +54,10 @@ class OptionValueContainer:
             arg = self._args.pop(0)
             if arg == "--": break
             if arg.startswith("--"):
-                self._have_option(arg[2:].replace("-", "_"), True)
+                self._have_option(arg[2:].replace("-", "_"))
             else:
                 for c in arg[1:]:
-                    self._have_option(c, False)
+                    self._have_option(c)
         self._check_argc()
         return self, self._args
 
@@ -81,9 +81,9 @@ class OptionValueContainer:
                 raise IndexError("too few arguments, needs at least", min)
         
 
-    def _have_option(self, opt, is_long_option):
+    def _have_option(self, opt):
         value = None
-        if is_long_option:
+        if len(opt) > 1:
             parts = opt.split("=", 1)
             if len(parts) > 1:
                 opt, value = parts
@@ -261,16 +261,4 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
             ovc._usage(" ".join(map(str, e.args)), exit_status=1)
         raise(e)
 
-
-if __name__ == "__main__":
-    ovc, args = parse({
-        "s": ("schmooze", bool, 0, "increase schmooziness"),
-        "o": ("output_file", str, None, "output file (or stdout)", "NAME"),
-        "n": ("repetitions", int, 3, "number of repetitions"),
-        "d": ("debug", str, [], "debug topics", "DEBUG_TOPIC"),
-        "_arguments": ("string_to_print", "[...]"),
-        "_help_header": "print a string a number of times",
-        "_help_footer": "This is just an example program.",
-    }, exit_on_error=True)
-    print(ovc)
-    print(ovc._values(), args)
+# EOF

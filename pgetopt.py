@@ -227,11 +227,13 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     line arguments. Example:
 
       ovc, args = pgetopt.parse({
-        "s": ("schmooze", bool, 0, "increase schmooziness"),
-        "o": ("output_file", str, None, "output file (or stdout)", "NAME"),
-        "n": ("repetitions", int, 3, "number of repetitions"),
-        "d": ("debug", str, [], "debug topics", "DEBUG_TOPIC"),
-        "_arguments": ("string_to_print", "..."),
+      # opt: (name,          type, default value, helptext[, arg name])
+        "s": ("schmooze",    bool, 0,    "increase schmooziness"),
+        "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
+        "n": ("repetitions", int,  3,    "number of repetitions"),
+        "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
+      # keyword:        value
+        "_arguments":   ("string_to_print", "..."),
         "_help_header": "print a string a number of times",
         "_help_footer": "This is just an example program.",
       }

@@ -192,15 +192,15 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     If the key begins with an underscore, it may be one of these
     keywords:
 
-      "_help_header": a string to be printed with 'help', between the
-      usage and the option explanations;
+      "_help_header": a string to print with 'help', between the usage
+      and the option explanations;
 
-      "_help_footer": a string to be printed with 'help', after the
-      option explanations;
+      "_help_footer": a string to print with 'help', after the option
+      explanations;
 
-      "_arguments": a sequence with the argument names; it is used to
-      print the arguments in the 'usage' and to determine the minimum
-      and maximum number of arguments:
+      "_arguments": a string to print in the usage to describe the
+      non-option arguments, or, to check the argument count, a sequence
+      with the argument names:
     
          - a normal string counts as one argument towards minimum and
            maximum
@@ -221,10 +221,10 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     terminate the program after printing the message. (This behaviour
     can be deactivated by setting a '-h' and/or a '-?' option.)
 
-    In case of a normal termination of the parse() function (i.e.
-    options and number of arguments okay, or exit_on_error passed as
-    false), it returns an OptionValueContainer and the remaining command
-    line arguments. Example:
+    In case of a normal return of the parse() function (i.e. options and
+    number of arguments okay, or exit_on_error passed as false), it
+    returns an OptionValueContainer and the remaining command line
+    arguments. Example:
 
       ovc, args = pgetopt.parse({
       # opt: (name,          type, default value, helptext[, arg name])
@@ -233,7 +233,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         "n": ("repetitions", int,  3,    "number of repetitions"),
         "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
       # keyword:        value
-        "_arguments":   ("string_to_print", "..."),
+        "_arguments":   ("string_to_print", "[...]"),
         "_help_header": "print a string a number of times",
         "_help_footer": "This is just an example program.",
       }
@@ -242,7 +242,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         ovc.verbose: the number of -s options counted,
         ovc.output_file: the parameter of -o or --output-file, or None
         ovc.repetitions: the parameter of -n or --repetitions, or 3
-        ovc.debug: a list with parameters given to all -d or --debug
+        ovc.debug: a list with all parameters given to -d or --debug
 
     Parameters to int or str options are taken from the next argument;
     with long options, "--option=parameter" is also possible.

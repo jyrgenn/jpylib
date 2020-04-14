@@ -216,7 +216,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         "n": ("repetitions", int,  3,    "number of repetitions"),
         "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
       # keyword:        value
-        "_arguments":   ("string_to_print", "[...]"),
+        "_arguments":   ("string_to_print", "..."),
         "_help_header": "print a string a number of times",
         "_help_footer": "This is just an example program.",
       }

@@ -2,7 +2,7 @@
 # -*- fill-column: 72 -*-
 
 """POSIX-compatible command-line option parser (plus long options).
-See the documentation of the parse() function for more information.
+See the parse() function for more information.
 """
 
 import os
@@ -10,13 +10,12 @@ import sys
 
 
 class OptionValueContainer:
-    def __init__(self, descriptors):
-        """The argument is a dict with optchar as key, descriptor as value.
+    def __init__(self, descriptors, args):
+        """Arguments: dict optchar => descriptor, and the command-line args.
 
         The option descriptor is a tuple with the name, type, default
-        value, and help text; optionally an argument name. See the
-        documentation of the parse() function below for more
-        information.
+        value, and help text + optional argument name. See the parse()
+        function below for more information.
 
         """
         self._program = os.path.basename(sys.argv[0])
@@ -29,7 +28,7 @@ class OptionValueContainer:
             assert isinstance(desc[0], str),\
                 f"name of option '{opt}' not a string"
             assert desc[1] in (bool, int, str),\
-                f"invalid type option '{opt}': {desc[1]}"
+                f"invalid option type '{opt}': {desc[1]}"
             self.__dict__[desc[0]] = desc[2]
 
         if "h" not in self._opts:
@@ -38,32 +37,21 @@ class OptionValueContainer:
             self._opts["?"] = ("usage", None, self._usage, "show usage briefly")
         for field in "_arguments", "_help_header", "_help_footer":
             self.__dict__[field] = self._opts.get(field)
-        self._long = { desc[0] : desc for desc in self._opts.values() }
-
-
-    def __str__(self):
-        """Return a string representation of the object."""
-        return self.__class__.__name__ + "<" + ", ".join(
-            [f"{k}={repr(self.__dict__[k])}" for k in sorted(self.__dict__)])\
-            + ">"
-
-
-    def _parse(self, args):
+        self._long = { desc[0].replace("_", "-") : desc
+                       for desc in self._opts.values() }
         self._args = args
+
+
+    def _parse(self):
         while self._args and self._args[0].startswith("-"):
             arg = self._args.pop(0)
             if arg == "--": break
             if arg.startswith("--"):
-                self._have_option(arg[2:].replace("-", "_"))
+                self._have_opt(arg[2:])
             else:
                 for c in arg[1:]:
-                    self._have_option(c)
-        self._check_argc()
-        return self, self._args
-
-
-    def _check_argc(self):
-        """Check the argument count if _arguments is a list or tuple."""
+                    self._have_opt(c)
+        # check number of arguments if specified in _arguments
         if isinstance(self._arguments, (list, tuple)):
             min = max = 0
             inf = False
@@ -72,16 +60,16 @@ class OptionValueContainer:
                     inf = True
                 if arg.startswith("["):
                     max += len(arg.split(" "))
-                else:
+                elif not arg == "...":
                     min += 1
                     max += 1
             if not inf and len(self._args) > max:
                 raise IndexError("too many arguments, at most", max)
             if len(self._args) < min:
                 raise IndexError("too few arguments, needs at least", min)
-        
 
-    def _have_option(self, opt):
+
+    def _have_opt(self, opt):
         value = None
         if len(opt) > 1:
             parts = opt.split("=", 1)
@@ -117,16 +105,9 @@ class OptionValueContainer:
             self.__dict__[name] = value
 
 
-    def _values(self):
-        """Return the option values as a dictionary."""
-        return { opt: self.__dict__[opt] for opt in map(
-            lambda d: d[0], self._opts.values()) if opt in self.__dict__ }
-
-
-    def _help(self, exit_status=0):
-        print(self._help_message(),
-              file=sys.stdout if not exit_status else sys.stderr)
-        sys.exit(exit_status)
+    def _help(self):
+        print(self._help_message())
+        sys.exit()
 
         
     def _help_message(self):
@@ -150,13 +131,12 @@ class OptionValueContainer:
         return msg
 
 
-    def _usage(self, error="", exit_status=2, dash_h=True):
+    def _usage(self, error="", exit_status=2):
         out = sys.stdout if not exit_status else sys.stderr
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
         print(self._usage_message(), file=out)
-        if dash_h:
-            print("run with '-h' to get help on command options")
+        print("run with '-h' to get help on command options", file=out)
         sys.exit(exit_status)
 
 
@@ -255,9 +235,10 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       ovc._usage_message(): the corresponding messages as stringsq
 
     """
-    ovc = OptionValueContainer(descriptors)
+    ovc = OptionValueContainer(descriptors, args)
     try:
-        return ovc._parse(args)
+        ovc._parse()
+        return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
             ovc._usage(" ".join(map(str, e.args)), exit_status=1)

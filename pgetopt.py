@@ -91,6 +91,9 @@ class OptionValueContainer:
 
     def _set_optarg(self, opt, desc, value):
         if value is None:
+            if not self._args:
+                raise IndexError(
+                    f"not enough arguments: option '{opt}' needs argument")
             value = self._args.pop(0)
         name = desc[0]
         if desc[1] == int:

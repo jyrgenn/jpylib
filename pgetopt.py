@@ -7,6 +7,7 @@ See the parse() function for more information.
 
 import os
 import sys
+import copy
 
 
 class OptionValueContainer:
@@ -19,8 +20,8 @@ class OptionValueContainer:
 
         """
         self._program = os.path.basename(sys.argv[0])
-        self._opts = descriptors
-        for opt, desc in descriptors.items():
+        self._opts = copy.deepcopy(descriptors)
+        for opt, desc in self._opts.items():
             if opt.startswith("_"):
                 continue                # allow for _<keyword> entries
             assert hasattr(type(desc), '__iter__') and len(desc) in (4, 5),\
@@ -30,7 +31,6 @@ class OptionValueContainer:
             assert desc[1] in (bool, int, str),\
                 f"invalid option type '{opt}': {desc[1]}"
             self.__dict__[desc[0]] = desc[2]
-
         if "h" not in self._opts:
             self._opts["h"] = ("help", None, self._help, "show help on options")
         if "?" not in self._opts:
@@ -145,6 +145,12 @@ class OptionValueContainer:
 
     def _usage_message(self):
         return f"usage: {self._program} [options] {' '.join(self._arguments)}"
+
+
+    def values(self):
+        return { key: val for key, val in self.__dict__.items()
+                 if not key.startswith("_") }
+
 
 
 def parse(descriptors, args=sys.argv[1:], exit_on_error=True):

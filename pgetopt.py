@@ -241,7 +241,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       ovc._usage(): the help and usage function, respectively
     
       ovc._help_message(),
-      ovc._usage_message(): the corresponding messages as stringsq
+      ovc._usage_message(): the corresponding messages as strings
 
     """
     ovc = OptionValueContainer(descriptors, args)

@@ -39,7 +39,7 @@ class OptionValueContainer:
             self.__dict__[field] = self._opts.get(field)
         self._long = { desc[0].replace("_", "-") : desc
                        for desc in self._opts.values() }
-        self._args = args
+        self._args = args[:]
 
 
     def _parse(self):
@@ -109,11 +109,13 @@ class OptionValueContainer:
 
 
     def _help(self):
+        """Print the help message and exit."""
         print(self._help_message())
         sys.exit()
 
         
     def _help_message(self):
+        """Return a detailed help message."""
         msg = self._usage_message() + "\n"
         if self._help_header:
             msg += self._help_header + "\n\n"
@@ -135,6 +137,7 @@ class OptionValueContainer:
 
 
     def _usage(self, error="", exit_status=2):
+        """Print usage message (with optional error message) and exit."""
         out = sys.stdout if not exit_status else sys.stderr
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
@@ -144,10 +147,12 @@ class OptionValueContainer:
 
 
     def _usage_message(self):
+        """Return a brief usage message."""
         return f"usage: {self._program} [options] {' '.join(self._arguments)}"
 
 
-    def values(self):
+    def _values(self):
+        """Return a dict of the options and their values (for testing)."""
         return { key: val for key, val in self.__dict__.items()
                  if not key.startswith("_") }
 
@@ -165,8 +170,8 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       underscores with dashes);
 
       (2) type of the option, which may be bool for options without
-      arguments, or str or int for options with an argument of the
-      respective type;
+      arguments (actually counters), or str or int for options with an
+      argument of the respective type;
 
       (3) the default value, which can be a starting counter (or False)
       for bool options, or an integer or string value for int or str

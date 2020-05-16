@@ -50,9 +50,9 @@ class OptionValueContainer:
             if arg.startswith("--"):
                 self._have_opt(arg[2:])
             else:
-                for c in arg[1:]:
-                    self._have_opt(c)
-        # check number of arguments if specified in _arguments
+                arg = arg[1:]
+                while arg:
+                    arg = self._have_opt(arg[0], arg[1:])
         if isinstance(self._arguments, (list, tuple)):
             min = max = 0
             inf = False
@@ -70,54 +70,55 @@ class OptionValueContainer:
                 raise IndexError("too few arguments, needs at least", min)
 
 
-    def _have_opt(self, opt):
+    def _have_opt(self, opt, arg=None):
         value = None
         if len(opt) > 1:
             parts = opt.split("=", 1)
             if len(parts) > 1:
                 opt, value = parts
-            desc = self._long.get(opt)
-        else:
-            desc = self._opts.get(opt)
-        if desc is None:
-            raise KeyError("unknown option", f"'{opt}'")
+        desc = self._long.get(opt)
+        if not desc:
+            raise KeyError("unknown option", repr(opt))
         name, typ, defval, *_ = desc
         if typ == bool:
+            if value:
+                raise TypeError("option does not take an argument", repr(opt))
             self.__dict__[name] += 1
         else:
+            if arg:
+                value = arg
+                arg = ""
             if callable(defval):
                 value = defval()
             self._set_optarg(opt, desc, value)
+        return arg
 
 
     def _set_optarg(self, opt, desc, value):
         if value is None:
             if not self._args:
-                raise IndexError(
-                    f"not enough arguments: option '{opt}' needs argument")
+                raise IndexError(f"option needs argument", repr(opt))
             value = self._args.pop(0)
-        name = desc[0]
         if desc[1] == int:
             try:
                 value = int(value)
             except:
-                raise TypeError(f"value for '{name}' option must be integer:",
-                                repr(value))
-        if isinstance(self.__dict__[name], list):
-            self.__dict__[name].append(value)
+                raise TypeError(f"value for option must be integer", repr(opt))
+        if isinstance(self.__dict__[desc[0]], list):
+            self.__dict__[desc[0]].append(value)
         else:
-            self.__dict__[name] = value
+            self.__dict__[desc[0]] = value
 
 
     def ovc_help(self):
         """Print the help message and exit."""
-        print(self.ovc_help_message())
+        print(self.ovc_help_msg())
         sys.exit()
 
         
-    def ovc_help_message(self):
+    def ovc_help_msg(self):
         """Return a detailed help message."""
-        msg = self.ovc_usage_message() + "\n"
+        msg = self.ovc_usage_msg() + "\n"
         if self._help_header:
             msg += self._help_header + "\n\n"
         for opt in sorted(self._opts.keys()):
@@ -142,12 +143,12 @@ class OptionValueContainer:
         out = sys.stdout if not exit_status else sys.stderr
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
-        print(self.ovc_usage_message(), file=out)
+        print(self.ovc_usage_msg(), file=out)
         print("run with '-h' to get help on command options", file=out)
         sys.exit(exit_status)
 
 
-    def ovc_usage_message(self):
+    def ovc_usage_msg(self):
         """Return a brief usage message."""
         return f"usage: {self._program} [options] {' '.join(self._arguments)}"
 
@@ -245,8 +246,8 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       ovc.ovc_help(),
       ovc.ovc_usage(): the help and usage function, respectively
     
-      ovc.ovc_help_message(),
-      ovc.ovc_usage_message(): the corresponding messages as strings
+      ovc.ovc_help_msg(),
+      ovc.ovc_usage_msg(): the corresponding messages as strings
 
     """
     ovc = OptionValueContainer(descriptors, args)

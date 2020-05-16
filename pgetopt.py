@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- fill-column: 72 -*-
+# Copyright (C) Juergen Nickelsen <ni@w21.org>, see LICENSE.
 
 """POSIX-compatible command-line option parser (plus long options).
 See the parse() function for more information.
@@ -32,9 +31,11 @@ class OptionValueContainer:
                 f"invalid option type '{opt}': {desc[1]}"
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
-            self._opts["h"] = ("help", None, self._help, "show help on options")
+            self._opts["h"] = ("help", None, self.ovc_help,
+                               "show help on options")
         if "?" not in self._opts:
-            self._opts["?"] = ("usage", None, self._usage, "show usage briefly")
+            self._opts["?"] = ("usage", None, self.ovc_usage,
+                               "show usage briefly")
         for field in "_arguments", "_help_header", "_help_footer":
             self.__dict__[field] = self._opts.get(field)
         self._long = { desc[0].replace("_", "-") : desc
@@ -108,15 +109,15 @@ class OptionValueContainer:
             self.__dict__[name] = value
 
 
-    def _help(self):
+    def ovc_help(self):
         """Print the help message and exit."""
-        print(self._help_message())
+        print(self.ovc_help_message())
         sys.exit()
 
         
-    def _help_message(self):
+    def ovc_help_message(self):
         """Return a detailed help message."""
-        msg = self._usage_message() + "\n"
+        msg = self.ovc_usage_message() + "\n"
         if self._help_header:
             msg += self._help_header + "\n\n"
         for opt in sorted(self._opts.keys()):
@@ -136,23 +137,23 @@ class OptionValueContainer:
         return msg
 
 
-    def _usage(self, error="", exit_status=2):
+    def ovc_usage(self, error="", exit_status=2):
         """Print usage message (with optional error message) and exit."""
         out = sys.stdout if not exit_status else sys.stderr
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
-        print(self._usage_message(), file=out)
+        print(self.ovc_usage_message(), file=out)
         print("run with '-h' to get help on command options", file=out)
         sys.exit(exit_status)
 
 
-    def _usage_message(self):
+    def ovc_usage_message(self):
         """Return a brief usage message."""
         return f"usage: {self._program} [options] {' '.join(self._arguments)}"
 
 
-    def _values(self):
-        """Return a dict of the options and their values (for testing)."""
+    def ovc_values(self):
+        """Return a dict of options and their values (mainly for testing)."""
         return { key: val for key, val in self.__dict__.items()
                  if not key.startswith("_") }
 
@@ -216,9 +217,8 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     can be deactivated by setting a '-h' and/or a '-?' option.)
 
     In case of a normal return of the parse() function (i.e. options and
-    number of arguments okay, or exit_on_error passed as false), it
-    returns an OptionValueContainer and the remaining command line
-    arguments. Example:
+    number of arguments okay), it returns an OptionValueContainer and
+    a list of the remaining command line arguments. Example:
 
       ovc, args = pgetopt.parse({
       # opt: (name,          type, default value, helptext[, arg name])
@@ -233,20 +233,20 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       }
 
       On return, ovc has the following fields:
-        ovc.verbose: the number of -s options counted,
+        ovc.schmooze:    the number of -s options counted,
         ovc.output_file: the parameter of -o or --output-file, or None
         ovc.repetitions: the parameter of -n or --repetitions, or 3
-        ovc.debug: a list with all parameters given to -d or --debug
+        ovc.debug:       a list with all parameters given to -d or --debug
 
     Parameters to int or str options are taken from the next argument;
     with long options, "--option=parameter" is also possible.
 
     Other potentially useful fields of ovc:
-      ovc._help(),
-      ovc._usage(): the help and usage function, respectively
+      ovc.ovc_help(),
+      ovc.ovc_usage(): the help and usage function, respectively
     
-      ovc._help_message(),
-      ovc._usage_message(): the corresponding messages as strings
+      ovc.ovc_help_message(),
+      ovc.ovc_usage_message(): the corresponding messages as strings
 
     """
     ovc = OptionValueContainer(descriptors, args)
@@ -255,7 +255,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc._usage(" ".join(map(str, e.args)), exit_status=1)
+            ovc.ovc_usage(" ".join(map(str, e.args)), exit_status=1)
         raise(e)
 
 # EOF

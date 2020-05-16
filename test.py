@@ -76,7 +76,7 @@ def run_test(testdef):
             errors += check("ovc", r_ovc, None, eq)
             continue
         #prob(tests[0][1])
-        errors += check("values", r_ovc._values(), c_values, equal)
+        errors += check("values", r_ovc.ovc_values(), c_values, equal)
         errors += check("args", r_args, c_args, equal)
         print("FAIL" if errors else "OK")
     return errors

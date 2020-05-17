@@ -27,7 +27,7 @@ class OptionValueContainer:
                 f"descriptor of option '{opt}' not sequence len 4 or 5"
             assert isinstance(desc[0], str),\
                 f"name of option '{opt}' not a string"
-            assert desc[1] in (bool, int, str),\
+            assert desc[1] in (bool, int, str, None),\
                 f"invalid option type '{opt}': {desc[1]}"
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
@@ -88,7 +88,7 @@ class OptionValueContainer:
             if arg:
                 value = arg
                 arg = ""
-            if callable(defval):
+            if value is None and callable(defval):
                 value = defval()
             self._set_optarg(opt, desc, value)
         return arg
@@ -169,32 +169,32 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
       (1) name of the option, used in the returned namespace and as the
       name of the corresponding long option name (after replacing
-      underscores with dashes);
+      underscores with dashes)
 
       (2) type of the option, which may be bool for options without
       arguments (actually counters), or str or int for options with an
-      argument of the respective type;
+      argument of the respective type
 
       (3) the default value, which can be a starting counter (or False)
       for bool options, or an integer or string value for int or str
       options, respectively, or a list, to which each option argument
-      will be appended (for multi-value options);
+      will be appended (for multi-value options)
 
-      (4) the description of the option, for the help text;
+      (4) the description of the option for the help text
 
       (5) the (optional) name of the option's argument for the help
-      text (defaults to 'ARG').
+      text (defaults to 'ARG')
 
     If the key begins with an underscore, it may be one of these
     keywords:
 
-      "_help_header": a string to print with 'help', between the usage
-      and the option explanations;
+      "_help_header": string to print with 'help', between the usage and
+      the option explanations
 
-      "_help_footer": a string to print with 'help', after the option
-      explanations;
+      "_help_footer": string to print with 'help', after the option
+      explanations
 
-      "_arguments": a string to print in the usage to describe the
+      "_arguments": string to print in the usage to describe the
       non-option arguments, or, to check the argument count, a sequence
       with the argument names:
     

@@ -80,11 +80,11 @@ class OptionValueContainer:
         else:
             desc = self._opts.get(opt)
         if not desc:
-            raise KeyError("unknown option", repr(opt))
+            raise KeyError("unknown option", opt)
         name, typ, defval, *_ = desc
         if typ == bool:
             if value:
-                raise TypeError("option does not take an argument", repr(opt))
+                raise TypeError("option does not take an argument", opt)
             self.__dict__[name] += 1
         else:
             if arg:
@@ -99,13 +99,13 @@ class OptionValueContainer:
     def _set_optarg(self, opt, desc, value):
         if value is None:
             if not self._args:
-                raise IndexError(f"option needs argument", repr(opt))
+                raise IndexError(f"option needs argument", opt)
             value = self._args.pop(0)
         if desc[1] == int:
             try:
                 value = int(value)
             except:
-                raise TypeError(f"value for option must be integer", repr(opt))
+                raise TypeError(f"value for option must be integer", opt)
         if isinstance(self.__dict__[desc[0]], list):
             self.__dict__[desc[0]].append(value)
         else:
@@ -258,7 +258,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc.ovc_usage(" ".join(map(str, e.args)), exit_status=1)
+            ovc.ovc_usage(f"{e.args[0]}:" + repr(e.args[1]), exit_status=1)
         raise(e)
 
 # EOF

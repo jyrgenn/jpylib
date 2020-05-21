@@ -76,7 +76,9 @@ class OptionValueContainer:
             parts = opt.split("=", 1)
             if len(parts) > 1:
                 opt, value = parts
-        desc = self._long.get(opt)
+            desc = self._long.get(opt)
+        else:
+            desc = self._opts.get(opt)
         if not desc:
             raise KeyError("unknown option", repr(opt))
         name, typ, defval, *_ = desc

@@ -1,7 +1,7 @@
 # Copyright (C) Juergen Nickelsen <ni@w21.org>, see LICENSE.
 
-"""POSIX-compatible command-line option parser (plus long options).
-See the parse() function for more information.
+"""POSIX-conformant command-line option parser (plus long options)
+See the parse() function for details.
 """
 
 import os
@@ -13,9 +13,9 @@ class OptionValueContainer:
     def __init__(self, descriptors, args):
         """Arguments: dict optchar => descriptor, and the command-line args.
 
-        The option descriptor is a tuple with the name, type, default
-        value, and help text + optional argument name. See the parse()
-        function below for more information.
+        A descriptor is a tuple with the name, type, default value, help
+        text, + optional argument name. See the parse() function below
+        for details.
 
         """
         self._program = os.path.basename(sys.argv[0])
@@ -41,6 +41,21 @@ class OptionValueContainer:
         self._long = { desc[0].replace("_", "-") : desc
                        for desc in self._opts.values() }
         self._args = args[:]
+        self._min = self._max = None
+        if isinstance(self._arguments, (list, tuple)):
+            min = max = 0
+            inf = False
+            for arg in self._arguments:
+                if arg.count("..."):
+                    inf = True
+                if arg.startswith("["):
+                    max += len(arg.split(" "))
+                elif not arg == "...":
+                    min += 1
+                    max += 1
+            self._min = min
+            self._max = None if inf else max
+            self._arguments = " ".join(self._arguments)
 
 
     def _parse(self):
@@ -53,21 +68,10 @@ class OptionValueContainer:
                 arg = arg[1:]
                 while arg:
                     arg = self._have_opt(arg[0], arg[1:])
-        if isinstance(self._arguments, (list, tuple)):
-            min = max = 0
-            inf = False
-            for arg in self._arguments:
-                if arg.count("..."):
-                    inf = True
-                if arg.startswith("["):
-                    max += len(arg.split(" "))
-                elif not arg == "...":
-                    min += 1
-                    max += 1
-            if not inf and len(self._args) > max:
-                raise IndexError("too many arguments, at most", max)
-            if len(self._args) < min:
-                raise IndexError("too few arguments, needs at least", min)
+        if self._min is not None and len(self._args) < self._min:
+            raise IndexError("too few arguments, needs at least", self._min)
+        if self._max is not None and len(self._args) > self._max:
+                raise IndexError("too many arguments, at most", self._max)
 
 
     def _have_opt(self, opt, arg=None):
@@ -152,14 +156,13 @@ class OptionValueContainer:
 
     def ovc_usage_msg(self):
         """Return a brief usage message."""
-        return f"usage: {self._program} [options] {' '.join(self._arguments)}"
+        return f"usage: {self._program} [options] {self._arguments}"
 
 
     def ovc_values(self):
         """Return a dict of options and their values (mainly for testing)."""
         return { key: val for key, val in self.__dict__.items()
                  if not key.startswith("_") }
-
 
 
 def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
@@ -258,7 +261,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc.ovc_usage(f"{e.args[0]}:" + repr(e.args[1]), exit_status=1)
+            ovc.ovc_usage(f"{e.args[0]}: " + repr(e.args[1]), exit_status=1)
         raise(e)
 
 # EOF

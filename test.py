@@ -63,7 +63,7 @@ def run_test(testdef):
         r_errtype = r_ovc = r_args = r_e = None
         try:
             r_ovc, r_args = pgetopt.parse(desc, c_argv, exit_on_error=False)
-        except (IndexError, KeyError, TypeError) as e:
+        except (IndexError, KeyError, TypeError, AssertionError) as e:
             r_e = e
         except Exception as e:
             raise(e)
@@ -84,7 +84,37 @@ def run_test(testdef):
 
 # name, desc{}, *args_values[ (name, args[], values[], exception type, args), ]
 tests = [
-    ("d0",
+    ("Assert short Desc",
+     {
+         "s": ("schmooze", bool, 0),
+     },
+     ("no args", [], None, AssertionError, None)
+    ),
+    ("Assert long Desc",
+     {
+         "s": ("schmooze", bool, 0, "huhu", "huhu", "huhu"),
+     },
+     ("no args", [], None, AssertionError, None)
+    ),
+    ("Assert Desc type",
+     {
+         "s": 17,
+     },
+     ("no args", [], None, AssertionError, None)
+    ),
+    ("Assert name type",
+     {
+         "s": (12, bool, 0, "increase schmooziness"),
+     },
+     ("no args", [], None, AssertionError, None)
+    ),
+    ("Assert type type",
+     {
+         "s": ("schmooze", int, 0, "increase schmooziness"),
+     },
+     ("no args", [], None, AssertionError, None)
+    ),
+    ("case from doc",
      {
          "s": ("schmooze", bool, 0, "increase schmooziness"),
          "o": ("output_file", str, None, "output file (or stdout)", "NAME"),

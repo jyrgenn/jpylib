@@ -2,34 +2,67 @@
 
 [this is still work in progress]
 
-pgetopt -- Python package for POSIX-compatible command-line option
+pgetopt -- Python package for POSIX-conformant command-line option
 parsing, plus long options.
 
-I wrote this not because there wasn't any option parsing package
+Motivation
+----------
+
+I wrote this not because there wasn't an option parsing package
 available in Python -- I know there are a few --, but because I
 didn't like those I saw. Argparse, Optparse, Click, they all do too
 much for my taste, and at the same time are IMO cumbersome to use.
 
 What I want is a really simple user interface, one that makes simple
-things simple. I don't want to do everything ever imaginable, or
-automate sophisticated argument verification in an option parser. I
-want it to parse the options, with potential arguments, and
+things simple. I don't want to automate sophisticated argument
+verification in an option parser. I want it to parse the options,
+with potential arguments, and maybe even count the remaining
+arguments to be able to throw an error for missing or surplus ones
+right there.
 
-TODO: An option and its argument may or may not appear as separate
-tokens. (In other words, the whitespace separating them is
-optional.) Thus, ‘-o foo’ and ‘-ofoo’ are equivalent.
+POSIX Conformance
+-----------------
+
+I want option parsing POSIX-conformant[1]. This means,
+(single-letter) options can be clustered; also, the argument of a
+single-letter option (if it takes one) may be placed in the next
+argv[] element, or in the same one, meaning that after that option
+letter, the rest of that argv[] element is the argument, not more
+clustered options. In other words, the whitespace separating option
+and argument is optional. Thus, '-o foo' and '-ofoo' are equivalent.
+
+But mainly, option parsing stops when the first argv[] element is
+encountered that is neither an option or an option argument, i.e. a
+regular argument. Example:
+
+    blark -v -o /tmp/blark.out -i 3 gnuddle fuddle -a ruddle
+
+Here, '-v' is an option, '-o' and '-i' are options with an argument,
+and 'gnuddle' is the first regular argument. Option parsing stops
+here, and starting with 'gnuddle' all other arguments are considered
+regular arguments, including '-a'. This is mandated by POSIX, and
+this is where Argparse, Optparse, and Click all fall short.
+
+(Option parsing also stops when a '--' argument is found, which can
+be useful if a regular argument follows that starts with a '-'.)
+
+[1] The Open Group Base Specifications Issue 7, 2018 edition
+    IEEE Std 1003.1-2017
+    https://pubs.opengroup.org/onlinepubs/9699919799/
 
 
-TODO:
+Simplicity
+----------
 
-If the SYNOPSIS of a standard utility shows an option with a
-mandatory option-argument (as with [ -c option_argument] in the
-example), a conforming application shall use separate arguments for
-that option and its option-argument. However, a conforming
-implementation shall also permit applications to specify the option
-and option-argument in the same argument string without intervening
-<blank> characters.
+One of the main goals was simplicity of the user interface. That
+implies, to some degree, a limitation of what the option parsing
+will do, but I think I found the right balance. To specify and parse
+the options of the hypothetical 'blark' program used as example
+above, all we need is this:
 
-The Open Group Base Specifications Issue 7, 2018 edition
-IEEE Std 1003.1-2017
-https://pubs.opengroup.org/onlinepubs/9699919799/
+    ovc, args = pgetopt.parse({
+        ("v", bool, False, "be verbose"),
+        ("o", string, "/dev/stdout", "output file"),
+        ("i", int, 1, "iterations"),
+    })
+

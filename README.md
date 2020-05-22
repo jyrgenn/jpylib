@@ -3,6 +3,7 @@
 pgetopt module -- POSIX-conformant command-line option parser (plus
 long options)
 
+
 Motivation
 ----------
 
@@ -20,6 +21,7 @@ right there, and to generate a brief usage or detailed help message.
 
 I also want it to be POSIX conformant, because that is the
 traditional Unix style.
+
 
 POSIX Conformance[1]
 --------------------
@@ -73,10 +75,10 @@ dictionary describing the options. The one-letter strings as keys
 are the option letters; their values are the option descriptors,
 tuples or lists of four or five elements. These are:
 
-(1) the name of the option in the namespace returned, also (with _
-    replaced by -) the name of the corresponding long option
-(2) the type: `bool` (boolean, actually a counter), str (needs
-    argument), int (needs integer argument)
+(1) the name of the option in the namespace returned, also (with `_`
+    replaced by `-`) the name of the corresponding long option
+(2) the type: `bool` (boolean, actually a counter), `str` (needs
+    argument), `int` (needs integer argument)
 (3) the default value (or counter start in case of bool); it may be
     a list collecting the arguments of multiple occurrances of the
     option
@@ -91,18 +93,19 @@ keeping the whole thing short and easy to read.
 
 Then, there may be a few key/value pairs where the key is a keyword:
 
-`_arguments`:: either a string describing the command's arguments,
-or a tuple or list with those. In the latter case, it is used
-to determine the minimum and maximum number of arguments -- each
-normal string counts as one, a `...` means an arbitrary number of
-arguments. So, `("source", "destination")` means exactly two
-arguments, `("gnumm", "...")` means one or more.
+`_arguments`
+: either a string describing the command's arguments, or a tuple or
+list with those. In the latter case, it is used to determine the
+minimum and maximum number of arguments -- each normal string counts
+as one, a `...` means an arbitrary number of arguments. So,
+`("source", "destination")` means exactly two arguments, `("gnumm",
+"...")` means one or more.
 
-`_help_header`:: a string that will be printed at the top of the
-help message.
+`_help_header`
+: a string that will be printed at the top of the help message.
 
-`_help_footer`:: a string that will be printed at the bottom of the
-help message.
+`_help_footer`
+: a string that will be printed at the bottom of the help message.
 
 The two values returned are an option value container, where the
 values can be access with `ovc.verbose`, `ovc.output_file` etc., and
@@ -141,3 +144,12 @@ The help and usage messages are available from the option value
 container by calling the `ovc_help_msg` and `ovc_usage_msg` methods,
 which return the respective message. Or call the `ovc_help` and
 `ovc_usage` methods, which print their message and end the program.
+
+
+Examples and Testing
+--------------------
+
+The examples above can also be found in the `examples/` directory.
+
+`test.py` is the beginning of a test suite, but it is rather in the
+early stages, not to say immature.

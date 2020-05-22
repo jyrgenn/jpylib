@@ -124,7 +124,8 @@ exercises nearly all features of this package:
         "_help_footer": "This is just an example program.",
     })
 
-On return, the option value container `ovc` has the following fields:  
+| On return, the option value container `ovc` has the following fields:     |
+|---------------------------------------------------------------------------|
 | `ovc.schmooze`    | the number of `-s` options counted                    |
 | `ovc.output_file` | the parameter of `-o` or `--output-file`, or `None`   |
 | `ovc.repetitions` | the parameter of `-n` or `--repetitions`, or `3`      |

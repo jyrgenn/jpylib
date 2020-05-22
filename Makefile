@@ -19,3 +19,7 @@ install:
 preview:
 	markdown README.md > $(PREVIEW)
 	open $(PREVIEW)
+
+clean:
+	-rm -rf *~
+	cd package && $(MAKE) clean

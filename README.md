@@ -1,6 +1,6 @@
 [_this is still work in progress_]
 
-pgetopt module -- POSIX-conformant command-line option parser (plus
+pgetopt module — POSIX-conformant command-line option parser (plus
 long options)
 
 
@@ -8,7 +8,7 @@ Motivation
 ----------
 
 I wrote this not because there wasn't an option parser available for
-Python -- I know there are a few -- but because I didn't like those
+Python — I know there are a few — but because I didn't like those
 I saw. Argparse, Optparse, Click, they all do more than I need, and
 because they do, thay are at the same time cumbersome to use.
 
@@ -75,15 +75,15 @@ dictionary describing the options. The one-letter strings as keys
 are the option letters; their values are the option descriptors,
 tuples or lists of four or five elements. These are:
 
-(1) the name of the option in the namespace returned, also (with `_`
-    replaced by `-`) the name of the corresponding long option
-(2) the type: `bool` (boolean, actually a counter), `str` (needs
-    argument), `int` (needs integer argument)
-(3) the default value (or counter start in case of bool); it may be
-    a list collecting the arguments of multiple occurrances of the
-    option
-(4) the text for the help output
-(5) [optional] a placeholder for the argument
+1. the name of the option in the namespace returned, also (with `_`
+   replaced by `-`) the name of the corresponding long option
+2. the type: `bool` (boolean, actually a counter), `str` (needs
+   argument), `int` (needs integer argument)
+3. the default value (or counter start in case of bool); it may be
+   a list collecting the arguments of multiple occurrances of the
+   option
+4. the text for the help output
+5. [optional] a placeholder for the argument
 
 IMO these descriptors with 4 or at most 5 elements is short enough
 to use positional parameters without sacrificing clarity or ease of
@@ -96,7 +96,7 @@ Then, there may be a few key/value pairs where the key is a keyword:
 `_arguments`
 : either a string describing the command's arguments, or a tuple or
 list with those. In the latter case, it is used to determine the
-minimum and maximum number of arguments -- each normal string counts
+minimum and maximum number of arguments — each normal string counts
 as one, a `...` means an arbitrary number of arguments. So,
 `("source", "destination")` means exactly two arguments, `("gnumm",
 "...")` means one or more.
@@ -132,7 +132,7 @@ this in the context of a program.)
 When the program using this gets called with an invalid option or
 the wrong number of arguments (in this case: none), or when it sees
 the `-?` or `--usage` option, a corresponding error and a brief
-usage message is printed and the program exits with an exit status
+usage message are printed and the program exits with an exit status
 of 1. When the program is called with `-h` or `--help`, a more
 detailed help message is printed, consisting of the usage, the
 `_help_header` value (if present), an explanation of the options

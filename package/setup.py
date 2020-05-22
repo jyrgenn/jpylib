@@ -2,12 +2,12 @@ import os
 import sys
 import setuptools
 
-with open("README", "r") as fh:
+with open("PKG_README", "r") as fh:
     # filter out the comment lines from the README
     description_lines = [ l for l in fh if not l.startswith("#") ]
 
 setuptools.setup(
-    name="pgetopt",
+    name="pgetopt-jyrgenn",
     version=os.environ["PKG_VERSION"] or sys.exit("missing $PKG_VERSION env."),
     author="Juergen Nickelsen",
     author_email="ni@w21.org",

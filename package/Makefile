@@ -1,12 +1,12 @@
 # create and maybe upload a package for the vrf-mlg library
 
 MODULE = pgetopt
-PKGNAME = pgetopt
+PKGNAME = pgetopt-jyrgenn
 PKGVERS = $(shell date +%Y.%m%d.%H%M)
 PYPIREPO = https://test.pypi.org
 PYPIUPLD = $(PYPIREPO)/legacy/
 PYPIDNLD = $(PYPIREPO)/simple/	# why "simple"?
-PRODUCTS = $(MODULE) $(MODULE).egg-info build dist \
+PRODUCTS = $(MODULE) *.egg-info build dist \
            $(shell find . -name __pycache__)
 PYPICRED = -u jyrgenn -p $$(getsecret pypi/jyrgenn)
 
@@ -30,7 +30,7 @@ upload: pkg
 	python3 -m twine upload $(PYPICRED) --repository-url $(PYPIUPLD) dist/*
 
 install:
-	python3 -m pip install --index-url $(PYPIDNLD) --no-deps $(PKGNAME)
+	python3 -m pip install -U --index-url $(PYPIDNLD) --no-deps $(PKGNAME)
 
 clean:
 	-rm -rf $(PRODUCTS) *~

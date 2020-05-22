@@ -124,7 +124,6 @@ exercises nearly all features of this package:
         "_help_footer": "This is just an example program.",
     })
 
-|-------------------|-------------------------------------------------------|
 | `ovc.schmooze`    | the number of `-s` options counted                    |
 | `ovc.output_file` | the parameter of `-o` or `--output-file`, or `None`   |
 | `ovc.repetitions` | the parameter of `-n` or `--repetitions`, or `3`      |

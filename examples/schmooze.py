@@ -6,7 +6,7 @@ import pgetopt
 
 ovc, args = pgetopt.parse({
     # opt: (name,        type, default value, helptext[, arg name])
-    "s": ("schmooze",    bool, 0,    "increase schmooziness"),
+    "s": ("schmooze",    bool, 0,    "more schmooziness"),
     "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
     "n": ("repetitions", int,  3,    "number of repetitions"),
     "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),

@@ -11,11 +11,9 @@ import copy
 
 class OptionValueContainer:
     def __init__(self, descriptors, args):
-        """Arguments: dict optchar => descriptor, and the command-line args.
+        """Arguments: dict optchar => descriptor; command-line args.
 
-        A descriptor is a tuple with the name, type, default value, help
-        text, + optional argument name. See the parse() function below
-        for details.
+        See the parse() function below for details.
 
         """
         self._program = os.path.basename(sys.argv[0])
@@ -110,10 +108,10 @@ class OptionValueContainer:
                 value = int(value)
             except:
                 raise TypeError(f"value for option must be integer", opt)
-        if isinstance(self.__dict__[desc[0]], list):
-            self.__dict__[desc[0]].append(value)
+        if isinstance(getattr(self, desc[0], None), list):
+            getattr(self, desc[0]).append(value)
         else:
-            self.__dict__[desc[0]] = value
+            setattr(self, desc[0], value)
 
 
     def ovc_help(self):
@@ -150,7 +148,7 @@ class OptionValueContainer:
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
         print(self.ovc_usage_msg(), file=out)
-        print("run with '-h' to get help on command options", file=out)
+        print("use '-h' option to get help on options", file=out)
         sys.exit(exit_status)
 
 
@@ -190,13 +188,12 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       (5) the (optional) name of the option's argument for the help
       text (defaults to 'ARG')
 
-    If the key begins with an underscore, it may be one of these
-    keywords:
+    A key may also be one of these keywords:
 
-      "_help_header": string to print with 'help', between the usage and
-      the option explanations
+      "_help_header": string to print with 'help' before the option
+      explanations
 
-      "_help_footer": string to print with 'help', after the option
+      "_help_footer": string to print with 'help' after the option
       explanations
 
       "_arguments": string to print in the usage to describe the
@@ -219,16 +216,15 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     immediately when the option is seen. 'help' prints a description of
     the options, framed by the _help_header and the _help_footer;
     'usage' prints a brief summary of the program's parameters. Both
-    terminate the program after printing the message. (This behaviour
-    can be deactivated by setting a '-h' and/or a '-?' option.)
+    terminate the program after printing the message.
 
-    In case of a normal return of the parse() function (i.e. options and
-    number of arguments okay), it returns an OptionValueContainer and
-    a list of the remaining command line arguments. Example:
+    In case of a normal return of parse() (i.e. options and number of
+    arguments okay), it returns an OptionValueContainer and a list of
+    the remaining command line arguments. Example:
 
       ovc, args = pgetopt.parse({
       # opt: (name,          type, default value, helptext[, arg name])
-        "s": ("schmooze",    bool, 0,    "increase schmooziness"),
+        "s": ("schmooze",    bool, 0,    "more schmooziness"),
         "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
         "n": ("repetitions", int,  3,    "number of repetitions"),
         "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
@@ -239,20 +235,20 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       }
 
       On return, ovc has the following fields:
-        ovc.schmooze:    the number of -s options counted,
-        ovc.output_file: the parameter of -o or --output-file, or None
-        ovc.repetitions: the parameter of -n or --repetitions, or 3
-        ovc.debug:       a list with all parameters given to -d or --debug
+        ovc.schmooze:    number of -s options counted,
+        ovc.output_file: parameter of -o or --output-file, or None
+        ovc.repetitions: parameter of -n or --repetitions, or 3
+        ovc.debug:       list with all parameters given to -d or --debug
 
     Parameters to int or str options are taken from the next argument;
     with long options, "--option=parameter" is also possible.
 
     Other potentially useful fields of ovc:
-      ovc.ovc_help(),
-      ovc.ovc_usage(): the help and usage function, respectively
+      ovc.ovc_help():  help function
+      ovc.ovc_usage(): usage function
     
       ovc.ovc_help_msg(),
-      ovc.ovc_usage_msg(): the corresponding messages as strings
+      ovc.ovc_usage_msg(): get corresponding messages as strings
 
     """
     ovc = OptionValueContainer(descriptors, args)

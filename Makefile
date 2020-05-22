@@ -11,3 +11,6 @@ pkg:
 
 upload:
 	cd package && $(MAKE) upload
+
+install:
+	cd package && $(MAKE) install

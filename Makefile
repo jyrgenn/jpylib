@@ -1,3 +1,4 @@
+PREVIEW =  $$TMPDIR/pgetopt-README.html
 
 default:
 	@echo This Makefile has no actionable default target.
@@ -14,3 +15,7 @@ upload:
 
 install:
 	cd package && $(MAKE) install
+
+preview:
+	markdown README.md > $(PREVIEW)
+	open $(PREVIEW)

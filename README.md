@@ -96,10 +96,8 @@ Then, there may be a few key/value pairs where the key is a keyword:
 `_arguments`
 : either a string describing the command's arguments, or a tuple or
 list with those. In the latter case, it is used to determine the
-minimum and maximum number of arguments — each normal string counts
-as one, a `...` means an arbitrary number of arguments. So,
-`("source", "destination")` means exactly two arguments, `("gnumm",
-"...")` means one or more.
+minimum and maximum number of arguments. See below at "Argument
+count checking" for more information.
 
 `_help_header`
 : a string that will be printed at the top of the help message.
@@ -126,6 +124,12 @@ exercises nearly all features of this package:
         "_help_footer": "This is just an example program.",
     })
 
+On return, the option value container `ovc` has the following fields:  
+| `ovc.schmooze`    | the number of `-s` options counted                    |
+| `ovc.output_file` | the parameter of `-o` or `--output-file`, or `None`   |
+| `ovc.repetitions` | the parameter of `-n` or `--repetitions`, or `3`      |
+| `ovc.debug`       | a list with all parameters given to `-d` or `--debug` |
+
 (See the `schmooze.py` program in the `examples/` directory to see
 this in the context of a program.)
 
@@ -144,6 +148,69 @@ The help and usage messages are available from the option value
 container by calling the `ovc_help_msg` and `ovc_usage_msg` methods,
 which return the respective message. Or call the `ovc_help` and
 `ovc_usage` methods, which print their message and end the program.
+
+
+Argument count checking
+-----------------------
+
+As mentioned above, if the `_arguments` field of the options
+descriptor is a list or tuple, the number of actual arguments is
+checked against the minimum and maximum number of arguments derived
+from this sequence. This is intended to capture the tradition of
+Unix command argument synopses and works as follows:
+
+ * Each "normal" string increases the minimum and the maximum by
+   one.
+
+ * The string `"..."` sets the maximum to infinity, but does not
+   change the minimum.
+
+ * Any other string that contains `...` sets the maximum to
+   infinity, but also increases the minimum by one.
+
+ * A string that begins with `[` is split by blanks, and the number
+   of its parts increases the maximum, but does not change the
+   minimum.
+
+So this means, for example:
+
+ * `("source", "destination")`: minimum = 2, maximum = 2
+
+ * `("file1", "...")`: minimum = 1, maximum none
+
+ * `("file1", "...", "destination")`: minimum = 2, maximum none
+
+ * `("file1...", "destination")`: minimum = 2, maximum none
+
+ * `("arg1", "[arg2]")`: minimum = 1, maximum = 2
+
+ * `("arg1", "[arg2 [arg3 arg4]]")`: minimum = 1, maximum = 4  
+   (In this case a number of 3 arguments would be illegal, but there
+   is no provision to check for that.)
+
+The latter illustrates how I try to achieve a balance between
+simplicity of the interface and the brevity of the code on one side
+and the capabilties of this module on the other: Being able to check
+for more than a minimum and a maximum number of arguments would
+either have made the interface or the implementation more complex,
+and given that this is rarely needed, I chose to omit that.
+
+
+Limitations
+-----------
+
+The simple interface and a compact implementation result in a few
+limitations.
+
+ * There can be no single-letter option without a logn option and
+   vice versa.
+
+ * Checking for errors in the passed option descriptors dictionary
+   is rudimentary.
+
+ * Passing an argument to the help option in the same argv[] element
+   results in `ovc.help` being set to that value, and not a call to
+   the `ovc_help` method.
 
 
 Examples and Testing

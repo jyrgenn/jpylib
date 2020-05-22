@@ -124,7 +124,6 @@ exercises nearly all features of this package:
         "_help_footer": "This is just an example program.",
     })
 
-| Field             | Value                                                 |
 |-------------------|-------------------------------------------------------|
 | `ovc.schmooze`    | the number of `-s` options counted                    |
 | `ovc.output_file` | the parameter of `-o` or `--output-file`, or `None`   |
@@ -203,8 +202,8 @@ Limitations
 The simple interface and a compact implementation result in a few
 limitations.
 
- * There can be no single-letter option without a logn option and
-   vice versa.
+ * There can be no single-letter option without a corresponding long
+   option and vice versa.
 
  * Checking for errors in the passed option descriptors dictionary
    is rudimentary.

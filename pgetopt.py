@@ -142,7 +142,7 @@ class OptionValueContainer:
         return msg
 
 
-    def ovc_usage(self, error="", exit_status=2):
+    def ovc_usage(self, error="", exit_status=64):
         """Print usage message (with optional error message) and exit."""
         out = sys.stdout if not exit_status else sys.stderr
         if error:
@@ -154,7 +154,8 @@ class OptionValueContainer:
 
     def ovc_usage_msg(self):
         """Return a brief usage message."""
-        return f"usage: {self._program} [options] {self._arguments}"
+        args = "<arguments>" if self._arguments is None else self._arguments
+        return f"usage: {self._program} [options] {args}"
 
 
     def ovc_values(self):
@@ -257,7 +258,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc.ovc_usage(f"{e.args[0]}: " + repr(e.args[1]), exit_status=1)
+            ovc.ovc_usage(f"{e.args[0]}: " + repr(e.args[1]))
         raise(e)
 
 # EOF

@@ -74,7 +74,7 @@ right to me. To specify and parse the options of the hypothetical
         "_arguments": ("gnumm", "..."),
     })
 
-The parse() function has, in the usual case, one argument, a
+The `parse()` function has, in the usual case, one argument, a
 dictionary describing the options. The one-letter strings as keys
 are the option letters; their values are the option descriptors,
 tuples or lists of four or five elements. These are:

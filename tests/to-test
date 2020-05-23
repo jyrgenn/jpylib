@@ -3,8 +3,9 @@ Things to test
 
 *: to do; +: done; @: ongoing; #: blocked; -: rejected
 
- * own help/usage options
+ + option arguments, same and other argv[] element, long and short
 
- * option value callback
+ + option value callback
 
- * option arguments, same and other argv[] element, long and short
+ + own help/usage options
+

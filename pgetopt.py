@@ -36,11 +36,11 @@ class OptionValueContainer:
                                "show usage briefly")
         for field in "_arguments", "_help_header", "_help_footer":
             self.__dict__[field] = self._opts.get(field)
-        self._long = { desc[0].replace("_", "-") : desc
-                       for desc in self._opts.values() }
+        self._long = { v[0].replace("_", "-"): v
+                       for k, v in self._opts.items() if len(k) == 1 }
         self._args = args[:]
         self._min = self._max = None
-        if hasattr(type(self._arguments), '__iter__'):
+        if self._arguments is not None and type(self._arguments) != str:
             min = max = 0
             inf = False
             for arg in self._arguments:

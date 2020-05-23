@@ -13,7 +13,7 @@ README.md: lib/README.md-sans-toc Makefile
 	./lib/include.py $<>$@
 
 test:
-	./test.py
+	./tests/run-tests.py
 
 pkg:
 	$(PKGMAKE) pkg

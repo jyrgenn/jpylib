@@ -6,3 +6,5 @@ Things to test
  * own help/usage options
 
  * option value callback
+
+ * option arguments, same and other argv[] element, long and short

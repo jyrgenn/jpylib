@@ -40,7 +40,7 @@ class OptionValueContainer:
                        for desc in self._opts.values() }
         self._args = args[:]
         self._min = self._max = None
-        if isinstance(self._arguments, (list, tuple)):
+        if hasattr(type(self._arguments), '__iter__'):
             min = max = 0
             inf = False
             for arg in self._arguments:

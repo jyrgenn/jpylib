@@ -2,7 +2,7 @@ import os
 import sys
 import setuptools
 
-with open("PKG_README", "r") as fh:
+with open("README.md", "r") as fh:
     # filter out the comment lines from the README
     description_lines = [ l for l in fh if not l.startswith("#") ]
 

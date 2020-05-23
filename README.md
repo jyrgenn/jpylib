@@ -173,11 +173,17 @@ message is printed, consisting of the usage, the `_help_header`
 value (if present), an explanation of the options constructed from
 the option descriptors, and the `_help_footer` value (if present).
 
-
 The help and usage messages are available from the option value
 container by calling the `ovc_help_msg` and `ovc_usage_msg` methods,
 which return the respective message. Or call the `ovc_help` and
 `ovc_usage` methods, which print their message and end the program.
+
+You can override the `-?`/`--usage` and the `-h`/`--help` options by
+specifying your own descriptor for these options in the descriptors
+dictionary. However, you cannot override the `--usage` option with
+any other short option than `-?`, or `--help` with any other short
+option than `-h`, as the short options are the decisive parameters
+here.
 
 
 Argument count checking

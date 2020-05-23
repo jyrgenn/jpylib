@@ -1,8 +1,11 @@
-[_this is still work in progress_]
+pgetopt module
+==============
 
-pgetopt module — POSIX-conformant command-line option parser (plus
-long options)
-
+This package implements a command-line option parser. The underlying
+idea was to have it POSIX conformant, additionally implement long
+options, while keeping the right balance between simplicity and
+clarity of the user interface, brevity of the code, and the
+implemented capabilities.
 
 Motivation
 ----------
@@ -26,13 +29,14 @@ traditional Unix style.
 POSIX Conformance[1]
 --------------------
 
-POSIX-conformance means, (single-letter) options can be clustered;
-also, the argument of a single-letter option (if it takes one) may
-be placed in the next argv[] element, or in the same one, meaning
-that after an option letter that needs and argument, the rest of
-that argv[] element is the argument, not more clustered options. In
-other words, the whitespace separating option and argument is
-optional. Thus, `-o foo` and `-ofoo` are equivalent.
+POSIX-conformance means, in the context of command-line options,
+(single-letter) options can be clustered; also, the argument of a
+single-letter option (if it demands one) may be placed in the next
+argv[] element, or in the same one, meaning that after an option
+letter that demands an argument, the rest of that argv[] element, if
+any, is the option argument, not more clustered options. In other
+words, the whitespace separating option and argument is optional.
+Thus, `-o foo` and `-ofoo` are equivalent.
 
 But mainly, option parsing stops when the first argv[] element is
 encountered that is neither an option or an option argument, i.e. a
@@ -124,6 +128,11 @@ exercises nearly all features of this package:
         "_help_footer": "This is just an example program.",
     })
 
+After this call, the option value container `ovc` contains (among
+others) the following attributes:
+
+| Attribute         | Value                                                 |
+|-------------------|-------------------------------------------------------|
 | `ovc.schmooze`    | the number of `-s` options counted                    |
 | `ovc.output_file` | the parameter of `-o` or `--output-file`, or `None`   |
 | `ovc.repetitions` | the parameter of `-n` or `--repetitions`, or `3`      |
@@ -210,6 +219,23 @@ limitations.
  * Passing an argument to the help option in the same argv[] element
    results in `ovc.help` being set to that value, and not a call to
    the `ovc_help` method.
+
+
+Hidden feature: option value functions
+--------------------------------------
+
+A feature not mentioned in the main documentation, the docstring of
+the `parse()` function, is the ability to call a function when an
+option is encountered. If the type of an option is specified as
+`None` and the default value is a callable function, this function
+will be called when the option is encountered on the command line,
+and its return value (which must not be `None`) will be used as the
+option's value.
+
+This is not a fully planned feature; rather, it fell more or less
+accidentally out of the way the default `help` and `usage` options
+were implemented. At the moment I do not really see a useful
+application for this feature, but maybe someone else will.
 
 
 Examples and Testing

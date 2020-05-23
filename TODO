@@ -2,9 +2,9 @@
 
 *: to do; +: done; @: in progress; #:blocked; -: rejected
 
- * describe "type is callable" trick
-
  * more tests, moar!
+
+ + describe "default value is callable" trick
 
  + `schmooze.py -sssn 2 --debug=me --debug and -d you blubber` arg
    passing bug

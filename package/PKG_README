@@ -1,5 +1,5 @@
 # -*- text -*-
-# first line must be the short description
+# first non-comment line must be the short description:
 POSIX-conformant command-line option parser (plus long options)
 
 Use it like this:
@@ -29,7 +29,7 @@ print a help message or a brief usage message, respectively.
 
 `args` holds the remaining arguments behind the last option.
 
-Call help(pgetopt) for details.
+Call help(pgetopt) for details.  
 More information at <https://git.w21.org/python_modules/pgetopt> 
 
 [ni@w21.org 2020-05-22]

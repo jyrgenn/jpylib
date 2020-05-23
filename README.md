@@ -3,7 +3,7 @@ pgetopt module
 
 This package implements a command-line option parser. The underlying
 idea was to have it POSIX conformant, additionally implement long
-options, while keeping the right balance between simplicity and
+options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
@@ -221,8 +221,8 @@ limitations.
    the `ovc_help` method.
 
 
-Hidden feature: option value functions
---------------------------------------
+Semi-hidden feature: option value callbacks
+-------------------------------------------
 
 A feature not mentioned in the main documentation, the docstring of
 the `parse()` function, is the ability to call a function when an
@@ -236,6 +236,10 @@ This is not a fully planned feature; rather, it fell more or less
 accidentally out of the way the default `help` and `usage` options
 were implemented. At the moment I do not really see a useful
 application for this feature, but maybe someone else will.
+
+I have to admit that this feature isn't the prime example for
+clarity of the user interface. But then it can safely be just
+ignored.
 
 
 Examples and Testing

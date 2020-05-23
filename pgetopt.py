@@ -101,13 +101,13 @@ class OptionValueContainer:
     def _set_optarg(self, opt, desc, value):
         if value is None:
             if not self._args:
-                raise IndexError(f"option needs argument", opt)
+                raise IndexError("option needs argument", opt)
             value = self._args.pop(0)
         if desc[1] == int:
             try:
                 value = int(value)
             except:
-                raise TypeError(f"value for option must be integer", opt)
+                raise TypeError("value for option must be integer", opt)
         if isinstance(getattr(self, desc[0], None), list):
             getattr(self, desc[0]).append(value)
         else:
@@ -178,15 +178,15 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       arguments (actually counters), or str or int for options with an
       argument of the respective type
 
-      (3) the default value, which can be a starting counter (or False)
-      for bool options, or an integer or string value for int or str
+      (3) default value, which can be a starting counter (or False) for
+      bool options, or an integer or string value for int or str
       options, respectively, or a list, to which each option argument
       will be appended (for multi-value options)
 
-      (4) the description of the option for the help text
+      (4) description of the option for the help text
 
-      (5) the (optional) name of the option's argument for the help
-      text (defaults to 'ARG')
+      (5) (optional) name of the option's argument for the help text
+      (defaults to 'ARG')
 
     A key may also be one of these keywords:
 
@@ -197,8 +197,8 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       explanations
 
       "_arguments": string to print in the usage to describe the
-      non-option arguments, or, to check the argument count, a sequence
-      with the argument names:
+      non-option arguments, or, to have the argument count checked,
+      a sequence with the argument names:
     
          - a normal string counts as one argument towards minimum and
            maximum

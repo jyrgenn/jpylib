@@ -217,8 +217,8 @@ limitations.
    is rudimentary.
 
  * Passing an argument to the help option in the same argv[] element
-   results in `ovc.help` being set to that value, and not a call to
-   the `ovc_help` method.
+   (as in `--help=3`) results in `ovc.help` being set to that value,
+   and not in a call to the `ovc_help` method.
 
 
 Semi-hidden feature: option value callbacks

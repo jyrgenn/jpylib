@@ -159,7 +159,7 @@ class OptionValueContainer:
 
 
     def ovc_values(self):
-        """Return a dict of options and their values (mainly for testing)."""
+        """Return a dict of options and their values (for testing)."""
         return { key: val for key, val in self.__dict__.items()
                  if not key.startswith("_") }
 
@@ -198,8 +198,8 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       explanations
 
       "_arguments": string to print in the usage to describe the
-      non-option arguments, or, to have the argument count checked,
-      a sequence with the argument names:
+      non-option arguments, or, for argument count checking, a sequence
+      with the argument names:
     
          - a normal string counts as one argument towards minimum and
            maximum

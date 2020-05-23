@@ -2,7 +2,7 @@
 
 MODULE = pgetopt
 PKGNAME = pgetopt-jyrgenn
-PKGVERS = $(shell date +%Y.%m%d.%H%M)
+PKGVERS = $(shell date +%Y.%m%d.%H%M | sed 's/\.0/./g')
 PYPIREPO = https://test.pypi.org
 PYPIUPLD = $(PYPIREPO)/legacy/
 PYPIDNLD = $(PYPIREPO)/simple/	# why "simple"?
@@ -19,6 +19,9 @@ default:
 pkg: copy
 	-rm -f dist/*
 	PKG_VERSION=$(PKGVERS) python3 setup.py sdist bdist_wheel
+	git diff --exit-code --raw && \
+          git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS)
+	git push --tags
 
 # copy the actual module in place; set the version number in a variable
 copy:

@@ -22,8 +22,12 @@ with potential arguments, and maybe even count the remaining
 arguments to be able to throw an error for missing or surplus ones
 right there, and to generate a brief usage or detailed help message.
 
-I also want it to be POSIX conformant, because that is the
-traditional Unix style.
+But mainly I want to impose as little obligation as possible on the
+calling program -- a single function call ought to be all to gain
+easy access to the option values.
+
+I also want the option parsing to be POSIX conformant, because that
+is the traditional Unix style.
 
 
 POSIX Conformance[1]
@@ -204,17 +208,133 @@ either have made the interface or the implementation more complex,
 and given that this is rarely needed, I chose to omit that.
 
 
+The `parse()` function
+----------------------
+
+Above, the `parse()` function has been shown to be called with one
+argument only, the option descriptors dictionary. There are two
+optional arguments that can be useful in some applications:
+
+`args`: The actual argument list from which the options shall be
+parsed. By default, this is taken from `sys.argv[1:]`, which will be
+adequate in most cases. But if, for instance, a program has
+subcommands that in turn have their own options and arguments, the
+subcommand's argument list can be passed here explicitly.
+
+`exit_on_error`: If this value is true, which it is by default, the
+`ovc_usage()` method will be called to print an error message and
+exit the program when an invalid option, a missing option argument,
+or the wrong number of arguments is seen. If it is false, an
+exception is raised instead. These exceptions are listed below.
+
+
+Exceptions
+----------
+
+When an invalid option, a missing option argument, or the wrong
+number of arguments is seen in the argument list, an exception is
+raised. Every one of these exceptions has two arguments, a message
+and an object (the option in question or the minimum or maximum
+number of arguments). These are as follows:
+
+| Type       | Message                             | Argument |
+|------------|-------------------------------------|----------|
+| IndexError | "too few arguments, needs at least" | minimum  |
+| IndexError | "too many arguments, at most"       | maximum  |
+| KeyError   | "unknown option"                    | option   |
+| TypeError  | "option does not take an argument"  | option   |
+| IndexError | "option needs argument"             | option   |
+| TypeError  | "value for option must be integer"  | option   |
+
+(The option argument is the option as found on the command line,
+meaning it can be the short form or the long form.)
+
+If you want to handle these exception by yourself, see the `parse()`
+function for an example.
+
+In addition to these exceptions, an `AssertionError` exception can
+be thrown in the following cases:
+
+ * An option descriptor is not an iterable of length 4 or 5.
+ * The name of an option in the descriptor is not a string.
+ * The specified type of the option is not `bool`, `int`, `str`, or
+   `None`.
+
+
+The OptionValueContainer
+------------------------
+
+The `OptionValueContainer`, short OVC and in my code often `ovc`, is
+the first of the two values returned by the `pgetopt.parse()`
+function. When it is returned, it contains the option values as
+attributes with the names of the options. So, if as option has been
+specified as `"v": ("verbose", bool, False, "turn on verbose mode")`
+in the option descriptors argument, its value is available as
+`ovc.verbose` in the returned OVC.
+
+Besides that, there are a few other fields in the OVC that may be of
+interest. Their names begin with `ovc_` or `_` to avoid conflicts
+with option names.
+
+`ovc.ovc_usage`: Method that prints a brief usage message describing
+the command arguments (from the `_arguments` value) and a reference
+to the `-h` option and exits the program. This is used internally
+when the actual options or the number of arguments are incorrect,
+but it can also be used by the user. Optional argument `error` may
+contain an error message that is printed with the usage message;
+optional argument `exit_status` may specify the exit status used
+(default: 2)
+
+`ovc.ovc_usage_msg`: Method that returns the usage message mentioned
+above as a string.
+
+`ovc.ovc_help`: Method that prints a more detailed help message and
+exits the program. The help message consists of the usage message
+(see above), the `_help_header` argument of the descriptors
+dictionary to `parse()`, a description of the options (constructed
+from the descriptors), and the `_help_footer` argument.
+
+`ovc.ovc_help_msg`: Method that returns the above help message as a
+string.
+
+The other fields, whose names begin with `_`, are not meant as
+official interfaces, but could be subject to change in future
+versions.
+
+`ovc._args`: The arguments as passed to the `parse()` function or,
+by default, taken from `sys.argv[]`.
+
+`ovc._arguments`, `ovc._help_footer`, `ovc._help_header`: The
+corresponding fields of the descriptors argument.
+
+`ovc._have_opt`: Method used internally during option parsing.
+
+`ovc._long`: Option descriptors dictionary by long option name.
+
+`ovc._max`: Maximum number of arguments as calculated from the
+`_arguments` description, or None.
+
+`ovc._min`: Minimum number of arguments as calculated from the
+`_arguments` description, or None.
+
+`ovc._parse`: Method used internally for option parsing.
+
+`ovc._program`: The name of the program, from `sys.argv[0]`.
+
+`ovc._set_optarg`: Method used internally during option parsing.
+
+
 Limitations
 -----------
 
-The simple interface and a compact implementation result in a few
-limitations.
+The simple interface and the brevity of the implementation result in
+a few limitations.
 
  * There can be no single-letter option without a corresponding long
    option and vice versa.
 
  * Checking for errors in the passed option descriptors dictionary
-   is rudimentary.
+   is rudimentary (see "Exceptions" above).
 
  * Passing an argument to the help option in the same argv[] element
    (as in `--help=3`) results in `ovc.help` being set to that value,
@@ -238,8 +358,8 @@ were implemented. At the moment I do not really see a useful
 application for this feature, but maybe someone else will.
 
 I have to admit that this feature isn't the prime example for
-clarity of the user interface. But then it can safely be just
-ignored.
+clarity of the user interface. But then it was an afterthought and
+can safely be just ignored.
 
 
 Examples and Testing
@@ -249,3 +369,6 @@ The examples above can also be found in the `examples/` directory.
 
 `test.py` is the beginning of a test suite, but it is rather in the
 early stages, not to say immature.
+
+
+[Juergen Nickelsen <ni@w21.org> 2020-05]

@@ -29,7 +29,7 @@ copy:
 	sed 's/\$$__package_version\$$/$(PKGVERS)/g' ../$(MODULE).py \
 	    > $(MODULE)/__init__.py
 
-upload: pkg
+upload:
 	python3 -m twine upload $(PYPICRED) --repository-url $(PYPIUPLD) dist/*
 
 install:

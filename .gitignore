@@ -1,3 +1,4 @@
 /examples/pgetopt.py
 README.toc
 /tests/pgetopt.py
+/tests/.coverage

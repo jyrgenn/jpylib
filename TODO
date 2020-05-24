@@ -2,7 +2,10 @@
 
 *: to do; +: done; @: ongoing; #: blocked; -: rejected
 
- * more tests, moar!
+ * More tests, moar! Actually check for test coverage of the code,
+   and add missing cases. | Actually, a first check using the
+   "coverage" tool shows the situation isn't really bad to begin
+   with.
 
  + describe "default value is callable" trick
 

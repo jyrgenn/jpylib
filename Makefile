@@ -15,7 +15,11 @@ README.toc: lib/README.md-sans-toc
 	gh-md-toc --hide-header --hide-footer $< | tail +2 > README.toc
 
 test:
-	./tests/run-tests.py
+	python3 -m unittest discover tests
+
+coverage:
+	coverage run -m unittest discover tests
+	coverage report -m
 
 pkg:
 	$(PKGMAKE) pkg

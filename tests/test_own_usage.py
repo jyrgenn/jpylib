@@ -60,16 +60,16 @@ class HelpTestcase(unittest.TestCase):
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, help=6))
         self.assertTrue(help_called)
         
-    def test_usage_short(self):
+    def test_usage_short0(self):
         """own usage option"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", bool, False, "opposite of overly"),
             "_arguments": (),
-        }, ["-v", "-u"], exit_on_error=False)
+        }, ["-v", "-?"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, usage=1))
 
-    def test_usage_short(self):
+    def test_usage_short1(self):
         """own usage option"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
@@ -78,7 +78,7 @@ class HelpTestcase(unittest.TestCase):
         }, ["-v", "--usage", "4"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, usage=4))
 
-    def test_usage_short0(self):
+    def test_usage_short2(self):
         """own usage option"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),

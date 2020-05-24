@@ -1,4 +1,4 @@
-;; -*- major-mode: text -*-
+;; -*- text -*-
 
 pgetopt module
 ==============
@@ -413,8 +413,8 @@ Building the PyPi package
 -------------------------
 
 The PyPi package is built and uploaded to PyPi by running `make pkg`
-and `make upload`, respectively. Currently, this is done to
-`test.pypi.org`.
+and `make upload`, respectively. The package URL is
+<https://pypi.org/project/pgetopt-jyrgenn/>.
 
 
 [Juergen Nickelsen <ni@w21.org> 2020-05]

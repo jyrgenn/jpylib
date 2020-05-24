@@ -11,8 +11,8 @@ doc: README.md
 README.md: lib/README.md-sans-toc lib/include.py Makefile README.toc
 	./lib/include.py $<>$@
 
-README.toc: lib/README.md-sans-toc
-	gh-md-toc --hide-header --hide-footer $< | tail +2 > README.toc
+README.toc: lib/README.md-sans-toc Makefile
+	tail +2 $<| gh-md-toc --hide-header --hide-footer | tail +2 >$@
 
 test:
 	python3 -m unittest discover tests

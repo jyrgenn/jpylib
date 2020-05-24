@@ -20,7 +20,7 @@ pkg: copy
 	PKG_VERSION=$(PKGVERS) python3 setup.py sdist bdist_wheel
 	git diff --exit-code --raw && \
           git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS) || \
-	  printf "\nthere are uncommitted changes!\n\n" && exit 1
+	  { printf "\nthere are uncommitted changes!\n\n"; exit 1 ; }
 	git push --tags
 
 # copy the actual module in place; set the version number in a variable

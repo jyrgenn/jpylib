@@ -19,17 +19,17 @@ Use it like this:
     })
 
 On return, the option value container `ovc` has the following fields:  
-    `ovc.schmooze`:    the number of -s options counted,  
-    `ovc.output_file`: the parameter of -o or --output-file, or None  
-    `ovc.repetitions`: the parameter of -n or --repetitions, or 3  
-    `ovc.debug`:       a list with all parameters given to -d or --debug  
+    `ovc.schmooze`:    the number of `-s` options counted,  
+    `ovc.output_file`: the parameter of `-o` or `--output-file`, or `None`  
+    `ovc.repetitions`: the parameter of `-n` or `--repetitions`, or `3`  
+    `ovc.debug`:       a list with all parameters given to `-d` or `--debug`  
 
 Options `-h`, `--help`, `-?`, `--usage` are installed by default and
 print a help message or a brief usage message, respectively.
 
 `args` holds the remaining arguments behind the last option.
 
-Call help(pgetopt) for details.  
+Call `help(pgetopt)` for details.  
 More information at <https://git.w21.org/python_modules/pgetopt> 
 
 [ni@w21.org 2020-05-22]

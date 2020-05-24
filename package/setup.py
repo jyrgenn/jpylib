@@ -21,7 +21,6 @@ setuptools.setup(
     project_urls=dict(
         Documentation=repository+"/-/blob/master/README.md",
         Source=repository,
-        Tracker="mailto:ni@w21.org?subject=pgetopt",
     ),
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -14,7 +14,7 @@ setuptools.setup(
     description=description_lines[0].strip(),
     long_description="".join(description_lines),
     long_description_content_type="text/markdown",
-    url="https://git.w21.org/ni/pgetopt",
+    url="https://git.w21.org/python_modules/pgetopt",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

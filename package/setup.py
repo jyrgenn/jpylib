@@ -2,6 +2,8 @@ import os
 import sys
 import setuptools
 
+repository = "https://git.w21.org/python_modules/pgetopt"
+
 with open("README.md", "r") as fh:
     # filter out the comment lines from the README
     description_lines = [ l for l in fh if not l.startswith("#") ]
@@ -14,8 +16,13 @@ setuptools.setup(
     description=description_lines[0].strip(),
     long_description="".join(description_lines),
     long_description_content_type="text/markdown",
-    url="https://git.w21.org/python_modules/pgetopt",
+    url=repository,
     packages=setuptools.find_packages(),
+    project_urls=dict(
+        Documentation=repository+"/-/blob/master/README.md",
+        Source=repository,
+        Tracker="mailto:ni@w21.org?subject=pgetopt",
+    ),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",

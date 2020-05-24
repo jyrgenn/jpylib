@@ -22,11 +22,11 @@ class OptionValueContainer:
             if opt.startswith("_"):
                 continue                # allow for _<keyword> entries
             assert hasattr(type(desc), '__iter__') and len(desc) in (4, 5),\
-                f"descriptor of option '{opt}' not sequence len 4 or 5"
+                f"descriptor of -{opt} not sequence len 4 or 5"
             assert isinstance(desc[0], str),\
-                f"name of option '{opt}' not a string"
+                f"name of -{opt} not a string"
             assert desc[1] in (bool, int, str, None),\
-                f"invalid option type '{opt}': {desc[1]}"
+                f"invalid option type -{opt}: {desc[1]}"
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
             self._opts["h"] = ("help", None, self.ovc_help,

@@ -3,7 +3,7 @@
 PREVIEW = $$TMPDIR/pgetopt-README.html
 PKGMAKE = cd package && $(MAKE)
 
-default: doc
+default: doc test
 
 doc: README.md
 # uses the table of contents generator from

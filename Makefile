@@ -8,9 +8,11 @@ default: doc
 doc: README.md
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
-README.md: lib/README.md-sans-toc Makefile
-	gh-md-toc --hide-header --hide-footer $< | tail +2 > README.toc
+README.md: lib/README.md-sans-toc lib/include.py Makefile README.toc
 	./lib/include.py $<>$@
+
+README.toc: lib/README.md-sans-toc
+	gh-md-toc --hide-header --hide-footer $< | tail +2 > README.toc
 
 test:
 	./tests/run-tests.py

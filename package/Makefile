@@ -3,7 +3,7 @@
 MODULE = pgetopt
 PKGNAME = pgetopt-jyrgenn
 PKGVERS = $(shell date +%Y.%m%d.%H%M | sed 's/\.0/./g')
-PYPIREPO = https://test.pypi.org
+PYPIREPO = https://pypi.org
 PYPIUPLD = $(PYPIREPO)/legacy/
 PYPIDNLD = $(PYPIREPO)/simple/	# why "simple"?
 PRODUCTS = $(MODULE) *.egg-info build dist \

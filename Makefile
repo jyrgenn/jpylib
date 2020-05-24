@@ -35,5 +35,6 @@ preview: README.md
 	open $(PREVIEW)
 
 clean:
-	-rm -rf *~ README.toc __pycache__
+	-rm -rf README.toc
+	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +
 	cd package && $(MAKE) clean

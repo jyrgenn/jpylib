@@ -1,4 +1,6 @@
 /examples/pgetopt.py
-README.toc
+/README.toc
 /tests/pgetopt.py
-/tests/.coverage
+*~
+__pycache__
+.coverage

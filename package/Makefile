@@ -3,9 +3,8 @@
 MODULE = pgetopt
 PKGNAME = pgetopt-jyrgenn
 PKGVERS = $(shell date +%Y.%m%d.%H%M | sed 's/\.0/./g')
-PYPIREPO = https://pypi.org
-PYPIUPLD = $(PYPIREPO)/
-PYPIDNLD = $(PYPIREPO)/simple/	# why "simple"?
+PYPIUPLD = https://upload.pypi.org/legacy/
+PYPIDNLD = https://pypi.org/simple/	# why "simple"?
 PRODUCTS = $(MODULE) *.egg-info build dist \
            $(shell find . -name __pycache__)
 PYPICRED = -u jyrgenn -p $$(getsecret pypi/jyrgenn)

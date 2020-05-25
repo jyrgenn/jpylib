@@ -42,7 +42,7 @@ class ErrorTestCase(unittest.TestCase):
         for atest in argtest_descs:
             name, optdesc, min, max, *cases = atest
             for num, ok in cases:
-                with self.subTest(sub=f"{name}_{num}"):
+                with self.subTest(sub=name+"_"+str(num)):
                     argv = mklist(num, name)
                     if ok:
                         _, args = parse(optdesc, argv, exit_on_error=False)

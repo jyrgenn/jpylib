@@ -20,7 +20,7 @@ def do_fd(fd, fname="<stdin>"):
             except Exception as e:
                 global had_error
                 had_error = True
-                print(f"{fname}:{lineno}: {e}", file=sys.stderr)
+                print("%s:%d: %s" % (fname, lineno, e), file=sys.stderr)
         else:
             print(line, end="")
     

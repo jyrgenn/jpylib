@@ -22,11 +22,11 @@ class OptionValueContainer:
             if opt.startswith("_"):
                 continue                # allow for _<keyword> entries
             assert hasattr(type(desc), '__iter__') and len(desc) in (4, 5),\
-                f"descriptor of -{opt} not sequence len 4 or 5"
+                "descriptor not sequence len 4 or 5: -"+opt
             assert isinstance(desc[0], str),\
-                f"name of -{opt} not a string"
+                "name not a string: -"+opt
             assert desc[1] in (bool, int, str, None),\
-                f"invalid option type -{opt}: {desc[1]}"
+                "invalid option type desc[1]"+": -"+opt
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
             self._opts["h"] = ("help", None, self.ovc_help,
@@ -132,10 +132,11 @@ class OptionValueContainer:
             arg = ""
             if desc[1] in (str, int):
                 arg = (desc[4] if len(desc) == 5 else "ARG")
-            msg += \
-                f" -{opt}, --{desc[0].replace('_', '-')} {arg}\n    {desc[3]}"
+            msg += " -%s, --%s %s\n    %s" % (
+                opt, desc[0].replace('_', '-'), arg, desc[3])
             if desc[1] in (int, str):
-                msg += f" ({desc[1].__name__} arg, default: {repr(desc[2])})"
+                msg += " (%s arg, default %s)" % (
+                    desc[1].__name__, repr(desc[2]))
             msg += "\n"
         if self._help_footer:
             msg += "\n" + self._help_footer
@@ -155,7 +156,7 @@ class OptionValueContainer:
     def ovc_usage_msg(self):
         """Return a brief usage message."""
         args = "<arguments>" if self._arguments is None else self._arguments
-        return f"usage: {self._program} [options] {args}"
+        return "usage: "+self._program+" [options] "+args
 
 
     def ovc_values(self):
@@ -258,7 +259,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc.ovc_usage(f"{e.args[0]}: " + repr(e.args[1]))
+            ovc.ovc_usage(e.args[0]+": "+repr(e.args[1]))
         raise(e)
 
 # EOF

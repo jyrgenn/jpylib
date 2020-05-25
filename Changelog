@@ -1,0 +1,13 @@
+;; -*- text -*-
+
+2020.525:
+
+ * Got rid of the f"..." strings for compatibility with Python 3.5
+ 
+   I *like* the f"..." strings, but I still have one server, and not
+   an unimportant one, still running under Debian 9 with Python 3.5.
+   This was, actually, a bit of a pain.
+
+2020.524:
+
+ * First public release

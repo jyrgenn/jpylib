@@ -3,10 +3,10 @@
 MODULE = pgetopt
 PKGNAME = pgetopt-jyrgenn
 PKGVERS = $(shell date +%Y.%m%d.%H%M | sed 's/\.0/./g')
-#PYPIUPLD = https://test.pypi.org/legacy/
-PYPIUPLD = https://upload.pypi.org/legacy/
-#PYPIDNLD = https://test.pypi.org/simple/
-PYPIDNLD = https://pypi.org/simple/
+PYPIUPLD = https://test.pypi.org/legacy/
+#PYPIUPLD = https://upload.pypi.org/legacy/
+PYPIDNLD = https://test.pypi.org/simple/
+#PYPIDNLD = https://pypi.org/simple/
 PRODUCTS = $(MODULE) *.egg-info build dist \
            $(shell find . -name __pycache__)
 PYPICRED = -u jyrgenn -p $$(getsecret pypi/jyrgenn)

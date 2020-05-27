@@ -93,7 +93,7 @@ program used as example above, all we need is this:
         "v": ("verbose", bool, False, "be verbose"),
         "o": ("output_file", str, "/dev/stdout", "output file", "PATHNAME"),
         "i": ("iterations", int, 1, "number of iterations"),
-        "_arguments": ("gnumm", "..."),
+        "_arguments": ["gnumm", "..."],
     })
 
 The `parse()` function has, in the usual case, one argument, a
@@ -121,9 +121,9 @@ Then, there may be a few key/value pairs where the key is one of
 these keywords:
 
 `_arguments` : either a string describing the command's arguments,
-or an iterable with those. In the latter case, it is used to
-determine the minimum and maximum number of arguments. See below at
-"Argument count checking" for more information.
+or a list with those. In the latter case, it is used to determine
+the minimum and maximum number of arguments. See below at "Argument
+count checking" for more information.
 
 `_help_header`
 : a string that will be printed at the top of the help message.
@@ -149,7 +149,7 @@ this package:
         "n": ("repetitions", int,  3,    "number of repetitions"),
         "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
         # keyword:        value
-        "_arguments":   ("string_to_print", "..."),
+        "_arguments":   ["string_to_print", "..."],
         "_help_header": "print a string a number of times",
         "_help_footer": "This is just an example program.",
     })
@@ -193,7 +193,7 @@ Argument count checking
 -----------------------
 
 As mentioned above, if the `_arguments` field of the options
-descriptor is a tuple, the number of actual arguments is checked
+descriptor is a list, the number of actual arguments is checked
 against the minimum and maximum number of arguments derived from
 this sequence. This is intended to capture the tradition of Unix
 command argument synopses and works as follows:
@@ -213,17 +213,17 @@ command argument synopses and works as follows:
 
 So this means, for example:
 
- * `("source", "destination")`: minimum = 2, maximum = 2
+ * `["source", "destination"]`: minimum = 2, maximum = 2
 
- * `("file1", "...")`: minimum = 1, maximum none
+ * `["file1", "..."]`: minimum = 1, maximum none
 
- * `("file1", "...", "destination")`: minimum = 2, maximum none
+ * `["file1", "...", "destination"]`: minimum = 2, maximum none
 
- * `("file1...", "destination")`: minimum = 2, maximum none
+ * `["file1...", "destination"]`: minimum = 2, maximum none
 
- * `("arg1", "[arg2]")`: minimum = 1, maximum = 2
+ * `["arg1", "[arg2]"]`: minimum = 1, maximum = 2
 
- * `("arg1", "[arg2 [arg3 arg4]]")`: minimum = 1, maximum = 4  
+ * `["arg1", "[arg2 [arg3 arg4]]"]`: minimum = 1, maximum = 4  
    (In this case a number of 3 arguments would be illegal, but there
    is no provision to check for that.)
 
@@ -234,6 +234,11 @@ for more than a minimum and a maximum number of arguments would
 either have made the interface or the implementation more complex,
 and given that this is rarely needed, I chose to omit that. It can
 be done in the application just as well.
+
+Change: the `_arguments` value must now be a list if it is not a
+string (was tuple before). Reason: `("arg1", )` is a tuple, but
+`("arg1")` is not, it is a string in parentheses. This is too easy
+to confuse, and that cannot happen with a list.
 
 
 The `parse()` function

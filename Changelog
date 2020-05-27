@@ -1,5 +1,10 @@
 ;; -*- text -*-
 
+2020.528:
+
+ * Spec change: option discriptor must now be a tuple; _arguments
+   value must now be a string (as before) or a list. See README.
+
 2020.525:
 
  * Got rid of the f"..." strings for compatibility with Python 3.5

@@ -10,7 +10,7 @@ schmooze_descs = {
     "o": ("output_file", str, None, "output file (or stdout)", "NAME"),
     "n": ("repetitions", int, 3, "number of repetitions"),
     "d": ("debug", str, [], "debug topics", "DEBUG_TOPIC"),
-    "_arguments": ("string_to_print", "..."),
+    "_arguments": ["string_to_print", "..."],
     "_help_header": "print a string a number of times",
     "_help_footer": "This is just an example program.",
 }
@@ -19,7 +19,7 @@ blark_descs = {
     "v": ("verbose", bool, False, "be verbose"),
     "o": ("output_file", str, "/dev/stdout", "output file", "PATHNAME"),
     "i": ("iterations", int, 1, "number of iterations"),
-    "_arguments": ("gnumm", "..."),
+    "_arguments": ["gnumm", "..."],
 }
 
 class BlarkTestcase(unittest.TestCase):

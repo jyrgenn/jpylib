@@ -7,7 +7,7 @@ import unittest
 
 optdescs = {
     "o": ("option", int, 1, "option with argument"),
-    "_arguments": (),
+    "_arguments": [],
 }
 
 class OptargTestcase(unittest.TestCase):

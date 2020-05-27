@@ -8,25 +8,25 @@ import unittest
 
 argtest_descs = (
     # name,  optdesc,            min, max
-    ("none", { "_arguments": () }, 0, 0,
+    ("none", { "_arguments": [] }, 0, 0,
      #(num, ok)*
      (0, True), (1, False), (2, False)),
-    ("fix2", { "_arguments": ("source", "dest") }, 2, 2,
+    ("fix2", { "_arguments": ["source", "dest"] }, 2, 2,
      (0, False), (1, False), (2, True), (3, False)),
-    ("1or2", { "_arguments": ("source", "[dest]") }, 1, 2,
+    ("1or2", { "_arguments": ["source", "[dest]"] }, 1, 2,
      (0, False), (1, True), (2, True), (3, False)),
-    ("1plusa", { "_arguments": ("source", "...") }, 1, None,
+    ("1plusa", { "_arguments": ["source", "..."] }, 1, None,
      (0, False), (1, True), (2, True), (3, True)),
-    ("1plusa", { "_arguments": ("source", "[dest...]") }, 1, None,
+    ("1plusa", { "_arguments": ["source", "[dest...]"] }, 1, None,
      (0, False), (1, True), (2, True), (3, True)),
-    ("2plusa", { "_arguments": ("source", "dest...") }, 2, None,
+    ("2plusa", { "_arguments": ["source", "dest..."] }, 2, None,
      (0, False), (1, False), (2, True), (3, True), (4, True)),
-    ("2plusb", { "_arguments": ("source", "dest", "...") }, 2, None,
+    ("2plusb", { "_arguments": ["source", "dest", "..."] }, 2, None,
      (0, False), (1, False), (2, True), (3, True), (4, True)),
-    ("0plus",  { "_arguments": ("...") }, 2, None,
+    ("0plus",  { "_arguments": ["..."] }, 2, None,
      (0, True), (1, True), (2, True), (3, True), (4, True)),
     ("dont", { "_arguments": "no arg counting done" }, None, None,
-     (0, True), (1, True), (2, True), (3, True), (4, True)),
+     [0, True], (1, True), (2, True), (3, True), (4, True)),
 )
 
 def mklist(len, el):

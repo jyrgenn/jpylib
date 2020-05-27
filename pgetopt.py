@@ -40,7 +40,7 @@ class OptionValueContainer:
                        for k, v in self._opts.items() if len(k) == 1 }
         self._args = args[:]
         self._min = self._max = None
-        if type(self._arguments) == tuple:
+        if type(self._arguments) == list:
             min = max = 0
             inf = False
             for arg in self._arguments:
@@ -231,7 +231,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         "n": ("repetitions", int,  3,    "number of repetitions"),
         "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
       # keyword:        value
-        "_arguments":   ("string_to_print", "..."),
+        "_arguments":   ["string_to_print", "..."],
         "_help_header": "print a string a number of times",
         "_help_footer": "This is just an example program.",
       }

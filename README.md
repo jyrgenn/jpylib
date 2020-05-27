@@ -19,7 +19,7 @@ implemented capabilities.
   * [Limitations](#limitations)
   * [Semi\-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
   * [Documentation, Examples and Testing](#documentation-examples-and-testing)
-  * [Building the PyPi package](#building-the-pypi-package)
+  * [The PyPi package](#the-pypi-package)
 
 
 Motivation
@@ -98,8 +98,8 @@ program used as example above, all we need is this:
 
 The `parse()` function has, in the usual case, one argument, a
 dictionary describing the options. The single-letter string key is
-the option letter; its value is the option descriptor, an iterables
-(usually a tuple or a list) of four or five elements. These are:
+the option letter; its value is the option descriptor, a tuple of
+four or five elements. These are:
 
 1. the name of the option in the namespace returned, also (with `_`
    replaced by `-`) the name of the corresponding long option
@@ -193,7 +193,7 @@ Argument count checking
 -----------------------
 
 As mentioned above, if the `_arguments` field of the options
-descriptor is an iterable, the number of actual arguments is checked
+descriptor is a tuple, the number of actual arguments is checked
 against the minimum and maximum number of arguments derived from
 this sequence. This is intended to capture the tradition of Unix
 command argument synopses and works as follows:
@@ -283,7 +283,7 @@ function for an example.
 In addition to these exceptions, an `AssertionError` exception can
 be thrown in the following cases:
 
- * An option descriptor is not an iterable of length 4 or 5.
+ * An option descriptor is not a tuple of length 4 or 5.
  * The name of an option in the descriptor is not a string.
  * The specified type of the option is not `bool`, `int`, `str`, or
    `None`.
@@ -409,8 +409,8 @@ somewhat work in progress. It can be invoked by running `make test`
 in the main directory.
 
 
-Building the PyPi package
--------------------------
+The PyPi package
+----------------
 
 The PyPi package is built and uploaded to PyPi by running `make pkg`
 and `make upload`, respectively. The package URL is

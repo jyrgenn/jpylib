@@ -21,7 +21,7 @@ class OptionValueContainer:
         for opt, desc in self._opts.items():
             if opt.startswith("_"):
                 continue                # allow for _<keyword> entries
-            assert hasattr(type(desc), '__iter__') and len(desc) in (4, 5),\
+            assert type(desc) == tuple and len(desc) in (4, 5),\
                 "descriptor not sequence len 4 or 5: -"+opt
             assert isinstance(desc[0], str),\
                 "name not a string: -"+opt
@@ -40,7 +40,7 @@ class OptionValueContainer:
                        for k, v in self._opts.items() if len(k) == 1 }
         self._args = args[:]
         self._min = self._max = None
-        if self._arguments is not None and type(self._arguments) != str:
+        if type(self._arguments) == tuple:
             min = max = 0
             inf = False
             for arg in self._arguments:
@@ -170,7 +170,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
     Keys of the descriptors dictionary are options or keywords. In case
     of an option, the key is the single option character, and the value
-    is a sequence of four or five fields:
+    is a tuple of four or five fields:
 
       (1) name of the option, used in the returned namespace and as the
       name of the corresponding long option name (after replacing

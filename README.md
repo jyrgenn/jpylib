@@ -282,8 +282,8 @@ number of arguments). These are as follows:
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)
 
-If you want to handle these exception by yourself, see the `parse()`
-function for an example.
+If you want to handle these exceptions by yourself, see the
+`parse()` function for an example.
 
 In addition to these exceptions, an `AssertionError` exception can
 be thrown in the following cases:
@@ -309,21 +309,23 @@ Besides that, there are a few other fields in the OVC that may be of
 interest. Their names begin with `ovc_` or `_` to avoid conflicts
 with option names.
 
-`ovc.ovc_usage`: Method that prints a brief usage message describing
-the command arguments (from the `_arguments` value) and a reference
-to the `-h` option, and then exits the program. This is used
-internally when the actual options or the number of arguments are
-incorrect, but it can also be used by the user. Optional argument
-`error` may contain an error message that is printed with the usage
-message; optional argument `exit_status` may specify the exit status
-used (default: 2)
+`ovc.ovc_usage`: Method that prints a brief usage message. This is
+the function invoked with the default `-?` or `--usage` option. The
+message describes the command arguments (from the `_arguments`
+value), prints a reference to the `-h` option, and then exits the
+program. This is used internally when the given options or the
+number of arguments are incorrect, but it can also be used by the
+user. Optional argument `error` may contain an error message that is
+printed with the usage message; optional argument `exit_status` may
+specify the exit status used (default: 64, the usual EX_USAGE value)
 
 `ovc.ovc_usage_msg`: Method that returns the usage message mentioned
 above as a string.
 
 `ovc.ovc_help`: Method that prints a more detailed help message and
-exits the program. The help message consists of the usage message
-(see above), the `_help_header` argument of the descriptors
+exits the program. This is the function invoked with the default
+`-h` or `--help` option. The help message consists of the usage
+message (see above), the `_help_header` argument of the descriptors
 dictionary to `parse()`, a description of the options (constructed
 from the descriptors), and the `_help_footer` argument.
 
@@ -403,8 +405,8 @@ This README file is the main documentation. The source is in the
 `lib/` directory; run `make` in the main directory to update the
 `README.md` with a table of contents. The package README in
 `package/` contains the "schmooze" example. The docstring of the
-`parse()` function contains a concise summary of the main features
-and usage of the module.
+`parse()` function contains a summary of the main features and usage
+of the module.
 
 The examples shown above can also be found in the `examples/`
 directory.

@@ -356,10 +356,10 @@ by default, taken from `sys.argv[]`.
 `ovc._max`: Maximum number of arguments as calculated from the
 `_arguments` description, or None.
 
-`ovc._opts`: Option descriptors dictionary by short option name.
-
 `ovc._min`: Minimum number of arguments as calculated from the
 `_arguments` description, or None.
+
+`ovc._opts`: Option descriptors dictionary by short option name.
 
 `ovc._parse`: Method used internally for option parsing.
 

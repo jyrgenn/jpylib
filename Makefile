@@ -9,7 +9,10 @@ doc: README.md
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
 README.md: lib/README.md-sans-toc lib/include.py Makefile README.toc
-	./lib/include.py $<>$@
+	rm -f $@
+	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
+	./lib/include.py $<>>$@
+	chmod -w $@
 
 README.toc: lib/README.md-sans-toc Makefile
 	tail +2 $<| gh-md-toc --hide-header --hide-footer | tail +2 >$@

@@ -1,4 +1,5 @@
-;; -*- text -*-
+<!-- GENERATED FILE, DO NOT EDIT -->
+<!--*- text -*-->
 
 pgetopt module
 ==============
@@ -8,18 +9,6 @@ idea was to have it POSIX conformant, additionally implement long
 options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
-
-  * [Motivation](#motivation)
-  * [POSIX Conformance[1]](#posix-conformance1)
-  * [Usage](#usage)
-  * [Argument count checking](#argument-count-checking)
-  * [The parse() function](#the-parse-function)
-  * [Exceptions](#exceptions)
-  * [The OptionValueContainer](#the-optionvaluecontainer)
-  * [Limitations](#limitations)
-  * [Semi\-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
-  * [Documentation, Examples and Testing](#documentation-examples-and-testing)
-  * [The PyPi package](#the-pypi-package)
 
 
 Motivation

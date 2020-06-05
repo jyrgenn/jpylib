@@ -16,7 +16,6 @@ class OptionValueContainer:
         See the parse() function below for details.
 
         """
-        self._program = os.path.basename(sys.argv[0])
         self._opts = copy.deepcopy(descriptors)
         for opt, desc in self._opts.items():
             if opt.startswith("_"):
@@ -34,8 +33,12 @@ class OptionValueContainer:
         if "?" not in self._opts:
             self._opts["?"] = ("usage", None, self.ovc_usage,
                                "show usage briefly")
-        for field in "_arguments", "_help_header", "_help_footer", "_usage":
+        _keys = (
+            "_arguments", "_help_header", "_help_footer", "_usage", "_program")
+        for field in _keys:
             self.__dict__[field] = self._opts.get(field)
+        if not self._program:
+            self._program = os.path.basename(sys.argv[0])
         self._long = { v[0].replace("_", "-"): v
                        for k, v in self._opts.items() if len(k) == 1 }
         self._args = args[:]
@@ -194,12 +197,6 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
     A key may also be one of these keywords:
 
-      "_help_header": string to print with 'help' before the option
-      explanations
-
-      "_help_footer": string to print with 'help' after the option
-      explanations
-
       "_arguments": string to print in the usage to describe the
       non-option arguments, or, for argument count checking, a sequence
       with the argument names:
@@ -214,6 +211,15 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
            blanks into multiple words, each one counts toward the
            maximum; e.g. "[param1 param2 param3]" increases the maximum
            by 3, but not the minimum
+
+      "_help_footer": string to print with 'help' after the option
+      explanations
+
+      "_help_header": string to print with 'help' before the option
+      explanations
+
+      "_program": string to use as program name for help and usage
+      message instead of sys.argv[0]
 
       "_usage": string to usage as usage message instead of the default
       constructed one

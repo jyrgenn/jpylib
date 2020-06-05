@@ -125,11 +125,14 @@ or a list with those. In the latter case, it is used to determine
 the minimum and maximum number of arguments. See below at "Argument
 count checking" for more information.
 
-`_help_header`
-: a string that will be printed at the top of the help message.
+`_help_header`: a string that will be printed at the top of the help
+message.
 
-`_help_footer`
-: a string that will be printed at the bottom of the help message.
+`_help_footer`: a string that will be printed at the bottom of the
+help message.
+
+`_usage`: a string to use as the usage message instead of the one
+constructed from the program name and `_arguments`.
 
 The two values returned are an option value container — a namespace
 in which the values can be accessed using the option name (e.g. as
@@ -339,8 +342,8 @@ versions.
 `ovc._args`: The arguments as passed to the `parse()` function or,
 by default, taken from `sys.argv[]`.
 
-`ovc._arguments`, `ovc._help_footer`, `ovc._help_header`: The
-corresponding fields of the descriptors argument.
+`ovc._arguments`, `ovc._help_footer`, `ovc._help_header`,
+`ovc._usage`: The corresponding fields of the descriptors argument.
 
 `ovc._have_opt`: Method used internally during option parsing.
 

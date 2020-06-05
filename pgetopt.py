@@ -22,11 +22,11 @@ class OptionValueContainer:
             if opt.startswith("_"):
                 continue                # allow for _<keyword> entries
             assert type(desc) == tuple and len(desc) in (4, 5),\
-                "descriptor not sequence len 4 or 5: -"+opt
+                "descriptor not sequence len 4 or 5: -" + opt
             assert isinstance(desc[0], str),\
-                "name not a string: -"+opt
+                "name not a string: -" + opt
             assert desc[1] in (bool, int, str, None),\
-                "invalid option type desc[1]"+": -"+opt
+                "invalid option type desc[1]" + ": -" + opt
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
             self._opts["h"] = ("help", None, self.ovc_help,
@@ -34,13 +34,14 @@ class OptionValueContainer:
         if "?" not in self._opts:
             self._opts["?"] = ("usage", None, self.ovc_usage,
                                "show usage briefly")
-        for field in "_arguments", "_help_header", "_help_footer":
+        for field in "_arguments", "_help_header", "_help_footer", "_usage":
             self.__dict__[field] = self._opts.get(field)
         self._long = { v[0].replace("_", "-"): v
                        for k, v in self._opts.items() if len(k) == 1 }
         self._args = args[:]
         self._min = self._max = None
         if type(self._arguments) == list:
+            _argstr = ""
             min = max = 0
             inf = False
             for arg in self._arguments:
@@ -51,9 +52,10 @@ class OptionValueContainer:
                 elif not arg == "...":
                     min += 1
                     max += 1
+                _argstr += " " + arg
             self._min = min
             self._max = None if inf else max
-            self._arguments = " ".join(self._arguments)
+            self._arguments = _argstr
 
 
     def _parse(self):
@@ -156,7 +158,7 @@ class OptionValueContainer:
     def ovc_usage_msg(self):
         """Return a brief usage message."""
         args = "<arguments>" if self._arguments is None else self._arguments
-        return "usage: "+self._program+" [options] "+args
+        return self._usage or "usage: " + self._program + " [options]" + args
 
 
     def ovc_values(self):
@@ -213,6 +215,9 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
            maximum; e.g. "[param1 param2 param3]" increases the maximum
            by 3, but not the minimum
 
+      "_usage": string to usage as usage message instead of the default
+      constructed one
+
     If no '?' or 'h' option is specified, they will default to a 'help'
     or a 'usage' function, respectively, which will be called
     immediately when the option is seen. 'help' prints a description of
@@ -259,7 +264,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
         return ovc, ovc._args
     except Exception as e:
         if exit_on_error:
-            ovc.ovc_usage(e.args[0]+": "+repr(e.args[1]))
+            ovc.ovc_usage(e.args[0] + ": " + repr(e.args[1]))
         raise(e)
 
 # EOF

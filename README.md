@@ -363,7 +363,8 @@ by default, taken from `sys.argv[]`.
 
 `ovc._parse`: Method used internally for option parsing.
 
-`ovc._program`: The name of the program, from `sys.argv[0]`.
+`ovc._program`: The name of the program, from `sys.argv[0]` or the
+descriptors argument.
 
 `ovc._set_optarg`: Method used internally during option parsing.
 

@@ -9,6 +9,7 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
+#include README.toc
 
 Motivation
 ----------

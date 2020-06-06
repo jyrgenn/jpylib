@@ -419,9 +419,8 @@ of the module.
 The examples shown above can also be found in the `examples/`
 directory.
 
-The directory `tests/` contains a test suite, which is still
-somewhat work in progress. It can be invoked by running `make test`
-in the main directory.
+The directory `tests/` contains a test suite. It can be invoked by
+running `make test` in the main directory.
 
 
 The PyPi package

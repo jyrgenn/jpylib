@@ -38,6 +38,6 @@ preview: README.md
 	open $(PREVIEW)
 
 clean:
-	-rm -rf README.toc
+	-rm -rf README.toc .coverage
 	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +
 	cd package && $(MAKE) clean

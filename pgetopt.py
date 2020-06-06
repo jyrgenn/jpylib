@@ -47,7 +47,6 @@ class OptionValueContainer:
         self._args = args[:]
         self._min = self._max = None
         if type(self._arguments) == list:
-            _argstr = ""
             min = max = 0
             inf = False
             for arg in self._arguments:
@@ -58,10 +57,9 @@ class OptionValueContainer:
                 elif not arg == "...":
                     min += 1
                     max += 1
-                _argstr += " " + arg
             self._min = min
             self._max = None if inf else max
-            self._arguments = _argstr
+            self._arguments = " ".join(self._arguments)
 
 
     def _parse(self):
@@ -163,7 +161,11 @@ class OptionValueContainer:
 
     def ovc_usage_msg(self):
         """Return a brief usage message."""
-        args = " <arguments>" if self._arguments is None else self._arguments
+        args = ""
+        if self._arguments is None:
+            args = " <arguments>"
+        elif self._arguments:
+            args = " " + self._arguments
         return self._usage or "usage: " + self._program + " [options]" + args
 
 

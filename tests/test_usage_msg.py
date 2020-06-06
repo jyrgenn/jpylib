@@ -62,3 +62,31 @@ class UsageTestcase(unittest.TestCase):
         self.assertEqual(ovc.ovc_usage_msg(),
                          f"usage: schnörkelate [options] mangia [file1 ...]")
 
+
+    def test_usage_string_arguments(self):
+        """_arguments as string"""
+        ovc, args = parse({
+            "v": ("verbose", bool, 0, "increase verbosity"),
+            "_arguments": "...",
+            "_program": "lala",
+        })
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options] ...")
+
+
+    def test_usage_empty_string_arguments(self):
+        """_arguments as string"""
+        ovc, args = parse({
+            "v": ("verbose", bool, 0, "increase verbosity"),
+            "_arguments": "",
+            "_program": "lala",
+        })
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options]")
+
+    def test_usage_empty_list_arguments(self):
+        """_arguments as string"""
+        ovc, args = parse({
+            "v": ("verbose", bool, 0, "increase verbosity"),
+            "_arguments": [],
+            "_program": "lala",
+        }, [])
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options]")

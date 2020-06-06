@@ -34,7 +34,7 @@ class AssertionsTestcase(unittest.TestCase):
         """long option descriptor"""
         with self.assertRaises(AssertionError):
             parse({
-         "s": ("schmooze", bool, 0, "huhu", "huhu", "huhu"),
+                "s": ("schmooze", bool, 0, "huhu", "huhu", "huhu"),
             }, [])
 
     def test_DescType(self):
@@ -50,6 +50,30 @@ class AssertionsTestcase(unittest.TestCase):
             parse({
                 "s": (12, bool, 0, "increase schmooziness"),
             }, [])
+
+    def test_Long_Key(self):
+        """option key too long"""
+        with self.assertRaises(AssertionError):
+            parse({
+                "sc": ("schmooze", bool, 0, "increase schmooziness"),
+            }, [])
+
+    def test_Invalid_Keyword(self):
+        """invalid keyword"""
+        with self.assertRaises(AssertionError):
+            parse({
+                "s": ("schmooze", bool, 0, "increase schmooziness"),
+                "__arguments": ["file1", "...", "destination"],
+            }, ["bla", "blubb"])
+
+    def test_Valid_Keyword(self):
+        """valid keyword"""
+        given_args = ["bla", "blubb"]
+        ovc, args = parse({
+            "s": ("schmooze", bool, 0, "increase schmooziness"),
+            "_arguments": ["file1", "...", "destination"],
+        }, given_args)
+        self.assertEqual(args, given_args)
 
 
 

@@ -17,15 +17,20 @@ class OptionValueContainer:
 
         """
         self._opts = copy.deepcopy(descriptors)
+        _keywords = ("_arguments", "_help_header", "_help_footer",
+                 "_usage", "_program")
         for opt, desc in self._opts.items():
             if opt.startswith("_"):
-                continue                # allow for _<keyword> entries
-            assert type(desc) == tuple and len(desc) in (4, 5),\
-                "descriptor not sequence len 4 or 5: -" + opt
+                assert opt in _keywords, "keyword unknown: " + repr(opt)
+                continue
+            assert type(opt) == str and len(opt) == 1, \
+              "option key must be string of length 1: " + repr(opt)
+            assert type(desc) == tuple and len(desc) in (4, 5), \
+              "descriptor not sequence len 4 or 5: -" + opt
             assert isinstance(desc[0], str),\
-                "name not a string: -" + opt
+              "name not a string: -" + opt
             assert desc[1] in (bool, int, str, None),\
-                "invalid option type desc[1]" + ": -" + opt
+              "invalid option type desc[1]" + ": -" + opt
             self.__dict__[desc[0]] = desc[2]
         if "h" not in self._opts:
             self._opts["h"] = ("help", None, self.ovc_help,
@@ -33,9 +38,7 @@ class OptionValueContainer:
         if "?" not in self._opts:
             self._opts["?"] = ("usage", None, self.ovc_usage,
                                "show usage briefly")
-        _keys = (
-            "_arguments", "_help_header", "_help_footer", "_usage", "_program")
-        for field in _keys:
+        for field in _keywords:
             self.__dict__[field] = self._opts.get(field)
         if not self._program:
             self._program = os.path.basename(sys.argv[0])

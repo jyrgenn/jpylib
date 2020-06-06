@@ -1,5 +1,19 @@
 ;; -*- text -*-
 
+2020.606:
+
+ * Check for option key length and valid keywords.
+
+ * Allow supplying _program for the program name instead of
+   sys.srgv[0].
+
+ * Allow supplying _usage for the usage message instead of the
+   constructed one.
+
+ * Gave up the under 10 KB code goal; hope to keep it under 16 KB
+   (which may leave space for some improvements like more error
+   checking and things).
+
 2020.528:
 
  * Spec change: option discriptor must now be a tuple; _arguments

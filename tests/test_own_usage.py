@@ -87,9 +87,3 @@ class HelpTestcase(unittest.TestCase):
         }, ["-v"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, usage=2))
 
-    
-
-if __name__ == "__main__":
-    unittest.main()
-
-        

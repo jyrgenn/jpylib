@@ -75,9 +75,4 @@ class AssertionsTestcase(unittest.TestCase):
         }, given_args)
         self.assertEqual(args, given_args)
 
-
-
-if __name__ == "__main__":
-    unittest.main()
-
         

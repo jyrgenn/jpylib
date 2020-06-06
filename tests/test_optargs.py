@@ -32,9 +32,3 @@ class OptargTestcase(unittest.TestCase):
         ovc, args = parse(optdescs, ["--option=4"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(option=4))
 
-    
-
-if __name__ == "__main__":
-    unittest.main()
-
-        

@@ -115,7 +115,3 @@ usage: bungabunga [options] <arguments>
 use '-h' option to get help on options
 """)
         
-if __name__ == "__main__":
-    unittest.main()
-
-        

@@ -104,8 +104,4 @@ class SchmoozeTestcase(unittest.TestCase):
                          ["-d", "print", "--output_file=hamburg",
                           "haha", "dada"])
 
-
-if __name__ == "__main__":
-    unittest.main()
-
         

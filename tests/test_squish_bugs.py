@@ -20,6 +20,3 @@ class BugsTestCase(unittest.TestCase):
         self.assertEqual(ovc.ovc_values(), {})
         self.assertEqual(args, [])
 
-
-if __name__ == "__main__":
-    unittest.main()

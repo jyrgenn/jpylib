@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from pgetopt import parse
 import unittest
+from pgetopt import parse
+from capture import outputAndExitCaptured
 
 # try to trigger all error conditions handled in the code (except the
 # assertions, which have already been done)
@@ -82,6 +83,37 @@ class ErrorTestCase(unittest.TestCase):
             parse({ "i": ("iterations", int, 1, "number of iterations") },
                   ["--iterations", "bunga"], exit_on_error=False)
 
+
+    def test_err_exit(self):
+        """exit due to error"""
+        with outputAndExitCaptured() as (out, err, status):
+            parse({
+                "i": ("iterations", int, 1, "number of iterations"),
+                "_program": "bungabunga",
+                "_arguments": ["bunga"],
+            }, ["-x", "bunga"])
+        self.assertEqual(status.value, 64)
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue(), f"""bungabunga: unknown option: 'x'
+
+usage: bungabunga [options] bunga
+use '-h' option to get help on options
+""")
+        
+    def test_err_exit_noargs(self):
+        """exit due to error"""
+        with outputAndExitCaptured() as (out, err, status):
+            parse({
+                "i": ("iterations", int, 1, "number of iterations"),
+                "_program": "bungabunga",
+            }, ["-x", "3", "bunga"])
+        self.assertEqual(status.value, 64)
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue(), f"""bungabunga: unknown option: 'x'
+
+usage: bungabunga [options] <arguments>
+use '-h' option to get help on options
+""")
         
 if __name__ == "__main__":
     unittest.main()

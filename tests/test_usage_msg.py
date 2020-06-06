@@ -15,7 +15,7 @@ class UsageTestcase(unittest.TestCase):
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
-        }, ["-vh5"], exit_on_error=False)
+        }, ["-v"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
                          f"usage: {default_argv0} [options]")
 
@@ -25,7 +25,7 @@ class UsageTestcase(unittest.TestCase):
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia"],
-        }, ["-vh5", "foo!"], exit_on_error=False)
+        }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
                          f"usage: {default_argv0} [options] mangia")
 
@@ -35,7 +35,7 @@ class UsageTestcase(unittest.TestCase):
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
-        }, ["-vh5", "foo!"], exit_on_error=False)
+        }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
                          f"usage: {default_argv0} [options] mangia [file1 ...]")
 
@@ -46,7 +46,7 @@ class UsageTestcase(unittest.TestCase):
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
             "_usage": f"usage: {default_argv0} [-v] [-z 5] mangia [file1 ...]"
-        }, ["-vh5", "foo!"], exit_on_error=False)
+        }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(
             ovc.ovc_usage_msg(),
             f"usage: {default_argv0} [-v] [-z 5] mangia [file1 ...]")
@@ -58,7 +58,7 @@ class UsageTestcase(unittest.TestCase):
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
             "_program": "schnörkelate",
-        }, ["-vh5", "foo!"], exit_on_error=False)
+        }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
                          f"usage: schnörkelate [options] mangia [file1 ...]")
 

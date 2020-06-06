@@ -224,7 +224,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       "_program": string to use as program name for help and usage
       message instead of sys.argv[0]
 
-      "_usage": string to usage as usage message instead of the default
+      "_usage": string to use as usage message instead of the default
       constructed one
 
     If no '?' or 'h' option is specified, they will default to a 'help'

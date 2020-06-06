@@ -163,7 +163,7 @@ class OptionValueContainer:
 
     def ovc_usage_msg(self):
         """Return a brief usage message."""
-        args = "<arguments>" if self._arguments is None else self._arguments
+        args = " <arguments>" if self._arguments is None else self._arguments
         return self._usage or "usage: " + self._program + " [options]" + args
 
 

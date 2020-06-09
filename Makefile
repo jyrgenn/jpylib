@@ -8,14 +8,18 @@ default: doc test
 doc: README.md
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
-README.md: lib/README.md-sans-toc lib/include.py Makefile README.toc
+README.md: lib/README.md-sans-toc lib/include.py Makefile \
+	   readme-toc.tmp readme-errtable.tmp
 	rm -f $@
 	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
 	./lib/include.py $<>>$@
 	chmod -w $@
 
-README.toc: lib/README.md-sans-toc Makefile
+readme-toc.tmp: lib/README.md-sans-toc Makefile
 	tail +2 $<| gh-md-toc --hide-header --hide-footer | tail +2 >$@
+
+readme-errtable.tmp: pgetopt.py lib/generrtable.py 
+	lib/generrtable.py $<>$@
 
 test:
 	python3 -m unittest discover tests
@@ -38,6 +42,6 @@ preview: README.md
 	open $(PREVIEW)
 
 clean:
-	-rm -rf README.toc .coverage
+	-rm -rf *.tmp .coverage
 	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +
 	cd package && $(MAKE) clean

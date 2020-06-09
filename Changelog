@@ -1,5 +1,10 @@
 ;; -*- text -*-
 
+2020.xxx:
+
+ * Exceptions raised are now of type OptionError, with well-defined
+   arguments.
+
 2020.606:
 
  * Check for option key length and valid keywords.

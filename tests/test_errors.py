@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from pgetopt import parse
+from pgetopt import *
 from capture import outputAndExitCaptured
 
 # try to trigger all error conditions handled in the code (except the
@@ -46,42 +46,53 @@ class ErrorTestCase(unittest.TestCase):
                 with self.subTest(sub=name+"_"+str(num)):
                     argv = mklist(num, name)
                     if ok:
-                        _, args = parse(optdesc, argv, exit_on_error=False)
+                        _, args = parse(optdesc, argv,
+                                                exit_on_error=False)
                         self.assertEqual(args, argv)
                     else:
-                        with self.assertRaises(IndexError):
+                        with self.assertRaises(OptionError) as cm:
                             parse(optdesc, argv, exit_on_error=False)
 
 
     def test_unknownOpt(self):
         """encounter unknown option"""
-        with self.assertRaises(KeyError):
+        with self.assertRaises(OptionError) as cm:
             parse({ "v": ("verbose", bool, 1, "increase verbosity") },
                   ["-d", "nunga"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorNotopt, "d"))
 
     def test_falseArgument(self):
         """argument supplied to bool option"""
-        with self.assertRaises(TypeError):
+        with self.assertRaises(OptionError) as cm:
             parse({ "v": ("verbose", bool, 1, "increase verbosity") },
-                  ["--verbose=19", "nunga"], exit_on_error=False)
+                          ["--verbose=19", "nunga"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorArg, "verbose"))
 
     def test_missingArgument(self):
-        """argument supplied to bool option"""
-        with self.assertRaises(IndexError):
-            parse({ "i": ("iterations", int, 1, "number of iterations") },
-                  ["-i"], exit_on_error=False)
-        with self.assertRaises(IndexError):
-            parse({ "i": ("iterations", int, 1, "number of iterations") },
-                  ["--iterations"], exit_on_error=False)
+        """missing argument to int option"""
+        with self.assertRaises(OptionError) as cm:
+            parse({
+                "i": ("iterations", int, 1, "number of iterations")
+            }, ["-i"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorNoarg, "i"))
+        with self.assertRaises(OptionError) as cm:
+            parse({
+                "i": ("iterations", int, 1, "number of iterations")
+            }, ["--iterations"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorNoarg, "iterations"))
             
     def test_wrongArgument(self):
         """wrong option argument type"""
-        with self.assertRaises(TypeError):
-            parse({ "i": ("iterations", int, 1, "number of iterations") },
-                  ["-i", "bunga"], exit_on_error=False)
-        with self.assertRaises(TypeError):
-            parse({ "i": ("iterations", int, 1, "number of iterations") },
-                  ["--iterations", "bunga"], exit_on_error=False)
+        with self.assertRaises(OptionError) as cm:
+            parse({
+                "i": ("iterations", int, 1, "number of iterations")
+            }, ["-i", "bunga"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorIntarg, "i"))
+        with self.assertRaises(OptionError) as cm:
+            parse({
+                "i": ("iterations", int, 1, "number of iterations")
+            }, ["--iterations", "bunga"], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorIntarg, "iterations"))
 
 
     def test_err_exit(self):
@@ -94,7 +105,7 @@ class ErrorTestCase(unittest.TestCase):
             }, ["-x", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), f"""bungabunga: unknown option: 'x'
+        self.assertEqual(err.getvalue(), f"""bungabunga: {ErrorNotopt}: 'x'
 
 usage: bungabunga [options] bunga
 use '-h' option to get help on options
@@ -109,7 +120,7 @@ use '-h' option to get help on options
             }, ["-x", "3", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), f"""bungabunga: unknown option: 'x'
+        self.assertEqual(err.getvalue(), f"""bungabunga: {ErrorNotopt}: 'x'
 
 usage: bungabunga [options] <arguments>
 use '-h' option to get help on options

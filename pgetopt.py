@@ -8,6 +8,16 @@ import os
 import sys
 import copy
 
+# Exception argument string and additional value (used to generate README)
+ErrorNotopt = "unknown option"                     # option
+ErrorArg = "option does not take an argument"      # option
+ErrorNoarg = "option needs argument"               # option
+ErrorIntarg = "option argument must be integer"    # option
+ErrorMinarg = "too few arguments, needs at least"  # minimum
+ErrorMaxarg = "too many arguments, at most"        # maximum
+
+class OptionError(Exception):
+    pass
 
 class OptionValueContainer:
     def __init__(self, descriptors, args):
@@ -50,7 +60,7 @@ class OptionValueContainer:
             min = max = 0
             inf = False
             for arg in self._arguments:
-                if arg.count("..."):
+                if "..." in arg:
                     inf = True
                 if arg.startswith("["):
                     max += len(arg.split(" "))
@@ -73,9 +83,9 @@ class OptionValueContainer:
                 while arg:
                     arg = self._have_opt(arg[0], arg[1:])
         if self._min is not None and len(self._args) < self._min:
-            raise IndexError("too few arguments, needs at least", self._min)
+            raise OptionError(ErrorMinarg, self._min)
         if self._max is not None and len(self._args) > self._max:
-                raise IndexError("too many arguments, at most", self._max)
+                raise OptionError(ErrorMaxarg, self._max)
 
 
     def _have_opt(self, opt, arg=None):
@@ -88,11 +98,11 @@ class OptionValueContainer:
         else:
             desc = self._opts.get(opt)
         if not desc:
-            raise KeyError("unknown option", opt)
+            raise OptionError(ErrorNotopt, opt)
         name, typ, defval, *_ = desc
         if typ == bool:
             if value:
-                raise TypeError("option does not take an argument", opt)
+                raise OptionError(ErrorArg, opt)
             self.__dict__[name] += 1
         else:
             if arg:
@@ -107,13 +117,13 @@ class OptionValueContainer:
     def _set_optarg(self, opt, desc, value):
         if value is None:
             if not self._args:
-                raise IndexError("option needs argument", opt)
+                raise OptionError(ErrorNoarg, opt)
             value = self._args.pop(0)
         if desc[1] == int:
             try:
                 value = int(value)
             except:
-                raise TypeError("value for option must be integer", opt)
+                raise OptionError(ErrorIntarg, opt)
         if isinstance(getattr(self, desc[0], None), list):
             getattr(self, desc[0]).append(value)
         else:
@@ -273,7 +283,7 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     try:
         ovc._parse()
         return ovc, ovc._args
-    except Exception as e:
+    except OptionError as e:
         if exit_on_error:
             ovc.ovc_usage(e.args[0] + ": " + repr(e.args[1]))
         raise(e)

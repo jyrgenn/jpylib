@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pgetopt import parse
+from pgetopt import *
 import unittest
 
 # assorted tests from the docs
@@ -39,8 +39,9 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_noArgs(self):
         """no arguments (needs 1)"""
-        with self.assertRaises(IndexError):
+        with self.assertRaises(OptionError) as cm:
             parse(schmooze_descs, [], exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorMinarg, 1))
 
     def test_OneArg(self):
         """one argument, no options"""
@@ -74,11 +75,12 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_wrongOpt(self):
         """wrong opt"""
-        with self.assertRaises(KeyError):
+        with self.assertRaises(OptionError) as cm:
             ovc, args = parse(schmooze_descs,
                               ["-d", "print", "--output_file=hamburg",
                                "haha", "dada"],
                               exit_on_error=False)
+        self.assertEqual(cm.exception.args, (ErrorNotopt, "output_file"))
 
     def test_moreOpts(self):
         """more opts"""

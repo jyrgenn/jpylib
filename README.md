@@ -271,20 +271,36 @@ exception is raised instead. These exceptions are listed below.
 Exceptions
 ----------
 
-When an invalid option, a missing option argument, or the wrong
-number of arguments is seen in the argument list, an exception is
-raised. Every one of these exceptions has two arguments, a message
-and an object (the option in question or the minimum or maximum
-number of arguments). These are as follows:
+The `parse()` function checks for a number of errors in the passed
+descriptors dictionary. If any of these are found, an
+`AssertionError` is raised:
 
-| Type       | Message                             | Argument |
-|------------|-------------------------------------|----------|
-| IndexError | "too few arguments, needs at least" | minimum  |
-| IndexError | "too many arguments, at most"       | maximum  |
-| KeyError   | "unknown option"                    | option   |
-| TypeError  | "option does not take an argument"  | option   |
-| IndexError | "option needs argument"             | option   |
-| TypeError  | "value for option must be integer"  | option   |
+ * The key of an entry is not an option string of length 1 or a
+   valid keyword.
+
+ * The descriptor value of an option is not a tuple of length 4 or
+   5.
+
+ * The name of an option is not a string.
+
+ * The type of an option is not `bool`, `int`, `str`, or `None`.
+
+
+When an invalid option, a missing option argument, or the wrong
+number of arguments is seen in the argument list, an `OptionError`
+exception is raised. Every one of these exceptions has two
+arguments, a message and an object (the option in question or the
+minimum or maximum number of arguments). These messages are defined
+as text constants, so they can be used for comparison:
+
+| Constant    | Message                             | Argument |
+|-------------|-------------------------------------|----------|
+| ErrorNotopt | "unknown option"                    | option   |
+| ErrorArg    | "option does not take an argument"  | option   |
+| ErrorNoarg  | "option needs argument"             | option   |
+| ErrorIntarg | "option argument must be integer"   | option   |
+| ErrorMinarg | "too few arguments, needs at least" | minimum  |
+| ErrorMaxarg | "too many arguments, at most"       | maximum  |
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)

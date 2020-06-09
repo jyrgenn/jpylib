@@ -20,7 +20,7 @@ default:
 pkg:
 	-rm -f dist/*
 	PKG_VERSION=$(PKGVERS) \
-        PKG_COMMIT="git rev-list -n 1 v"$(PKGVERS) \
+        PKG_COMMIT=$$(git rev-list -n 1 -- v$(PKGVERS)) \
           python3 setup.py sdist bdist_wheel
 	git diff --exit-code --raw && \
           git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS) || \

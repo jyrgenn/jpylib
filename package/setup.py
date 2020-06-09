@@ -3,14 +3,19 @@ import sys
 import setuptools
 
 repository = "https://git.w21.org/python_modules/pgetopt"
+pkg_version = os.environ["PKG_VERSION"] or sys.exit("missing $PKG_VERSION env.")
+pkg_commit = os.environ["PKG_COMMIT"]
 
 with open("README.md", "r") as fh:
     # filter out the comment lines from the README
-    description_lines = [ l for l in fh if not l.startswith("#") ]
+    description_lines = [
+        l.replace("$__package_commit$", pkg_commit)
+        for l in fh if not l.startswith("#")
+    ]
 
 setuptools.setup(
     name="pgetopt-jyrgenn",
-    version=os.environ["PKG_VERSION"] or sys.exit("missing $PKG_VERSION env."),
+    version=pkg_version,
     author="Juergen Nickelsen",
     author_email="ni@w21.org",
     description=description_lines[0].strip(),

@@ -17,16 +17,15 @@ default:
 
 # create the package; ensure old versions are gone (they are a pain
 # when twine tries to upload dist/* to the package repository)
-pkg: copy
+pkg:
 	-rm -f dist/*
-	PKG_VERSION=$(PKGVERS) python3 setup.py sdist bdist_wheel
+	PKG_VERSION=$(PKGVERS) \
+        PKG_COMMIT="git rev-list -n 1 v"$(PKGVERS) \
+          python3 setup.py sdist bdist_wheel
 	git diff --exit-code --raw && \
           git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS) || \
 	  { printf "\nthere are uncommitted changes!\n\n"; exit 1 ; }
 	git push --tags
-
-# copy the actual module in place; set the version number in a variable
-copy:
 	mkdir -p $(MODULE)
 	sed 's/\$$__package_version\$$/$(PKGVERS)/g' ../$(MODULE).py \
 	    > $(MODULE)/__init__.py

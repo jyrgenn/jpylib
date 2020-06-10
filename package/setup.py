@@ -23,7 +23,7 @@ setuptools.setup(
     url=repository,
     packages=setuptools.find_packages(),
     project_urls=dict(
-        Documentation=repository+"/-/blob/master/README.md",
+        Documentation="{}/-/blob/v{}/README.md".format(repository, pkg_version),
         Source=repository,
     ),
     classifiers=[

@@ -19,12 +19,12 @@ default:
 # when twine tries to upload dist/* to the package repository)
 pkg:
 	-rm -f dist/*
-	PKG_VERSION=$(PKGVERS) \
-        PKG_COMMIT=$$(git rev-list -n 1 -- v$(PKGVERS)) \
-          python3 setup.py sdist bdist_wheel
 	git diff --exit-code --raw && \
           git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS) || \
 	  { printf "\nthere are uncommitted changes!\n\n"; exit 1 ; }
+	PKG_VERSION=$(PKGVERS) \
+        PKG_COMMIT=$$(git rev-list -n 1 v$(PKGVERS)) \
+          python3 setup.py sdist bdist_wheel
 	git push --tags
 	mkdir -p $(MODULE)
 	sed 's/\$$__package_version\$$/$(PKGVERS)/g' ../$(MODULE).py \

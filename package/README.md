@@ -33,6 +33,6 @@ Call `help(pgetopt)` for details.
 More information at <https://git.w21.org/python_modules/pgetopt>
 
 The full documentation for this version is at
-<https://git.w21.org/python_modules/pgetopt/-/blob/$__package_commit$/README.md>
+<https://git.w21.org/python_modules/pgetopt/-/blob/v$__package_version$/README.md>
 
 [ni@w21.org 2020-05-22]

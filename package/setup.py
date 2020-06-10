@@ -4,12 +4,11 @@ import setuptools
 
 repository = "https://git.w21.org/python_modules/pgetopt"
 pkg_version = os.environ["PKG_VERSION"] or sys.exit("missing $PKG_VERSION env.")
-pkg_commit = os.environ["PKG_COMMIT"]
 
 with open("README.md", "r") as fh:
     # filter out the comment lines from the README
     description_lines = [
-        l.replace("$__package_commit$", pkg_commit)
+        l.replace("$__package_version$", pkg_version)
         for l in fh if not l.startswith("#")
     ]
 

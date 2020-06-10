@@ -10,6 +10,18 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
+  * [Motivation](#motivation)
+  * [POSIX Conformance](#posix-conformance)
+  * [Usage](#usage)
+  * [Argument count checking](#argument-count-checking)
+  * [The parse() function](#the-parse-function)
+  * [Exceptions](#exceptions)
+  * [The OptionValueContainer](#the-optionvaluecontainer)
+  * [Limitations](#limitations)
+  * [Semi\-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
+  * [Documentation, Examples and Testing](#documentation-examples-and-testing)
+  * [The PyPi package](#the-pypi-package)
+
 
 Motivation
 ----------
@@ -17,7 +29,7 @@ Motivation
 I wrote this not because there wasn't an option parser available for
 Python — I know there are a few — but because I didn't like those
 I saw. Argparse, Optparse, Click, they all do more than I need, and
-because they do, thay are at the same time cumbersome to use.
+because they do, they are at the same time cumbersome to use.
 
 What I want is a really simple user interface, one that makes simple
 things simple. I don't want to automate sophisticated argument
@@ -35,8 +47,8 @@ I also want the option parsing to be POSIX conformant, because that
 is the traditional Unix style.
 
 
-POSIX Conformance[1]
---------------------
+POSIX Conformance
+-----------------
 
 POSIX-conformance means, in the context of command-line options,
 (single-letter) options can be clustered; also, the argument of a
@@ -45,7 +57,7 @@ single-letter option (if it demands one) may be placed in the next
 letter that demands an argument, the rest of that `argv[]` element,
 if any, is the option argument, not more clustered options. In other
 words, the whitespace separating option and argument is optional.
-Thus, `-o foo` and `-ofoo` are equivalent.
+Thus, `-o foo` and `-ofoo` are equivalent.[1]
 
 But mainly, option parsing stops when the first `argv[]` element is
 encountered that is neither an option or an option argument, i.e. a
@@ -65,6 +77,7 @@ be useful if a regular argument follows that starts with a `-`.)
 [1] The Open Group Base Specifications Issue 7, 2018 edition
     IEEE Std 1003.1-2017
     https://pubs.opengroup.org/onlinepubs/9699919799/
+    12. Utility Conventions
 
 
 Usage

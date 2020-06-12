@@ -1,6 +1,6 @@
 # Makefile for the pgetopt Python module
 
-PREVIEW = $$TMPDIR/pgetopt-README.html
+PREVIEW = $${TMPDIR-/tmp}/pgetopt-README.html
 PKGMAKE = cd package && $(MAKE)
 
 default: doc test

@@ -4,7 +4,7 @@
 pgetopt module
 ==============
 
-This package implements a command-line option parser. The underlying
+This module implements a command-line option parser. The underlying
 idea was to have it POSIX conformant, additionally implement long
 options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
@@ -146,7 +146,7 @@ arguments.
 
 And that is indeed all you need to know for the majority of
 applications. One simple example exercises nearly all features of
-this package:
+this module:
 
     import pgetopt
 

@@ -428,16 +428,21 @@ Documentation, Examples and Testing
 
 This README file is the main documentation. The source is in the
 `lib/` directory; run `make` in the main directory to update the
-`README.md` with a table of contents. The package README in
-`package/` contains the "schmooze" example. The docstring of the
-`parse()` function contains a summary of the main features and usage
-of the module.
+`README.md` with a table of contents. `gh-md-toc` is used to
+generate the table of contents of the README
+(<https://github.com/ekalinin/github-markdown-toc.go.git>).
+
+The package README in `package/` contains the "schmooze" example.
+The docstring of the `parse()` function contains a summary of the
+main features and usage of the module.
 
 The examples shown above can also be found in the `examples/`
 directory.
 
 The directory `tests/` contains a test suite. It can be invoked by
-running `make test` in the main directory.
+running `make test` in the main directory. The `coverage` package/tool
+to run test coverage analysis. (The Debian/Ubuntu package installs
+the command as `python3-coverage`, same as the package name.)
 
 
 The PyPi package
@@ -447,5 +452,8 @@ The PyPi package is built and uploaded to PyPi by running `make pkg`
 and `make upload`, respectively. The package URL is
 <https://pypi.org/project/pgetopt-jyrgenn/>.
 
+To build the package, you need at least Python 3.6 (for the f"..."
+strings), with `setuptools` and `twine`.
 
-[Juergen Nickelsen <ni@w21.org> 2020-05]
+
+[Juergen Nickelsen <ni@w21.org> 2020-06]

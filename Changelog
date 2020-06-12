@@ -1,9 +1,10 @@
 ;; -*- text -*-
 
-2020.xxx:
+2020.610:
 
  * Exceptions raised are now of type OptionError, with well-defined
-   arguments.
+   arguments. This allows better exception handling by the caller if
+   so requested (with `exit_on_error=False`).
 
 2020.606:
 

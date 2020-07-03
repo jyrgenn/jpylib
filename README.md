@@ -26,10 +26,26 @@ The two functions called above, `fntrace` and `pgetopt` (which
 actually would be `pgetopt.parse`) are indeed the first two I have
 in mind.
 
-Current status:
+
+Current Status
+--------------
 
 * `fntrace` — exists as a proof of concept.
 
 * `pgetopt` — a submodule `pgetopt` as used elsewhere.
+
+
+Planned Items
+-------------
+
+* the configuration mechanism as in run-jobs
+
+* the "print depending on verbosity" functions, maybe with logging
+
+* a totally simple value container class, plus a more functional
+  namespace class with **kwargs initialisation and things (or maybe
+  both rolled in one after all?)
+
+* semi-complex value syntax from tam
 
 [ni 2020-07-02] started

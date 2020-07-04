@@ -4,11 +4,16 @@ import os
 import sys
 import inspect
 
-L_ERROR  = 0
-L_NOTICE = 1
-L_INFO   = 2
-L_DEBUG  = 3
-L_TRACE  = 4
+print_level_name = [
+    "L_ERROR",
+    "L_NOTICE",
+    "L_INFO",
+    "L_DEBUG",
+    "L_TRACE",
+]
+for i, name in enumerate(print_level_name):
+    locals()[name] = i
+print_max_level = len(print_level_name) - 1
 
 print_level_level = 1
 
@@ -19,7 +24,6 @@ print_level_decoration = [
     "DBG",
     "TRC",
 ]
-print_max_level = len(print_level_decoration) - 1
 
 print_level_fds = [
     sys.stderr,
@@ -28,6 +32,7 @@ print_level_fds = [
     sys.stderr,
     sys.stderr,
 ]
+
 
 print_level_program = os.path.basename(sys.argv[0])
 
@@ -58,9 +63,29 @@ def print_level(level=None):
     trace() will print something with level 4 (and greater).
     """
     global print_level_level
+        
     if level is not None:
-        print_level_level = max(0, min(level, print_level_max_level))
+        if type(level) is str:
+            level = print_level_map[level]
+        print_level_level = max(0, min(level, print_max_level))
     return print_level_level
+
+
+def is_notice():
+    """Return True iff the print level is at least at notice."""
+    return print_level_level >= L_NOTICE
+
+def is_info():
+    """Return True iff the print level is at least at info."""
+    return print_level_level >= L_INFO
+
+def is_debug():
+    """Return True iff the print level is at least at debugging."""
+    return print_level_level >= L_DEBUG
+
+def is_trace():
+    """Return True iff the print level is at least at tracing."""
+    return print_level_level >= L_TRACE
 
 
 def print_if_level(level, *msgs):
@@ -74,7 +99,7 @@ def print_if_level(level, *msgs):
 
     """
     # make all msgs elements strings, calling those that are callable
-    for i, elem in msgs:
+    for i, elem in enumerate(msgs):
         if callable(elem):
             msgs[i] = elem()
         elif type(elem) is not str:
@@ -104,21 +129,21 @@ def debug_vars(*vars):
 def err(*msgs):
     """Print error level output."""
     had_errors = True
-    print_if_level(0, *msgs)
+    print_if_level(L_ERROR, *msgs)
 
 def notice(*msgs):
     """Print notice level output if so requested."""
-    print_if_level(1, *msgs)
+    print_if_level(L_NOTICE, *msgs)
 
 def info(*msgs):
     """Print info level output if so requested."""
-    print_if_level(2, *msgs)
+    print_if_level(L_INFO, *msgs)
 
 def debug(*msgs):
     """Print debug level output if so requested."""
-    print_if_level(3, *msgs)
+    print_if_level(L_DEBUG, *msgs)
 
 def trace(*msgs):
     """Print debug level output if so requested."""
-    print_if_level(4, *msgs)
+    print_if_level(L_TRACE, *msgs)
 

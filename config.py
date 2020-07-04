@@ -3,10 +3,13 @@
 
 import os
 
+import ./stringreader
+
 debug = None                            # forward reference
 config_files = [
     os.path.join(HOME, f".{program}.conf"),
 ]
+
 
 class Config:
     """Name space class used as a configuration object."""
@@ -34,6 +37,22 @@ class Config:
                 self.__dict__[key] = value
             else:
                 raise KeyError("not a valid config key", key)
+
+    def update_from_string(conf_string):
+        """Use a config string like "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f]}.
+
+        On the top level, this is a comma-separated list of parameters as
+        key=value pairs. A value can be a literal that doesn't contain commas,
+        curly braces, and brackets, or a dict in curly braces {key=value,...},
+        or a list in brackets [value,...].
+
+        Return an error message; if it is empty, everything was fine.
+
+        """
+        try:
+            self.update(decode_params(StringReader(conf_string)))
+        except SyntaxError as e:
+            return str(e)
 
     def __str__(self):
         """Return a string repr in the form of 'Config(key1=value1, ...)'."""

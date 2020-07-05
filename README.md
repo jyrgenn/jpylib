@@ -407,16 +407,16 @@ Semi-hidden feature: option value callbacks
 -------------------------------------------
 
 A feature not mentioned so far is the ability to call a function
-when an option is encountered. If the type of an option is specified
-as `None` and the default value is a callable function, this
-function will be called when the option is encountered on the
-command line, and its return value (which must not be `None`) will
-be used as the option's value.
+when an option is encountered. If the type field of an option
+descriptor contains not a type, but a callable function, this
+function will be called without arguments when the option is
+encountered on the command line, and its return value (which must
+not be `None`) will be used as the option's value.
 
 This is not a fully planned feature; rather, it fell more or less
 accidentally out of the implementation of the default `help` and
-`usage` options. At the moment I do not really see a useful
-application, but maybe someone else will.
+`usage` options. At the beginning I did not even really see a useful
+application, but in between one has dawned on me.
 
 I have to admit this feature isn't the prime example for clarity of
 the user interface. But then it was an afterthought and can safely

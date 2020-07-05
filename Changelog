@@ -1,5 +1,10 @@
 ;; -*- text -*-
 
+2020.705:
+
+ * Option callback functions are now in the type position of the
+   option descriptor, and a default value where it belongs.
+
 2020.610:
 
  * Exceptions raised are now of type OptionError, with well-defined

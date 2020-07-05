@@ -37,17 +37,21 @@ class OptionValueContainer:
               "option key must be string of length 1: " + repr(opt)
             assert type(desc) == tuple and len(desc) in (4, 5), \
               "descriptor not sequence len 4 or 5: -" + opt
-            assert isinstance(desc[0], str),\
-              "name not a string: -" + opt
-            assert desc[1] in (bool, int, str, None),\
-              "invalid option type desc[1]" + ": -" + opt
-            self.__dict__[desc[0]] = desc[2]
+
+            name, typ, default, *_ = desc
+            assert isinstance(name, str), "option name is not a string: -" + opt
+            if type(typ) == type:
+                assert typ in (bool, int, str), "invalid option type: -" + opt
+            else:
+                assert callable(typ), "invalid option type: -"+opt
+            self.__dict__[name] = default
+
         if "h" not in self._opts:
-            self._opts["h"] = ("help", None, self.ovc_help,
-                               "show help on options")
+            self._opts["h"] = \
+                ("help", self.ovc_help, None, "show help on options")
         if "?" not in self._opts:
-            self._opts["?"] = ("usage", None, self.ovc_usage,
-                               "show usage briefly")
+            self._opts["?"] = \
+                ("usage", self.ovc_usage, None, "show usage briefly")
         for field in _keywords:
             self.__dict__[field] = self._opts.get(field)
         if not self._program:
@@ -105,11 +109,11 @@ class OptionValueContainer:
                 raise OptionError(ErrorArg, opt)
             self.__dict__[name] += 1
         else:
-            if arg:
+            if typ not in (str, int):
+                value = typ()
+            elif arg:
                 value = arg
                 arg = ""
-            if value is None and callable(defval):
-                value = defval()
             self._set_optarg(opt, desc, value)
         return arg
 

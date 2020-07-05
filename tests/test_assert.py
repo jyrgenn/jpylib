@@ -8,7 +8,7 @@ class AssertionsTestcase(unittest.TestCase):
 
     def test_okOptType(self):
         """valid option types"""
-        for typ in bool, str, int, None:
+        for typ in bool, str, int, all:
             with self.subTest(i=typ):
                 parse({
                     "s": ("schmooze", typ, 0, "schmooziness"),

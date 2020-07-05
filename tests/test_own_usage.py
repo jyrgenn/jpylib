@@ -54,14 +54,14 @@ class HelpTestcase(unittest.TestCase):
         """call help function"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
-            "h": ("help", None, my_help, "number of hounds"),
+            "h": ("help", my_help, None, "number of hounds"),
             "_arguments": [],
         }, ["-v", "--help"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, help=6))
         self.assertTrue(help_called)
         
     def test_usage_short0(self):
-        """own usage option"""
+        """own usage option 0"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", bool, False, "opposite of overly"),
@@ -70,7 +70,7 @@ class HelpTestcase(unittest.TestCase):
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, usage=1))
 
     def test_usage_short1(self):
-        """own usage option"""
+        """own usage option 1"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", int, 2, "opposite of overly"),
@@ -79,7 +79,7 @@ class HelpTestcase(unittest.TestCase):
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, usage=4))
 
     def test_usage_short2(self):
-        """own usage option"""
+        """own usage option 2"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", int, 2, "opposite of overly"),

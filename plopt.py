@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
-import pylib as y
+import jpylib as y
+
+y.print_level(y.L_TRACE)
 
 ovc, args = y.pgetopts({
     "v": ("verbose", y.print_level_up, y.print_level(), "increase verbosity"),
     "l": ("locals", locals, None, "the local vars"),
+    "g": ("globals", globals, None, "the global vars"),
     "q": ("quiet", y.print_level_zero, False, "be quiet"),
 })
 

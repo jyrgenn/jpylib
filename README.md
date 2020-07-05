@@ -4,25 +4,25 @@ My Python Library
 
 This is meant to be a library package of things I want to have at
 hand for my own daily python programming. It shall include all the
-things I have developed and want to re-use, modules, utility
+things I have developed and want to re-use — modules, utility
 functions, and things.
 
 I want to make a PyPi package out of this, such that I can access it
 from everywhere (just like pgetopt now) and import into programs as
 a whole. That could look like this:
 
-    import tools_jyrgenn as y
+    import jpylib as y
 
     # trace calls of this function
     @y.fntrace
     def foo(bar, moo=None):
         pass
 
-    ovc, args = y.pgetopt({
+    ovc, args = y.pgetopts({
         "v": (...),
     })
 
-The two functions called above, `fntrace` and `pgetopt` (which
+The two functions called above, `fntrace` and `pgetopts` (which
 actually would be `pgetopt.parse`) are indeed the first two I have
 in mind.
 

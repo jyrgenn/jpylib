@@ -1,5 +1,6 @@
 
-from pylib import Namespace, parse_kvs
+from .namespace import Namespace
+from .kvs import parse_kvs
 
 class Config(Namespace):
     """Name space class used to build a config object."""

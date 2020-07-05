@@ -42,7 +42,7 @@ descriptsion, but exploiting this sloppyness will not be of any use.
 
 """
 
-import stringreader
+from .stringreader import StringReader
 
 class SyntaxError(Exception):
     """An exception raised when the parser sees a syntax error.
@@ -105,5 +105,5 @@ def parse_kvpairs(buf):
 
 
 def parse_kvs(string):
-    """Parse a key=value string and return the data structure.
+    """Parse a key=value string and return the data structure."""
     return parse_kvpairs(stringreader.StringReader(string))

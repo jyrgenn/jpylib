@@ -1,4 +1,4 @@
-# print functions depending on a verbosity level
+# print messages depending on a verbosity level
 
 import os
 import sys
@@ -8,10 +8,10 @@ import inspect
 # locals() values
 print_levels = [
     # level name, message decoration, fd
-    ("L_ERROR", "{program}: Error,", sys.stderr),
+    ("L_ERROR", "{program}: Error:", sys.stderr),
     ("L_NOTICE", None,   sys.stderr),
     ("L_INFO",   None,   sys.stderr),
-    ("L_DEBUG"  "DBG",   sys.stderr),
+    ("L_DEBUG",  "DBG",   sys.stderr),
     ("L_TRACE", "TRC",   sys.stderr),
 ]
 # message decoration and output file descriptor by level, to be initialised
@@ -24,14 +24,14 @@ for i, props in enumerate(print_levels):
     name, decoration, fd = props
     locals()[name] = i
     print_level_decoration.append(decoration)
-    print_level_fd.append = fd
+    print_level_fd.append(fd)
 print_max_level = i
 
 # default print level
 print_level_level = 1
 
 # the program 
-print_level_program = os.path.basename(sys.argv[0])
+program = os.path.basename(sys.argv[0])
 
 print_level_use_syslog = False
 
@@ -68,15 +68,34 @@ def print_level(level=None):
     return print_level_level
 
 
+def print_level_name(level=None):
+    """Return the name of the specified (or current) level number."""
+    if level is None:
+        level = print_level_level
+    return print_levels[level][0]
+
+
 def print_level_up():
-    """Increase the print level by one."""
+    """Increase the print level by one.
+
+    This is intended to be used as the callback function for the default value
+    of a pgetopt option to increase the verbosity.
+
+    """
+    global print_level_level
     if print_level_level < print_max_level:
         print_level_level += 1
     return print_level_level
 
 
 def print_level_zero():
-    """Set the print level to zero (errors only)."""
+    """Set the print level to zero (errors only).
+
+    This is intended to be used as the callback function for the default value
+    of a pgetopt option to set the verbosity to zero.
+
+    """
+    global print_level_level
     print_level_level = 0
     return print_level_level
 

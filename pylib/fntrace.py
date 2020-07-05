@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 
-import print_level as pl
-
+from .print_level import is_trace, trace, print_level, L_TRACE
 
 def fntrace(func):
     """Decorator: trace decorated function if trace level is set."""
     def wrapper(*args, **kwargs):
-        if pl.is_trace():
+        if is_trace():
             s = f"call {func.__name__}({', '.join(map(repr, args))}"
             if kwargs:
                 for k, v in kwargs.items():
                     s += f", {k}={repr(v)}"
-            pl.trace(s + ")")
+            trace(s + ")")
         return func(*args, **kwargs)
     return wrapper
 
 
 if __name__ == "__main__":
 
-    pl.print_level(pl.L_TRACE)
+    print_level(L_TRACE)
 
     @fntrace
     def this_function(start, end, step=1):

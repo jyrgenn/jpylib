@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .print_level import is_trace, trace, print_level, L_TRACE
+from pylib import is_trace, trace, print_level, L_TRACE
 
 def fntrace(func):
     """Decorator: trace decorated function if trace level is set."""

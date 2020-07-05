@@ -16,4 +16,6 @@ print(ovc.ovc_values())
 print(fun_fun_fun(5, 6))
 print(fun_fun_fun(5, 6, 7))
 print(fun_fun_fun(5, 6, add=8))
+print()
 
+print(y.parse_kvs("karl=frits,schum={sigs=[1,2,15],3=4},moo=0"))

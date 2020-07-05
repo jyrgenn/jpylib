@@ -55,6 +55,11 @@ class SyntaxError(Exception):
 
 separators = "{}[],="
 
+
+def syntax_error(buf, message, *args):
+    raise SyntaxError(str(buf), message.format(*args) if args else message)
+
+
 def next_token(buf):
     token = ""
     while not buf.eof():
@@ -67,7 +72,6 @@ def next_token(buf):
                 token = ch
             break
         token += ch
-    # print("next token:", token or None)
     return token or None
 
 
@@ -76,10 +80,10 @@ def parse_valuelist(buf):
     result = []
     while True:
         t = next_token(buf)
+        if t is None:
+            syntax_error(str(buf), "value list misses closing ']'")
         if t == "]":
             return result
-        if t is None:
-            raise SyntaxError(str(buf))
         if t == "[":
             result.append(parse_valuelist(buf))
             continue
@@ -87,7 +91,7 @@ def parse_valuelist(buf):
             result.append(parse_kvpairs(buf))
             continue
         if t in "=}":
-            raise SyntaxError(str(buf))
+            syntax_error(buf, "unexpected in {} value list", repr(t))
         if t in ",":
             result.append("")
         result.append(t)
@@ -101,19 +105,21 @@ def parse_kvpairs(buf, need_brace=False):
         t = next_token(buf)
         if t is None:
             if need_brace:
-                raise SyntaxError(str(buf))
+                syntax_error(str(buf), "kvpairs list misses closing '}'")
             return result
         if t == "}":
+            if not need_brace:
+                syntax_error(str(buf), "unexpected '}' in top-level kvpairs")
             return result
         if t == ",":
             continue
         if t in separators:
-            raise SyntaxError(str(buf))
+            syntax_error(str(buf), "unexpected '{}' in kvpairs list", t)
         key = t
         # expect "="
         t = next_token(buf)
         if t != "=":
-            raise SyntaxError(str(buf))
+            syntax_error(str(buf), "expected '=' after key in kvpairs list")
         # read value
         t = next_token(buf)
         if t == "{":
@@ -125,9 +131,12 @@ def parse_kvpairs(buf, need_brace=False):
         if t is ",":
             result[key] = ""
             continue
+        # if t is "}":
+        #     result[key] = ""
+        #     return result
         if t is None:
             if need_brace:
-                raise SyntaxError(str(buf))
+                syntax_error(str(buf), "kvpairs list misses closing '}'")
             result[key] = ""
             return result
         result[key] = t

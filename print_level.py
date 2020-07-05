@@ -4,36 +4,33 @@ import os
 import sys
 import inspect
 
-print_level_name = [
-    "L_ERROR",
-    "L_NOTICE",
-    "L_INFO",
-    "L_DEBUG",
-    "L_TRACE",
+# properties of the print levels; the decoration will be formatted with the
+# locals() values
+print_levels = [
+    # level name, message decoration, fd
+    ("L_ERROR", "{program}: Error,", sys.stderr),
+    ("L_NOTICE", None,   sys.stderr),
+    ("L_INFO",   None,   sys.stderr),
+    ("L_DEBUG"  "DBG",   sys.stderr),
+    ("L_TRACE", "TRC",   sys.stderr),
 ]
-for i, name in enumerate(print_level_name):
-    locals()[name] = i
-print_max_level = len(print_level_name) - 1
+# message decoration and output file descriptor by level, to be initialised
+# below
+print_level_decoration = []
+print_level_fd = []
 
+# initialise some data structures from the print_levels[] properties
+for i, props in enumerate(print_levels):
+    name, decoration, fd = props
+    locals()[name] = i
+    print_level_decoration.append(decoration)
+    print_level_fd.append = fd
+print_max_level = i
+
+# default print level
 print_level_level = 1
 
-print_level_decoration = [
-    "ERROR",
-    None,
-    None,
-    "DBG",
-    "TRC",
-]
-
-print_level_fds = [
-    sys.stderr,
-    sys.stderr,
-    sys.stderr,
-    sys.stderr,
-    sys.stderr,
-]
-
-
+# the program 
 print_level_program = os.path.basename(sys.argv[0])
 
 print_level_use_syslog = False
@@ -42,13 +39,13 @@ had_errors = False
 
 
 def print_level_config(*, level=None, program=None, level_fds=None,
-                         use_syslog=False, _):
+                         use_syslog=None):
     if level is not None:
         print_level(level)
     if program is not None:
         print_level_program = program
     if level_fds is not None:
-        print_level_fds = level_fds
+        print_level_fd = level_fds
     if use_syslog is not None:
         print_level_use_syslog = use_syslog
 
@@ -68,6 +65,19 @@ def print_level(level=None):
         if type(level) is str:
             level = print_level_map[level]
         print_level_level = max(0, min(level, print_max_level))
+    return print_level_level
+
+
+def print_level_up():
+    """Increase the print level by one."""
+    if print_level_level < print_max_level:
+        print_level_level += 1
+    return print_level_level
+
+
+def print_level_zero():
+    """Set the print level to zero (errors only)."""
+    print_level_level = 0
     return print_level_level
 
 
@@ -93,9 +103,9 @@ def print_if_level(level, *msgs):
 
     If a decoration exists in `print_level_decoration[]` for that level, is
     it prepended to the message. By default, all levels print to stderr; this
-    can be changed in `print_level_fds[]` by level.
+    can be changed in `print_level_fd[]` by level.
 
-    If one of the
+    If one of the    {XXX TODO what tf did I want to say here?}
 
     """
     # make all msgs elements strings, calling those that are callable
@@ -105,10 +115,10 @@ def print_if_level(level, *msgs):
         elif type(elem) is not str:
             msgs[i] = str(elem)
     if print_level_decoration[level]:
-        msgs = [print_level_decoration[level], *msgs]
+        msgs = [print_level_decoration[level].format(**globals()), *msgs]
 
     if level <= print_level_level:
-        print(*msgs, file=print_level_fds[level])
+        print(*msgs, file=print_level_fd[level])
 
     if print_level_use_syslog:
         if not syslog_opened:
@@ -147,3 +157,4 @@ def trace(*msgs):
     """Print debug level output if so requested."""
     print_if_level(L_TRACE, *msgs)
 
+# EOF

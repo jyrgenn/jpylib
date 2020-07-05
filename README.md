@@ -30,22 +30,24 @@ in mind.
 Current Status
 --------------
 
-* `fntrace` — exists as a proof of concept.
+* `fntrace` — function call tracing decorator
 
 * `pgetopt` — a submodule `pgetopt` as used elsewhere.
+
+* `kvs` — simple key-value string parser
+
+* the "print depending on verbosity" functions, with logging
+
+* `namespace` — a value container class with **kwargs initialisation
+  and things
+
+* the configuration mechanism as in run-jobs
 
 
 Planned Items
 -------------
 
-* the configuration mechanism as in run-jobs
+* 
 
-* the "print depending on verbosity" functions, maybe with logging
-
-* a totally simple value container class, plus a more functional
-  namespace class with **kwargs initialisation and things (or maybe
-  both rolled in one after all?)
-
-* semi-complex value syntax from tam
 
 [ni 2020-07-02] started

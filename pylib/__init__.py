@@ -9,3 +9,5 @@ from .print_level import L_ERROR, L_NOTICE, L_INFO, L_DEBUG, L_TRACE, \
 from .fntrace import fntrace
 from .stringreader import StringReader
 from .kvs import parse_kvs
+from .namespace import Namespace
+from .config import Config

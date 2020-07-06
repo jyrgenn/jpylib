@@ -7,7 +7,7 @@ class Namespace:
         """Initialize a Namespace object from the 'kwargs' mapping."""
         self.__dict__.update(kwargs)
 
-    def update(self, new_values, skip_underscore=False):
+    def update(self, new_values, skip_underscore=False, reject_unknown=False):
         """Update the NS with a dictionary of new key/value pairs.
 
         It is an error if the argument dictionary contains keys that
@@ -20,10 +20,10 @@ class Namespace:
         for key, value in new_values.items():
             if key.startswith("_") and skip_underscore:
                 continue
-            if key in self.__dict__:
-                self.__dict__[key] = value
-            else:
-                raise KeyError("not a valid config key", key)
+            if key not in self.__dict__ and reject_unknown:
+                raise KeyError("unknown key in {}: {}".format(
+                    self.__class__.__name__, key))
+            self.__dict__[key] = value
 
     def __str__(self):
         """Return a string repr in the form of 'Namespace(key1=value1, ...)'."""

@@ -7,6 +7,9 @@ from .print_level import debug
 class Config(Namespace):
     """Name space class used to build a config object."""
 
+    def update(self, new_values):
+        super().update(new_values, skip_underscore=True, reject_unknown=True)
+
     def load_from(self, filename, must_exist=False):
         """Read a configuration from file 'filename'."""
         try:
@@ -25,7 +28,7 @@ class Config(Namespace):
             raise type(e)("Error in config file: {}; {}".format(
                 filename, e
             ))
-        self.update(new_locals, skip_underscore=True)
+        self.update(new_locals)
         return True
 
     def load_config_files(self, config_files, notice_func=None):

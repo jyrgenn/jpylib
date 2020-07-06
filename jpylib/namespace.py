@@ -1,4 +1,4 @@
-#!/busr/bin/env python3
+#!/usr/bin/env python3
 
 class Namespace:
     """Simple name space class."""
@@ -24,6 +24,14 @@ class Namespace:
                 raise KeyError("unknown key in {}: {}".format(
                     self.__class__.__name__, key))
             self.__dict__[key] = value
+
+    def set(self, key, value):
+        """Set a value."""
+        self.__dict__[key] = value
+
+    def get(self, key, default=None):
+        """Get a value; default if key is not present."""
+        return self.__dict__.get(key, default)
 
     def __str__(self):
         """Return a string repr in the form of 'Namespace(key1=value1, ...)'."""

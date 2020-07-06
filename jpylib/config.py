@@ -1,6 +1,8 @@
+# Config class with configuration file reader
 
 from .namespace import Namespace
 from .kvs import parse_kvs
+from .print_level import debug
 
 class Config(Namespace):
     """Name space class used to build a config object."""
@@ -17,7 +19,12 @@ class Config(Namespace):
             else:
                 raise exc
         new_locals = {}
-        exec(contents, globals(), new_locals)
+        try:
+            exec(contents, globals(), new_locals)
+        except Exception as e:
+            raise type(e)("Error in config file: {}; {}".format(
+                filename, e
+            ))
         self.update(new_locals, skip_underscore=True)
         return True
 

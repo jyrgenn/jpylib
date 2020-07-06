@@ -9,6 +9,8 @@ ovc, args = y.pgetopts({
     "l": ("locals", locals, None, "the local vars"),
     "g": ("globals", globals, None, "the global vars"),
     "q": ("quiet", y.print_level_zero, False, "be quiet"),
+    "c": ("config_file", str, None, "configuration file path"),
+    "C": ("config_item", str, [], "configuration item(s)"),
 })
 
 @y.fntrace
@@ -28,5 +30,24 @@ print(y.parse_kvs("foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not",
 
 ns = y.Namespace(foo="hanselmann", bar=3, singer=[15,2,3,8,9])
 print(ns)
+print(ns.foo)
 print(repr(ns))
+print()
+
+cfg = y.Config(
+    owner = "jni",
+    permissions = 0o751,
+    signals = [15, 15, 15, 15, 2, 2, 2, 3, 3, 3, 6, 6, 6, 9, 9, 9, 9, 9,],
+    dirs = {
+        "lib": "/usr/local/lib",
+        "bin": "/usr/local/bin",
+    },
+    err_exit = 2,
+)
+if ovc.config_file:
+    cfg.load_from(ovc.config_file)
+if ovc.config_item:
+    for item in ovc.config_item:
+        cfg.update_from_string(item)
+print(cfg)
 

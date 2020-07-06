@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 
 class Namespace:
-    """Simple name space class."""
+    """Simple name space class as a key-value store.
+
+    Values can be assigned and read directly (ns.key = value) or using the
+    set()/get() methods. An update() method (as with a dictionary) has the
+    options to skip keys beginning with an underscore, or raise a KeyError if a
+    key is not previously known.
+
+    """
 
     def __init__(self, **kwargs):
         """Initialize a Namespace object from the 'kwargs' mapping."""
         self.__dict__.update(kwargs)
 
     def update(self, new_values, skip_underscore=False, reject_unknown=False):
-        """Update the NS with a dictionary of new key/value pairs.
+        """Update the object with a dictionary of new key/value pairs.
 
-        It is an error if the argument dictionary contains keys that
-        are not in the NS's key set.
+        If `reject_unknown` is true, it is an error if the argument dictionary
+        contains keys that are not in the object's key set.
 
-        If `skip_underscore` is true, keys with a name that starts with an
-        underscore ("_") are not considered for update
+        If `skip_underscore` is true, keys that start with an underscore ("_")
+        are not considered for update.
 
         """
         for key, value in new_values.items():
@@ -34,7 +41,7 @@ class Namespace:
         return self.__dict__.get(key, default)
 
     def __str__(self):
-        """Return a string repr in the form of 'Namespace(key1=value1, ...)'."""
+        """Return a string repr in the form of '<class>(key1=value1, ...)'."""
         return self.__class__.__name__ + "(" + ", ".join(
             [f"{k}={repr(v)}" for k, v in self.__dict__.items()]) + ")"
 

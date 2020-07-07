@@ -42,11 +42,12 @@ Current Status
 
 * the configuration mechanism as in run-jobs
 
+* `getsecret` — read a secret from a secrets file
+
 
 Planned Items
 -------------
 
-* getsecret
-
+*
 
 [ni 2020-07-02] started

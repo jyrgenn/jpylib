@@ -1,4 +1,3 @@
-
 My Python Library
 =================
 
@@ -47,7 +46,7 @@ Current Status
 Planned Items
 -------------
 
-* 
+* getsecret
 
 
 [ni 2020-07-02] started

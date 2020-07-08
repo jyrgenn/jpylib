@@ -45,9 +45,15 @@ Current Status
 * `getsecret` — read a secret from a secrets file
 
 
-Planned Items
--------------
+To Do Next
+----------
 
-*
+* tests, lots of
+
+* the packaging itself, and upload to PyPi
+
+* maybe some directory hierarchy traversing support (the need to do
+  that comes up again and again)
+
 
 [ni 2020-07-02] started

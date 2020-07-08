@@ -133,12 +133,9 @@ def parse_kvpairs(buf, need_brace=False, intvals=False):
         if t == "[":
             result[key] = parse_valuelist(buf, intvals=intvals)
             continue
-        if t is ",":
+        if t == ",":
             result[key] = ""
             continue
-        # if t is "}":
-        #     result[key] = ""
-        #     return result
         if t is None:
             if need_brace:
                 syntax_error(str(buf), "kvpairs list misses closing '}'")

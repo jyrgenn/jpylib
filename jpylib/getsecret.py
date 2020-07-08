@@ -20,7 +20,9 @@ def getsecret(key, fname=default_filename):
     key and/or value with e.g. base64.
 
     If the key is found, the value is returned. Otherwise, a `KeyError`
-    exception is raised.
+    exception is raised. The exception's arguments are a format string,
+    the key, and the file name. (Splitting this up allows for subsequent
+    i18n.)
 
     """
     with open(fname) as f:
@@ -28,7 +30,7 @@ def getsecret(key, fname=default_filename):
             tag, *value = line.split(":", 1)
             if value and tag == key:
                 return value[0].rstrip()
-    raise KeyError(f"cannot find secret for '{key}' in '{fname}'")
+    raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
 
 
 if __name__ == '__main__':
@@ -37,5 +39,5 @@ if __name__ == '__main__':
     try:
         print(getsecret(*sys.argv[1:]))
     except Exception as e:
-        sys.exit(f"getsecret: {e}")
+        sys.exit(f"getsecret: {e.args[0].format(*e.args[1:])}")
 

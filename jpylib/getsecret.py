@@ -33,7 +33,7 @@ def getsecret(key, fname=default_filename):
     raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
 
 
-if __name__ == '__main__':
+def main():
     if not (2 <= len(sys.argv) <= 3):
         sys.exit("usage: getsecret key [filename]")
     try:
@@ -41,3 +41,6 @@ if __name__ == '__main__':
     except Exception as e:
         sys.exit(f"getsecret: {e.args[0].format(*e.args[1:])}")
 
+
+if __name__ == '__main__':
+    main()

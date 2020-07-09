@@ -51,3 +51,5 @@ if ovc.config_item:
         cfg.update_from_string(item)
 print(cfg)
 
+print("getsecret test: ", end="")
+y.getsecret_main()

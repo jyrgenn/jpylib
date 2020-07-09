@@ -12,3 +12,5 @@ from .kvs import parse_kvs
 from .namespace import Namespace
 from .config import Config
 from .getsecret import getsecret
+
+version = "$__package_version$"

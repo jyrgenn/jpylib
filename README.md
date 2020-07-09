@@ -55,5 +55,7 @@ To Do Next
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)
 
+* make it 3.5-compatible, i.e. eliminate f"..." strings :–(
+
 
 [ni 2020-07-02] started

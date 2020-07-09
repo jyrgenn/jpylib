@@ -17,8 +17,7 @@ default:
 
 # create the package; ensure old versions are gone (they are a pain
 # when twine tries to upload dist/* to the package repository)
-pkg:
-	-rm -f dist/* $(MODULE)
+pkg: clean
 	git diff --exit-code --raw && \
           git tag -a -m "created package version $(PKGVERS)" v$(PKGVERS) || \
 	  { printf "\nthere are uncommitted changes!\n\n"; exit 1 ; }

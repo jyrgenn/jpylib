@@ -39,7 +39,7 @@ def main():
     try:
         print(getsecret(*sys.argv[1:]))
     except Exception as e:
-        sys.exit(f"getsecret: {e.args[0].format(*e.args[1:])}")
+        sys.exit("getsecret: " + e.args[0].format(*e.args[1:]))
 
 
 if __name__ == '__main__':

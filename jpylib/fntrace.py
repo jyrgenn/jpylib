@@ -6,10 +6,10 @@ def fntrace(func):
     """Decorator: trace decorated function if trace level is set."""
     def wrapper(*args, **kwargs):
         if is_trace():
-            s = f"call {func.__name__}({', '.join(map(repr, args))}"
+            s = "call {}({}".format(func.__name__, ', '.join(map(repr, args)))
             if kwargs:
                 for k, v in kwargs.items():
-                    s += f", {k}={repr(v)}"
+                    s += ", {}={}".format(k, repr(v))
             trace(s + ")")
         return func(*args, **kwargs)
     return wrapper
@@ -22,10 +22,12 @@ if __name__ == "__main__":
     @fntrace
     def this_function(start, end, step=1):
         hadone = False
-        print(f"=> i am func({repr(start)}, {repr(end)}, {repr(step)})")
+        print("=> i am func({}, {}, {})".format(
+            repr(start), repr(end), repr(step))
+        )
         for i in range(start, end, step):
             hadone = True
-            print(f"{i} ", end="")
+            print("{} ".format(i), end="")
         if hadone:
             print()
 

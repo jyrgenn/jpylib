@@ -43,7 +43,8 @@ class Namespace:
     def __str__(self):
         """Return a string repr in the form of '<class>(key1=value1, ...)'."""
         return self.__class__.__name__ + "(" + ", ".join(
-            [f"{k}={repr(v)}" for k, v in self.__dict__.items()]) + ")"
+            ["{}={}".format(k, repr(v)) for k, v in self.__dict__.items()]) \
+            + ")"
 
     def __repr__(self):
         return self.__str__()

@@ -40,5 +40,5 @@ class StringReader():
         head = self.content[:self._next]
         tail = self.content[self._next:]
         show = head + "^" + tail
-        return f"<{self.__class__.__name__} {repr(show)}>"
+        return "<{} {}>".format(self.__class__.__name__, repr(show))
 

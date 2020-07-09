@@ -17,7 +17,7 @@ class Config(Namespace):
                 contents = f.read()
         except OSError as exc:
             if not must_exist and exc.errno == 2:   # ENOENT
-                debug(f"config file {filename} not found")
+                debug("config file {} not found".format(filename))
                 return None
             else:
                 raise exc
@@ -41,7 +41,7 @@ class Config(Namespace):
         for file in config_files:
             if cfg.load_from(file):
                 if notice_func:
-                    notice_func(f"configuration loaded from {file}")
+                    notice_func("configuration loaded from " + file)
 
     def update_from_string(self, cfgstring):
         """Update the configuration from a key-value string.

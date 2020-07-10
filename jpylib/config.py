@@ -2,7 +2,7 @@
 
 from .namespace import Namespace
 from .kvs import parse_kvs
-from .print_level import debug
+from .alerts import debug
 
 class Config(Namespace):
     """Name space class used to build a config object."""

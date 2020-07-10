@@ -1,5 +1,9 @@
 ;; -*- text -*-
 
+2020-710:
+
+ * Integrated pgetopt into the jpylib Python library.
+
 2020.705:
 
  * Option callback functions are now in the type position of the

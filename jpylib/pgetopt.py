@@ -1,4 +1,4 @@
-# Copyright (C) Juergen Nickelsen <ni@w21.org>, see LICENSE.
+# Copyright (C) 2020 Juergen Nickelsen <ni@w21.org>, see LICENSE.
 
 """POSIX-conformant command-line option parser (plus long options)
 See the parse() function for details. Build $__package_version$

@@ -46,7 +46,7 @@ install-jpylib:
 	cd package-jpylib && $(MAKE) install
 
 preview: README.md
-	markdown README.md > $(PREVIEW)
+	markdown README-pgetopt.md > $(PREVIEW)
 	open $(PREVIEW)
 
 clean:

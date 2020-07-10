@@ -435,7 +435,9 @@ The PyPi package is built and uploaded to PyPi by running `make
 pkg-pgetopt` and `make upload-pgetopts`, respectively. The package
 URL is <https://pypi.org/project/pgetopt-jyrgenn/>.
 
-To build the package, you need `setuptools` and `twine`.
+To build the package, you need `setuptools` and `twine` (see
+<https://packaging.python.org/tutorials/packaging-projects/> for
+details).
 
 
 [Juergen Nickelsen <ni@w21.org> 2020-06]

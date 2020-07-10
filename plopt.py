@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+# just try out some of those functions
 
+import time
 import jpylib as y
 
 y.print_level(y.L_TRACE)
@@ -16,6 +18,12 @@ ovc, args = y.pgetopts({
 @y.fntrace
 def fun_fun_fun(a, b, add=3):
     return (a + b) + add
+
+@y.sanesighandler
+def nap():
+    """sleep a bit, so we can interrupt"""
+    print("interrupt now?")
+    time.sleep(3)
 
 print(ovc.ovc_values())
 print(fun_fun_fun(5, 6))
@@ -50,6 +58,7 @@ if ovc.config_item:
     for item in ovc.config_item:
         cfg.update_from_string(item)
 print(cfg)
+nap()
 
 print("getsecret test: ", end="")
 y.getsecret_main()

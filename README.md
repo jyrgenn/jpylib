@@ -44,19 +44,17 @@ Current Status
 
 * `getsecret` — read a secret from a secrets file
 
+* a decorator to handle SIGINT and SIGPIPE in a sane way (which Python
+  doesn't)
+
 
 To Do Next
 ----------
 
 * tests, lots of
 
-* the packaging itself, and upload to PyPi
-
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)
-
-* a decorator to handle SIGINT and SIGPIPE in a sane way (which Python
-  doesn't)
 
 
 

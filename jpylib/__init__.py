@@ -13,5 +13,6 @@ from .namespace import Namespace
 from .config import Config
 from .getsecret import getsecret
 from .getsecret import main as getsecret_main
+from .sighandler import sanesighandler
 
 version = "$__package_version$"

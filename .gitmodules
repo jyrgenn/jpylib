@@ -1,3 +1,0 @@
-[submodule "pgetopt"]
-	path = pgetopt
-	url = git@git.w21.org:python_modules/pgetopt.git

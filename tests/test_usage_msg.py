@@ -17,7 +17,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": [],
         }, ["-v"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         f"usage: {default_argv0} [options]")
+                         "usage: {} [options]".format(default_argv0))
 
     def test_usage1(self):
         """-h/--hounds option"""
@@ -27,7 +27,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": ["mangia"],
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         f"usage: {default_argv0} [options] mangia")
+                         "usage: {} [options] mangia".format(default_argv0))
 
     def test_usage2(self):
         """-h/--hounds option"""
@@ -37,7 +37,8 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": ["mangia", "[file1 ...]"],
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         f"usage: {default_argv0} [options] mangia [file1 ...]")
+                         "usage: {} [options] mangia [file1 ...]".format(
+                             default_argv0))
 
     def test_usage_own(self):
         """-h/--hounds option"""
@@ -45,11 +46,12 @@ class UsageTestcase(unittest.TestCase):
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
-            "_usage": f"usage: {default_argv0} [-v] [-z 5] mangia [file1 ...]"
+            "_usage": "usage: {} [-v] [-z 5] mangia [file1 ...]".format(
+                default_argv0)
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(
             ovc.ovc_usage_msg(),
-            f"usage: {default_argv0} [-v] [-z 5] mangia [file1 ...]")
+            "usage: {} [-v] [-z 5] mangia [file1 ...]".format(default_argv0))
 
     def test_usage_program(self):
         """-h/--hounds option"""
@@ -60,7 +62,7 @@ class UsageTestcase(unittest.TestCase):
             "_program": "schnörkelate",
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         f"usage: schnörkelate [options] mangia [file1 ...]")
+                         "usage: schnörkelate [options] mangia [file1 ...]")
 
 
     def test_usage_string_arguments(self):

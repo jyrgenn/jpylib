@@ -105,11 +105,11 @@ class ErrorTestCase(unittest.TestCase):
             }, ["-x", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), f"""bungabunga: {ErrorNotopt}: 'x'
+        self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
 
 usage: bungabunga [options] bunga
 use '-h' option to get help on options
-""")
+""".format(ErrorNotopt))
         
     def test_err_exit_noargs(self):
         """exit due to error"""
@@ -120,9 +120,9 @@ use '-h' option to get help on options
             }, ["-x", "3", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), f"""bungabunga: {ErrorNotopt}: 'x'
+        self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
 
 usage: bungabunga [options] <arguments>
 use '-h' option to get help on options
-""")
+""".format(ErrorNotopt))
         

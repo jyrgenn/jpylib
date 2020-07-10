@@ -9,19 +9,19 @@ tests = []
 
 def prit(it, indent=""):
     brk = "[]" if isinstance(it, list) else "()"
-    print(f"{indent}{brk[0]}")
+    print(indent + brk[0])
     n_indent = indent + indent_level
     for el in it:
         prob(el, indent=n_indent)
-    print(f"{indent}{brk[1]}")    
+    print(indent + brk[1])    
 
 def prkv(dic, indent=""):
-    print(f"{indent}{{")
+    print(indent + "{")
     n_indent = indent + indent_level
     for k, v in dic.items():
-        print(f"{n_indent}{repr(k)}: ", end="")
+        print(n_indent + repr(k) + ": ", end="")
         prob(v, n_indent)
-    print(f"{indent}}}")
+    print(indent + "}")
 
 def prob(ob, indent=""):
     if isinstance(ob, (list, tuple)):
@@ -29,7 +29,7 @@ def prob(ob, indent=""):
     elif isinstance(ob, dict):
         prkv(ob, indent)
     else:
-        print(f"{indent}{repr(ob)}")
+        print(indent + repr(ob))
         
 
 def pr(*args):
@@ -45,7 +45,7 @@ def typ(a1, a2):
     return type(a1) is type(a2)
 
 def check(what, real, expected, op):
-    #print(f"check {what}: {real} ~ {expected}")
+    #print("check {}: {} ~ {}".format(what, real, expected))
     if op(real, expected):
         pr("|", what, "ok")
         return 0
@@ -58,7 +58,7 @@ def run_test(testdef):
     testname, desc, *cases = testdef
     for case in cases:
         c_name, c_argv, c_values, c_errtype, c_args = case
-        pr(f"{testname}: {c_name:12}")
+        pr("{}: {:12}".format(testname, c_name))
         errors = 0
         r_errtype = r_ovc = r_args = r_e = None
         try:
@@ -155,6 +155,6 @@ if __name__ == "__main__":
     s = "" if total_errors == 1 else "s"
     print()
     if total_errors:
-        print(f"FAIL, {total_errors} total error{s}")
+        print("FAIL, {} total error{}".format(total_errors, s))
     else:
         print("OK all good")

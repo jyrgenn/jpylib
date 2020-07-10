@@ -431,12 +431,11 @@ the command as `python3-coverage`, same as the package name.)
 The PyPi package
 ----------------
 
-The PyPi package is built and uploaded to PyPi by running `make pkg`
-and `make upload`, respectively. The package URL is
-<https://pypi.org/project/pgetopt-jyrgenn/>.
+The PyPi package is built and uploaded to PyPi by running `make
+pkg-pgetopt` and `make upload-pgetopts`, respectively. The package
+URL is <https://pypi.org/project/pgetopt-jyrgenn/>.
 
-To build the package, you need at least Python 3.6 (for the f"..."
-strings), with `setuptools` and `twine`.
+To build the package, you need `setuptools` and `twine`.
 
 
 [Juergen Nickelsen <ni@w21.org> 2020-06]

@@ -21,8 +21,8 @@ class UsageTestcase(unittest.TestCase):
             ovc.ovc_usage()
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         f"""usage: {default_argv0} [options]
-use '-h' option to get help on options""")
+                         """usage: {} [options]
+use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(status.value, 64)
 
 
@@ -37,8 +37,8 @@ use '-h' option to get help on options""")
             ovc.ovc_usage(exit_status=63)
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         f"""usage: {default_argv0} [options]
-use '-h' option to get help on options""")
+                         """usage: {} [options]
+use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(status.value, 63)
 
     def test_usage2(self):
@@ -52,10 +52,10 @@ use '-h' option to get help on options""")
             ovc.ovc_usage("sis is rong", exit_status=63)
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         f"""{default_argv0}: sis is rong
+                         """{}: sis is rong
 
-usage: {default_argv0} [options]
-use '-h' option to get help on options""")
+usage: {} [options]
+use '-h' option to get help on options""".format(default_argv0, default_argv0))
         self.assertEqual(status.value, 63)
 
     def test_usage3(self):
@@ -69,10 +69,10 @@ use '-h' option to get help on options""")
             ovc.ovc_usage("sis is rong")
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         f"""{default_argv0}: sis is rong
+                         """{}: sis is rong
 
-usage: {default_argv0} [options]
-use '-h' option to get help on options""")
+usage: {} [options]
+use '-h' option to get help on options""".format(default_argv0, default_argv0))
         self.assertEqual(status.value, 64)
 
     def test_usage4(self):
@@ -86,8 +86,8 @@ use '-h' option to get help on options""")
             ovc.ovc_usage(exit_status=0)
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
-                         f"""usage: {default_argv0} [options]
-use '-h' option to get help on options""")
+                         """usage: {} [options]
+use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(status.value, 0)
 
     def test_usage5(self):
@@ -101,8 +101,8 @@ use '-h' option to get help on options""")
             ovc.ovc_usage(exit_status=0)
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
-                         f"""usage: {default_argv0} [options] 1 2 drei
-use '-h' option to get help on options""")
+                         """usage: {} [options] 1 2 drei
+use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(status.value, 0)
 
 
@@ -123,7 +123,7 @@ class HelpTestcase(unittest.TestCase):
             "_program": "schmooze",
         }, ["gnaddel"])
         self.assertEqual(ovc.ovc_help_msg(),
-                         f"""usage: schmooze [options] string_to_print ...
+                         """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
  -?, --usage 
@@ -159,7 +159,7 @@ This is just an example program.""")
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(status.value, 0)
         self.assertEqual(out.getvalue(),
-                         f"""usage: schmooze [options] string_to_print ...
+                         """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
  -?, --usage 
@@ -198,7 +198,7 @@ This is just an example program.
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(status.value, 0)
         self.assertEqual(out.getvalue(),
-                         f"""usage: schmooze [options] string_to_print ...
+                         """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
  -?, --usage 

@@ -30,9 +30,9 @@ print a help message or a brief usage message, respectively.
 `args` holds the remaining arguments behind the last option.
 
 Call `help(pgetopt)` for details.  
-More information at <https://git.w21.org/python_modules/pgetopt>
+More information at <https://git.w21.org/ni/jpylib/>
 
 The full documentation for this version is at
-<https://git.w21.org/python_modules/pgetopt/-/blob/v$__package_version$/README.md>
+<https://git.w21.org/ni/jpylib/-/blob/v$__package_version$/README-pgetopt.md>
 
 [ni@w21.org 2020-05-22]

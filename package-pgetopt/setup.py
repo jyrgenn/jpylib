@@ -2,7 +2,7 @@ import os
 import sys
 import setuptools
 
-repository = "https://git.w21.org/python_modules/pgetopt"
+repository = "https://git.w21.org/ni/jpylib"
 pkg_version = os.environ["PKG_VERSION"] or sys.exit("missing $PKG_VERSION env.")
 
 with open("README.md", "r") as fh:

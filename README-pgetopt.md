@@ -1,3 +1,4 @@
+<!-- GENERATED FILE, DO NOT EDIT -->
 <!--*- text -*-->
 
 pgetopt module
@@ -9,7 +10,18 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
-#include readme-toc.tmp
+  * [Motivation](#motivation)
+  * [POSIX Conformance](#posix-conformance)
+  * [Usage](#usage)
+  * [Argument count checking](#argument-count-checking)
+  * [The parse() function](#the-parse-function)
+  * [Exceptions](#exceptions)
+  * [The OptionValueContainer](#the-optionvaluecontainer)
+  * [Limitations](#limitations)
+  * [Semi\-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
+  * [Documentation, Examples and Testing](#documentation-examples-and-testing)
+  * [The PyPi package](#the-pypi-package)
+
 
 Motivation
 ----------
@@ -284,7 +296,12 @@ as text constants, so they can be used for comparison:
 
 | Constant    | Message                             | Argument |
 |-------------|-------------------------------------|----------|
-#include readme-errtable.tmp
+| ErrorNotopt | "unknown option"                    | option   |
+| ErrorArg    | "option does not take an argument"  | option   |
+| ErrorNoarg  | "option needs argument"             | option   |
+| ErrorIntarg | "option argument must be integer"   | option   |
+| ErrorMinarg | "too few arguments, needs at least" | minimum  |
+| ErrorMaxarg | "too many arguments, at most"       | maximum  |
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)

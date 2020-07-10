@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # test: trigger assertion 2
 
-import pgetopt
+import jpylib as y
 
-ovc, args = pgetopt.parse({
+ovc, args = y.pgetopts({
     "v": (b"verbose", bool, 0, "increase verbosity"),
 })

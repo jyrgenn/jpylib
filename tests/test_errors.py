@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from pgetopt import *
+from jpylib.pgetopt import *
 from capture import outputAndExitCaptured
 
 # try to trigger all error conditions handled in the code (except the

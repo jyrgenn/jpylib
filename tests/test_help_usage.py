@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from pgetopt import parse
+from jpylib.pgetopt import parse
 from capture import outputAndExitCaptured
 
 default_argv0 = "python3 -m unittest"

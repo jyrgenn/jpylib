@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pgetopt import parse
+from jpylib.pgetopt import parse
 import unittest
 
 # tests about triggering assertion errors

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pgetopt import *
+from jpylib.pgetopt import *
 import unittest
 
 # assorted tests from the docs

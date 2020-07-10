@@ -24,7 +24,7 @@ pkg:
 	  { printf "\nthere are uncommitted changes!\n\n"; exit 1 ; }
 	git push --tags
 	mkdir -p $(MODULE)
-	sed 's/\$$__package_version\$$/$(PKGVERS)/g' ../$(MODULE).py \
+	sed 's/\$$__package_version\$$/$(PKGVERS)/g' ../jpylib/$(MODULE).py \
 	    > $(MODULE)/__init__.py
 	PKG_VERSION=$(PKGVERS) python3 setup.py sdist bdist_wheel
 

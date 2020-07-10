@@ -1,7 +1,6 @@
 # Makefile for the pgetopt Python module
 
 PREVIEW = $${TMPDIR-/tmp}/pgetopt-README.html
-PKGMAKE = cd package && $(MAKE)
 
 default: doc test
 
@@ -28,14 +27,23 @@ coverage:
 	coverage run -m unittest discover tests
 	coverage report -m
 
-pkg: test
-	$(PKGMAKE) pkg
+pkg-pgetopt: test
+	cd package-pgetopt && $(MAKE) pkg
 
-upload:
-	$(PKGMAKE) upload
+pkg-jpylib: test
+	cd package-jpylib && $(MAKE) pkg
 
-install:
-	$(PKGMAKE) install
+upload-pgetopt:
+	cd package-pgetopt && $(MAKE) upload
+
+upload-jpylib:
+	cd package-jpylib && $(MAKE) upload
+
+install-pgetopt:
+	cd package-pgetopt && $(MAKE) install
+
+install-jpylib:
+	cd package-jpylib && $(MAKE) install
 
 preview: README.md
 	markdown README.md > $(PREVIEW)

@@ -2,9 +2,9 @@
 # pgetopt example program [ni@w21.org 2020-05-22]
 
 import sys
-import pgetopt
+import jpylib as y
 
-ovc, args = pgetopt.parse({
+ovc, args = y.pgetopts({
     # opt: (name,        type, default value, helptext[, arg name])
     "s": ("schmooze",    bool, 0,    "more schmooziness"),
     "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),

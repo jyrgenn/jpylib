@@ -128,6 +128,7 @@ def alert_if_level(level, *msgs):
 
     """
     # make all msgs elements strings, calling those that are callable
+    msgs = list(msgs)                   # is a tuple before
     for i, elem in enumerate(msgs):
         if callable(elem):
             msgs[i] = elem()

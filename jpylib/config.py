@@ -39,7 +39,7 @@ class Config(Namespace):
 
         """
         for file in config_files:
-            if cfg.load_from(file):
+            if self.load_from(file):
                 if notice_func:
                     notice_func("configuration loaded from " + file)
 

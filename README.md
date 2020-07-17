@@ -49,6 +49,12 @@ Current Status
   signals (or rather the corresponding KeyboardInterrupt and
   BrokenPipeError exceptions) as they should be.
 
+* `terminal_size` — return `columns, rows` of terminal (or `None,
+  None` if not available)
+
+* `program`, `home`, `real_home` — basename of `argv[0]`, `$HOME`,
+  and the uid's home dir as variables
+
 
 To Do Next
 ----------

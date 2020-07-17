@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Have all support function modules here at hand.
 
+import os
+import pwd
+import sys
+
 from .pgetopt import parse as pgetopts
 from .alerts import L_ERROR, L_NOTICE, L_INFO, L_DEBUG, L_TRACE, \
     alert_config, alert_level, alert_level_name, \
@@ -17,3 +21,6 @@ from .sighandler import sanesighandler
 from .terminal import terminal_size
 
 version = "$__package_version$"
+program = os.path.basename(sys.argv[0])
+real_home = pwd.getpwuid(os.getuid()).pw_dir
+home = os.environ.get("HOME") or real_home

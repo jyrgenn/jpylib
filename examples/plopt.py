@@ -58,6 +58,11 @@ if ovc.config_item:
     for item in ovc.config_item:
         cfg.update_from_string(item)
 print(cfg)
+print()
+print("jpylib version ", y.version, ", program ", y.program,
+      ", home ", y.home, ", real home ", y.real_home, sep="")
+print()
+print("terminal is {} x {}".format(*y.terminal_size()))
 nap()
 
 print("getsecret test: ", end="")

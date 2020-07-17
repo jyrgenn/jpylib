@@ -14,5 +14,6 @@ from .config import Config
 from .getsecret import getsecret
 from .getsecret import main as getsecret_main
 from .sighandler import sanesighandler
+from .terminal import terminal_size
 
 version = "$__package_version$"

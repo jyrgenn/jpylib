@@ -29,31 +29,41 @@ in mind.
 Current Status
 --------------
 
-* `fntrace` — function call tracing decorator
+* `fntrace` — function call tracing decorator.
 
 * `pgetopt` — a submodule `pgetopt` as used elsewhere.
 
-* `kvs` — simple key-value string parser
+* `kvs` — simple key-value string parser.
 
-* the "print depending on verbosity" functions, with logging
+* `alerts` – print messages depending on an alert level.
 
 * `namespace` — a value container class with **kwargs initialisation
-  and things
+  and things.
 
-* the configuration mechanism as in run-jobs
+* `config` — reading configuration values from files in Python
+  syntax and strings in a simple `key=value` syntax.
 
 * `getsecret` — read a secret from a secrets file
+
+* `sanesighandler` — a decorator to handle SIGINT and SIGPIPE
+  signals (or rather the corresponding KeyboardInterrupt and
+  BrokenPipeError exceptions) as they should be.
+
+* `terminal_size` — return `columns, rows` of terminal (or `None,
+  None` if not available)
+
+* `program`, `home`, `real_home` — basename of `argv[0]`, `$HOME`,
+  and the uid's home dir as variables
 
 
 To Do Next
 ----------
 
-* tests, lots of
-
-* the packaging itself, and upload to PyPi
+* testing
 
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)
+
 
 
 [ni 2020-07-02] started

@@ -18,7 +18,7 @@ def maybe_decode(string):
     return string
 
 
-def getsecret(key, fname=default_filename):
+def getsecret(key, fname=None):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
     The default pathname for the secrets file is `/etc/secrets` if
@@ -39,6 +39,8 @@ def getsecret(key, fname=default_filename):
     before it is returned.
 
     """
+    if fname is None:
+        fname = default_filename
     with open(fname) as f:
         for line in f:
             tag, *value = line.split(":", 1)

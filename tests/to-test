@@ -1,0 +1,11 @@
+Things to test
+--------------
+
+*: to do; +: done; @: ongoing; #: blocked; -: rejected
+
+ + option arguments, same and other argv[] element, long and short
+
+ + option value callback
+
+ + own help/usage options
+

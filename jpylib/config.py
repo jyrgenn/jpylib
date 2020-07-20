@@ -2,7 +2,7 @@
 
 from .namespace import Namespace
 from .kvs import parse_kvs
-from .print_level import debug
+from .alerts import debug
 
 class Config(Namespace):
     """Name space class used to build a config object."""
@@ -39,7 +39,7 @@ class Config(Namespace):
 
         """
         for file in config_files:
-            if cfg.load_from(file):
+            if self.load_from(file):
                 if notice_func:
                     notice_func("configuration loaded from " + file)
 

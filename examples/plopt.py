@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
+# just try out some of those functions
 
+import time
 import jpylib as y
 
-y.print_level(y.L_TRACE)
+y.alert_level(y.L_TRACE)
 
 ovc, args = y.pgetopts({
-    "v": ("verbose", y.print_level_up, y.print_level(), "increase verbosity"),
+    "v": ("verbose", y.alert_level_up, y.alert_level(), "increase verbosity"),
     "l": ("locals", locals, None, "the local vars"),
     "g": ("globals", globals, None, "the global vars"),
-    "q": ("quiet", y.print_level_zero, False, "be quiet"),
+    "q": ("quiet", y.alert_level_zero, False, "be quiet"),
     "c": ("config_file", str, None, "configuration file path"),
     "C": ("config_item", str, [], "configuration item(s)"),
 })
@@ -16,6 +18,12 @@ ovc, args = y.pgetopts({
 @y.fntrace
 def fun_fun_fun(a, b, add=3):
     return (a + b) + add
+
+@y.sanesighandler
+def nap():
+    """sleep a bit, so we can interrupt"""
+    print("interrupt now?")
+    time.sleep(3)
 
 print(ovc.ovc_values())
 print(fun_fun_fun(5, 6))
@@ -50,6 +58,12 @@ if ovc.config_item:
     for item in ovc.config_item:
         cfg.update_from_string(item)
 print(cfg)
+print()
+print("jpylib version ", y.version, ", program ", y.program,
+      ", home ", y.home, ", real home ", y.real_home, sep="")
+print()
+print("terminal is {} x {}".format(*y.terminal_size()))
+nap()
 
 print("getsecret test: ", end="")
 y.getsecret_main()

@@ -1,0 +1,5 @@
+/README.toc
+*~
+__pycache__
+.coverage
+*.tmp

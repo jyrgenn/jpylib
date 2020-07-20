@@ -1,0 +1,47 @@
+;; -*- text -*-
+
+2020-710:
+
+ * Integrated pgetopt into the jpylib Python library.
+
+2020.705:
+
+ * Option callback functions are now in the type position of the
+   option descriptor, and a default value where it belongs.
+
+2020.610:
+
+ * Exceptions raised are now of type OptionError, with well-defined
+   arguments. This allows better exception handling by the caller if
+   so requested (with `exit_on_error=False`).
+
+2020.606:
+
+ * Check for option key length and valid keywords.
+
+ * Allow supplying _program for the program name instead of
+   sys.srgv[0].
+
+ * Allow supplying _usage for the usage message instead of the
+   constructed one.
+
+ * Gave up the under 10 KB code goal; hope to keep it under 16 KB
+   (which may leave space for some improvements like more error
+   checking and things).
+
+2020.528:
+
+ * Spec change: option discriptor must now be a tuple; _arguments
+   value must now be a string (as before) or a list. See README.
+
+2020.525:
+
+ * Got rid of the f-strings for compatibility with Python 3.5
+ 
+   I *like* the f-strings, but I still have one server, and not an
+   unimportant one, still running under Debian 9 with Python 3.5.
+   This was, actually, a bit of a pain.
+
+2020.524:
+
+ * First public release

@@ -11,7 +11,7 @@ from .stringreader import StringReader
 from .kvs import parse_kvs
 from .namespace import Namespace
 from .config import Config
-from .getsecret import getsecret
-from .getsecret import main as getsecret_main
+from .get_secret import getsecret
+from .get_secret import main as getsecret_main
 
 version = "$__package_version$"

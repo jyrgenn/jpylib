@@ -7,6 +7,17 @@ import sys
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
 default_filename = os.path.join(basedir, "etc/secrets")
 
+def maybe_decode(string):
+    """Decode the string, if necessary.
+
+    Currently implemented decoding:
+      * base64; used when string starts with "{b64}"
+    """
+    if string.startswith("{b64}"):
+        string = base64.b64decode(string[5:])
+    return string
+
+
 def getsecret(key, fname=default_filename):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
@@ -24,12 +35,15 @@ def getsecret(key, fname=default_filename):
     the key, and the file name. (Splitting this up allows for subsequent
     i18n.)
 
+    If the found key starts with "{b64}", it will be base64-decoded
+    before it is returned.
+
     """
     with open(fname) as f:
         for line in f:
             tag, *value = line.split(":", 1)
             if value and tag == key:
-                return value[0].rstrip()
+                return maybe_decode(value[0].rstrip())
     raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
 
 

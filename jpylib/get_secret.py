@@ -2,6 +2,7 @@
 
 import os
 import sys
+import base64
 
 
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')

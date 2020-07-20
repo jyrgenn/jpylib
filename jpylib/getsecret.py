@@ -7,7 +7,7 @@ import sys
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
 default_filename = os.path.join(basedir, "etc/secrets")
 
-def getsecret(key, fname=default_filename):
+def getsecret(key, fname=None):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
     The default pathname for the secrets file is `/etc/secrets` if
@@ -25,6 +25,8 @@ def getsecret(key, fname=default_filename):
     i18n.)
 
     """
+    if fname is None:
+        fname = default_filename
     with open(fname) as f:
         for line in f:
             tag, *value = line.split(":", 1)

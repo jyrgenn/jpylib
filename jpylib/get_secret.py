@@ -4,22 +4,34 @@ import os
 import sys
 import base64
 
-
+# Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
 default_filename = os.path.join(basedir, "etc/secrets")
 
-def maybe_decode(string):
-    """Decode the string, if necessary.
+# Default encoding to use in case of base64 decode (maybe also others in the
+# future).
+default_encoding = "utf-8"
 
-    Currently implemented decoding:
-      * base64; used when string starts with "{b64}"
+# tag => decoder function mapping for tagged values in the secrets file. If a
+# secret value starts with a tag, find the decoder function here.
+decoders = {
+    "{b64}": lambda string, encoding: str(base64.b64decode(string), encoding),
+}
+
+
+def maybe_decode(string, encoding):
+    """Decode the string, if tagged and necessary.
+
+    See `decoders` above for available decoding functions.
+
     """
-    if string.startswith("{b64}"):
-        string = base64.b64decode(string[5:])
+    for tag, decode_func in decoders.items():
+        if string.startswith(tag):
+            string = decode_func(string[len(tag):], encoding)
     return string
 
 
-def getsecret(key, fname=None):
+def getsecret(key, fname=None, encoding=default_encoding):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
     The default pathname for the secrets file is `/etc/secrets` if
@@ -36,8 +48,8 @@ def getsecret(key, fname=None):
     the key, and the file name. (Splitting this up allows for subsequent
     i18n.)
 
-    If the found key starts with "{b64}", it will be base64-decoded
-    before it is returned.
+    If the found value for the key starts with "{b64}", it will be
+    base64-decoded before it is returned.
 
     """
     if fname is None:
@@ -46,7 +58,7 @@ def getsecret(key, fname=None):
         for line in f:
             tag, *value = line.split(":", 1)
             if value and tag == key:
-                return maybe_decode(value[0].rstrip())
+                return maybe_decode(value[0].rstrip(), encoding)
     raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
 
 

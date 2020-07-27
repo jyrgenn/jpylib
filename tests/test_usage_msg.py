@@ -3,7 +3,6 @@
 from jpylib.pgetopt import parse
 import unittest
 
-default_argv0 = "python3 -m unittest"
 
 # test replacing the default usage message
 
@@ -17,7 +16,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": [],
         }, ["-v"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: {} [options]".format(default_argv0))
+                         "usage: {} [options]".format(ovc._program))
 
     def test_usage1(self):
         """-h/--hounds option"""
@@ -27,7 +26,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": ["mangia"],
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: {} [options] mangia".format(default_argv0))
+                         "usage: {} [options] mangia".format(ovc._program))
 
     def test_usage2(self):
         """-h/--hounds option"""
@@ -38,7 +37,7 @@ class UsageTestcase(unittest.TestCase):
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
                          "usage: {} [options] mangia [file1 ...]".format(
-                             default_argv0))
+                             ovc._program))
 
     def test_usage_own(self):
         """-h/--hounds option"""
@@ -46,12 +45,11 @@ class UsageTestcase(unittest.TestCase):
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
-            "_usage": "usage: {} [-v] [-z 5] mangia [file1 ...]".format(
-                default_argv0)
+            "_usage": "usage: gniddle [-v] [-z 5] mangia [file1 ...]"
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(
             ovc.ovc_usage_msg(),
-            "usage: {} [-v] [-z 5] mangia [file1 ...]".format(default_argv0))
+            "usage: gniddle [-v] [-z 5] mangia [file1 ...]")
 
     def test_usage_program(self):
         """-h/--hounds option"""

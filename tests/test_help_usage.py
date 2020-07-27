@@ -4,8 +4,6 @@ import unittest
 from jpylib.pgetopt import parse
 from capture import outputAndExitCaptured
 
-default_argv0 = "python3 -m unittest"
-
 # test replacing the default usage message
 
 class UsageTestcase(unittest.TestCase):
@@ -22,7 +20,7 @@ class UsageTestcase(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
                          """usage: {} [options]
-use '-h' option to get help on options""".format(default_argv0))
+use '-h' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 64)
 
 
@@ -38,7 +36,7 @@ use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
                          """usage: {} [options]
-use '-h' option to get help on options""".format(default_argv0))
+use '-h' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage2(self):
@@ -55,7 +53,7 @@ use '-h' option to get help on options""".format(default_argv0))
                          """{}: sis is rong
 
 usage: {} [options]
-use '-h' option to get help on options""".format(default_argv0, default_argv0))
+use '-h' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage3(self):
@@ -72,7 +70,7 @@ use '-h' option to get help on options""".format(default_argv0, default_argv0))
                          """{}: sis is rong
 
 usage: {} [options]
-use '-h' option to get help on options""".format(default_argv0, default_argv0))
+use '-h' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 64)
 
     def test_usage4(self):
@@ -87,7 +85,7 @@ use '-h' option to get help on options""".format(default_argv0, default_argv0))
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
                          """usage: {} [options]
-use '-h' option to get help on options""".format(default_argv0))
+use '-h' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
     def test_usage5(self):
@@ -102,7 +100,7 @@ use '-h' option to get help on options""".format(default_argv0))
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
                          """usage: {} [options] 1 2 drei
-use '-h' option to get help on options""".format(default_argv0))
+use '-h' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
 

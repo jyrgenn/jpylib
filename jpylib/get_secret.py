@@ -20,13 +20,13 @@ decoders = {
 
 
 def maybe_decode(fields, key, encoding):
-    """Decode the found value, if tagged and necessary.
+    """Decode the found value, if options are present.
 
-    `fields`    the fields after the key, value only or with encoding tags;
-    `key`       key we searched for
+    `fields`    the fields after the key, value string only or with options;
+    `key`       the key we originally searched for;
     `encoding`  the bytes => string encoding to use.
 
-    See `decoders` above for available decoding functions.
+    See `decoders` above for available decoder functions.
 
     """
     assert 1 <= len(fields) <= 2

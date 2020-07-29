@@ -15,19 +15,33 @@ default_encoding = "utf-8"
 # tag => decoder function mapping for tagged values in the secrets file. If a
 # secret value starts with a tag, find the decoder function here.
 decoders = {
-    "{b64}": lambda string, encoding: str(base64.b64decode(string), encoding),
+    "b64": lambda string, encoding: str(base64.b64decode(string), encoding),
 }
 
 
-def maybe_decode(string, encoding):
-    """Decode the string, if tagged and necessary.
+def maybe_decode(fields, key, encoding):
+    """Decode the found value, if tagged and necessary.
+
+    `fields`    the fields after the key, value only or with encoding tags;
+    `key`       key we searched for
+    `encoding`  the bytes => string encoding to use.
 
     See `decoders` above for available decoding functions.
 
     """
-    for tag, decode_func in decoders.items():
-        if string.startswith(tag):
-            string = decode_func(string[len(tag):], encoding)
+    assert 1 <= len(fields) <= 2
+    if len(fields) == 2:
+        options, string = fields
+        string = string.rstrip()
+        if options:                       # skip an empty string => no options
+            for opt in options.split(","):
+                try:
+                    decode_func = decoders[opt]
+                except KeyError:
+                    raise KeyError("option '{}' at key '{}' unknown", opt, key)
+                string = decode_func(string, encoding)
+    else:
+        return fields[0].rstrip()
     return string
 
 
@@ -56,9 +70,9 @@ def getsecret(key, fname=None, encoding=default_encoding):
         fname = default_filename
     with open(fname) as f:
         for line in f:
-            tag, *value = line.split(":", 1)
-            if value and tag == key:
-                return maybe_decode(value[0].rstrip(), encoding)
+            tag, *rest = line.split(":", 2)
+            if rest and tag == key:
+                return maybe_decode(rest, key, encoding)
     raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
 
 

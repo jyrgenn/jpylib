@@ -33,7 +33,7 @@ def encode_b64(string, char_encoding):
 
 def decode_b64(string, char_encoding):
     """Decode base64-encoded string."""
-    return str(base64.b64decode(string), encoding)
+    return str(base64.b64decode(string), char_encoding)
 
 def decode_zip(string, char_encoding):
     """Decode a zipped string. Implies base64 encoding of zip data."""
@@ -43,7 +43,7 @@ def decode_zip(string, char_encoding):
 def encode_zip(string, char_encoding):
     """Zip-compress a string. Implies base64 encoding of zip data."""
     binary = zlib.compress(bytes(string, char_encoding))
-    return encode_b64(binary)
+    return encode_b64(binary, char_encoding)
 
 
 # encode/decode direction

@@ -7,8 +7,8 @@ from .alerts import debug
 class Config(Namespace):
     """Name space class used to build a config object."""
 
-    def update(self, new_values):
-        super().update(new_values, skip_underscore=True, reject_unknown=True)
+    def update(self, new_values, reject_unknown=True):
+        super().update(new_values, skip_underscore=True, reject_unknown=reject_unknown)
 
     def load_from(self, filename, reject_unknown=True, must_exist=False):
         """Read a configuration from file 'filename'."""
@@ -38,10 +38,13 @@ class Config(Namespace):
         about a config file being loaded.
 
         """
+        loaded = 0
         for file in config_files:
             if self.load_from(file, reject_unknown=reject_unknown):
+                loaded += 1
                 if notice_func:
                     notice_func("configuration loaded from " + file)
+        return loaded
 
     def update_from_string(self, cfgstring, reject_unknown=True):
         """Update the configuration from a key-value string.

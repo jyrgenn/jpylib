@@ -1,5 +1,7 @@
 # Config class with configuration file reader
 
+import errno
+
 from .namespace import Namespace
 from .kvs import parse_kvs
 from .alerts import debug
@@ -16,7 +18,7 @@ class Config(Namespace):
             with open(filename, "r") as f:
                 contents = f.read()
         except OSError as exc:
-            if not must_exist and exc.errno == 2:   # ENOENT
+            if not must_exist and exc.errno == errno.ENOENT:
                 debug("config file {} not found".format(filename))
                 return None
             else:

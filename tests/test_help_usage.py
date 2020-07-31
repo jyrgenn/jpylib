@@ -2,7 +2,7 @@
 
 import unittest
 from jpylib.pgetopt import parse
-from capture import outputAndExitCaptured
+from jpylib.capture import outputAndExitCaptured
 
 # test replacing the default usage message
 

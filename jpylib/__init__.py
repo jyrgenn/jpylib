@@ -19,6 +19,7 @@ from .get_secret import getsecret
 from .get_secret import main as getsecret_main
 from .sighandler import sanesighandler
 from .terminal import terminal_size
+from .capture import outputCaptured, outputAndExitCaptured
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

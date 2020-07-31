@@ -1,6 +1,6 @@
 import sys
 import unittest
-from capture import outputCaptured, outputAndExitCaptured
+from jpylib.capture import outputCaptured, outputAndExitCaptured
 
 class CaptureTest(unittest.TestCase):
 

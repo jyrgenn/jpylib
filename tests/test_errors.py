@@ -2,7 +2,7 @@
 
 import unittest
 from jpylib.pgetopt import *
-from capture import outputAndExitCaptured
+from jpylib.capture import outputAndExitCaptured
 
 # try to trigger all error conditions handled in the code (except the
 # assertions, which have already been done)

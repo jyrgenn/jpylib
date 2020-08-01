@@ -80,13 +80,6 @@ def alert_redirect(level, file):
     cfg.fd[level] = file
 
 
-def get_mod_var(name):
-    """Get the value of a module variable, for testing."""
-    if name[0] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-        return globals()[name]
-    return cfg.get(name)
-
-
 def alert_level(level=None):
     """Get or set the verbosity level for the alert functions.
 

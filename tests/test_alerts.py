@@ -26,7 +26,7 @@ class AlertsTestcase(unittest.TestCase):
         self.assertEqual(alcf().program, "the_program")
         self.assertEqual(alcf().syslog_facility, syslog.LOG_LPR)
 
-        debug("it ain't me babe")
+        debug("it ain't me babe")       # need to trigger syslog open
         self.assertTrue(alcf().syslog_opened)
         nulldev = open("/dev/null", "w")
         alert_redirect(L_DEBUG, nulldev)
@@ -52,11 +52,7 @@ class AlertsTestcase(unittest.TestCase):
 
     def test_alert_level(self):
         l = alert_level("L_INFO")
-        print("level:", l, "INFO:", L_INFO, "new:", alert_level(),
-              file=sys.stderr)
         self.assertEqual(alert_level(), L_INFO)
-        print("cfg:", alcf().level, "alcf():", alcf().level, "new:", alert_level(),
-              file=sys.stderr)
         self.assertEqual(alcf().level, L_INFO)
         alert_level(L_TRACE)
         self.assertEqual(alert_level(), L_TRACE)
@@ -127,6 +123,17 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
             error("an error")
         self.assertTrue(err.getvalue().endswith("an error\n"))
         self.assertEqual(alcf().had_errors, True)
+
+    def test_fatal(self):
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("too bad!")
+        self.assertTrue(err.getvalue().endswith(" too bad!\n"))
+        self.assertEqual(status.value, 1)
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("oy vey!", exit_status=13)
+        self.assertTrue(err.getvalue().endswith(" oy vey!\n"))
+        self.assertEqual(status.value, 13)
+        
 
     def test_notice(self):
         alert_level(L_TRACE)

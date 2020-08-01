@@ -9,8 +9,8 @@ class CaptureTest(unittest.TestCase):
         with outputCaptured() as (out, err):
             print("huhu")
             print("hihi", file=sys.stderr)
-        self.assertEqual(out.getvalue(), "huhu\n")
         self.assertEqual(err.getvalue(), "hihi\n")
+        self.assertEqual(out.getvalue(), "huhu\n")
 
     def test_capture_exit(self):
         with outputAndExitCaptured() as (out, err, status):

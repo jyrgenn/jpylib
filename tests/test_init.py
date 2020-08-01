@@ -18,6 +18,7 @@ version_re = r"^(20\d\d\.\d\d\d\d?.\d\d\d\d?|\$__package_version\$)$"
 class InitTestcase(unittest.TestCase):
 
     def test_ttys(self):
+        ptty("\nthis should come out exactly ike this")
         tty_in = ttyi()
         self.assertEqual(tty_in.__class__.__name__, "TextIOWrapper")
         tty_in2 = ttyi()

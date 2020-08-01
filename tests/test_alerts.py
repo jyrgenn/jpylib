@@ -7,30 +7,33 @@ import unittest
 # alerts tests
 
 class AlertsTestcase(unittest.TestCase):
+
+    def setUp(self):
+        alert_init()
     
     def test_variables(self):
         """test module variable settings"""
         self.assertEqual(len(alert_levels), 5)
-        self.assertEqual(len(alert_levels) - 1, alert_max_level)
-        self.assertEqual(alert_level_level, L_NOTICE)
-        self.assertEqual(alert_level_level, 1)
-        self.assertEqual(alert_program, os.path.basename(sys.argv[0]))
+        self.assertEqual(len(alert_levels) - 1, alcf().max_level)
+        self.assertEqual(alcf().level, L_NOTICE)
+        self.assertEqual(alcf().level, 1)
+        self.assertEqual(alcf().program, os.path.basename(sys.argv[0]))
 
     def test_config(self):
         alert_config(level=L_DEBUG, program="the_program",
                      syslog_facility=syslog.LOG_LPR)
         self.assertEqual(alert_level(), 3)
-        self.assertEqual(get_mod_var("alert_program"), "the_program")
-        self.assertEqual(get_mod_var("alert_syslog_facility"), syslog.LOG_LPR)
+        self.assertEqual(alcf().program, "the_program")
+        self.assertEqual(alcf().syslog_facility, syslog.LOG_LPR)
 
-        self.assertTrue(not syslog_opened)
+        debug("it ain't me babe")
+        self.assertTrue(alcf().syslog_opened)
         nulldev = open("/dev/null", "w")
         alert_redirect(L_DEBUG, nulldev)
         alert_level(L_DEBUG)
-        debug("should open syslog")
         alert_redirect(L_DEBUG, sys.stderr)
         nulldev.close()
-        self.assertTrue(get_mod_var("syslog_opened"))
+        self.assertTrue(alcf().syslog_opened)
 
     def test_level_names(self):
         alert_level(L_DEBUG)
@@ -41,26 +44,122 @@ class AlertsTestcase(unittest.TestCase):
         self.assertEqual(alert_level_name(3), "L_DEBUG")
         self.assertEqual(alert_level_name(4), "L_TRACE")
 
-        self.assertEqual(get_mod_var("L_ERROR"), 0)
-        self.assertEqual(get_mod_var("L_NOTICE"), 1)
-        self.assertEqual(get_mod_var("L_INFO"), 2)
-        self.assertEqual(get_mod_var("L_DEBUG"), 3)
-        self.assertEqual(get_mod_var("L_TRACE"), 4)
+        self.assertEqual(L_ERROR, 0)
+        self.assertEqual(L_NOTICE, 1)
+        self.assertEqual(L_INFO, 2)
+        self.assertEqual(L_DEBUG, 3)
+        self.assertEqual(L_TRACE, 4)
 
     def test_alert_level(self):
-        alert_level("L_INFO")
+        l = alert_level("L_INFO")
+        print("level:", l, "INFO:", L_INFO, "new:", alert_level(),
+              file=sys.stderr)
         self.assertEqual(alert_level(), L_INFO)
-        self.assertEqual(get_mod_var("alert_level_level"), L_INFO)
+        print("cfg:", alcf().level, "alcf():", alcf().level, "new:", alert_level(),
+              file=sys.stderr)
+        self.assertEqual(alcf().level, L_INFO)
         alert_level(L_TRACE)
         self.assertEqual(alert_level(), L_TRACE)
-        self.assertEqual(get_mod_var("alert_level_level"), L_TRACE)
+        self.assertEqual(alcf().level, L_TRACE)
+        alert_level_up()
+        self.assertEqual(alert_level(), L_TRACE)
+        alert_level_zero()
+        self.assertEqual(alert_level(), L_ERROR)
+        alert_level_up()
+        self.assertEqual(alert_level(), L_NOTICE)
+        
+        alert_level_zero()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [False, False, False, False])
+        alert_level_up()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [True, False, False, False])
+        alert_level_up()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [True, True, False, False])
+        alert_level_up()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [True, True, True, False])
+        alert_level_up()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [True, True, True, True])
+        alert_level_up()
+        self.assertEqual([is_notice(), is_info(), is_debug(), is_trace()],
+                         [True, True, True, True])
+
+        alert_level_zero()
+        with outputCaptured() as (out, err):
+            notice("check check check 2")
+        self.assertEqual(err.getvalue(), "")
+        
+        alert_level_up()
+        with outputCaptured() as (out, err):
+            notice("check check check 4")
+        self.assertEqual(err.getvalue(), "check check check 4\n")
+
+    def test_lambda_arg(self):
+        with outputCaptured() as (out, err):
+            notice("this is", lambda: "a test")
+        self.assertEqual(err.getvalue(), "this is a test\n")
+
+    def test_num_level(self):
+        with outputCaptured() as (out, err):
+            alert_redirect(1, 1)
+            notice("this is", lambda: "a test")
+        self.assertEqual(out.getvalue(), "this is a test\n")
+
+    def test_debug_vars(self):
+        a = 3
+        b = "this is a test"
+        c = a * b
+        with outputCaptured() as (out, err):
+            alert_redirect(L_DEBUG, sys.stderr)
+            alert_level(L_DEBUG)
+            debug_vars("a", "b", "c")
+        self.assertEqual(err.getvalue(), """DBG VAR a: 3
+DBG VAR b: 'this is a test'
+DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
+
+    def test_error(self):
+        alert_level(L_TRACE)
+        self.assertEqual(alcf().had_errors, False)
+        with outputCaptured() as (out, err):
+            error("an error")
+        self.assertTrue(err.getvalue().endswith("an error\n"))
+        self.assertEqual(alcf().had_errors, True)
+
+    def test_notice(self):
+        alert_level(L_TRACE)
+        with outputCaptured() as (out, err):
+            notice("las noticias")
+        self.assertTrue(err.getvalue().endswith("las noticias\n"))
+
+    def test_info(self):
+        alert_level(L_TRACE)
+        with outputCaptured() as (out, err):
+            info("terminal")
+        self.assertTrue(err.getvalue().endswith("terminal\n"))
+
+    def test_debug(self):
+        alert_init(level=L_TRACE)
+        with outputCaptured() as (out, err):
+            debug("adbsdbgdb")
+        #ptty(f"ERRVALUE({alert_level()})", err.getvalue())
+        self.assertTrue(err.getvalue().endswith("adbsdbgdb\n"))
+
+    def test_trace(self):
+        alert_level(L_TRACE)
+        with outputCaptured() as (out, err):
+            trace("lines")
+        self.assertTrue(err.getvalue().endswith("lines\n"))
+
 
     def test_redirect(self):
-        alert_level(alert_max_level)
+        alert_level(alcf().max_level)
         msg = "Null Eins Zwei Drei Vier Fünf Sechs".split()
 
         with outputCaptured() as (out, err):
-            for level in range(alert_max_level + 1):
+            for level in range(alcf().max_level + 1):
                 alert_redirect(level, sys.stderr)
                 alert_if_level(level, msg[level])
         outs = out.getvalue()
@@ -70,13 +169,13 @@ class AlertsTestcase(unittest.TestCase):
         self.assertEqual(outs, "")
         lineno = 0
         for line in errs.split("\n"):
-            if lineno <= alert_max_level:
+            if lineno <= alcf().max_level:
                 # ptty("line =", repr(line), "msg[lineno] =", repr(msg[lineno]))
                 self.assertTrue(line.endswith(msg[lineno]))
             lineno += 1
 
         with outputCaptured() as (out, err):
-            for level in range(alert_max_level + 1):
+            for level in range(alcf().max_level + 1):
                 alert_redirect(level, sys.stderr)
                 alert_redirect(L_NOTICE, sys.stdout)
                 alert_if_level(level, msg[level])

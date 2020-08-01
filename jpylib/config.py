@@ -4,13 +4,24 @@ import errno
 
 from .namespace import Namespace
 from .kvs import parse_kvs
-from .alerts import debug
+# from .alerts import debug
 
 class Config(Namespace):
     """Name space class used to build a config object."""
 
     def update(self, new_values, reject_unknown=True):
-        super().update(new_values, skip_underscore=True, reject_unknown=reject_unknown)
+        super().update(new_values, skip_underscore=True,
+                       reject_unknown=reject_unknown)
+
+    def set(self, key, value):
+        if key not in self.__dict__:
+            raise KeyError("key not in config: " + repr(key))
+        self.__dict__[key] = value
+
+    def get(self, key):
+        if key not in self.__dict__:
+            raise KeyError("key not in config: " + repr(key))
+        return self.__dict__[key]
 
     def load_from(self, filename, reject_unknown=True, must_exist=False):
         """Read a configuration from file 'filename'."""
@@ -19,7 +30,6 @@ class Config(Namespace):
                 contents = f.read()
         except OSError as exc:
             if not must_exist and exc.errno == errno.ENOENT:
-                debug("config file {} not found".format(filename))
                 return None
             else:
                 raise exc
@@ -33,7 +43,8 @@ class Config(Namespace):
         self.update(new_locals, reject_unknown=reject_unknown)
         return True
 
-    def load_config_files(self, config_files, notice_func=None, reject_unknown=True):
+    def load_config_files(self, config_files, notice_func=None,
+                          reject_unknown=True):
         """Read the configuration from the config files.
 
         Optional "notice_func" is a function to print a message

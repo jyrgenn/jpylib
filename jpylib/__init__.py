@@ -17,6 +17,7 @@ from .namespace import Namespace
 from .config import Config
 from .get_secret import getsecret
 from .get_secret import main as getsecret_main
+from .get_secret import putsecret
 from .sighandler import sanesighandler
 from .terminal import terminal_size
 from .capture import outputCaptured, outputAndExitCaptured

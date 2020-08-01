@@ -2,22 +2,25 @@
 
 import os
 import sys
+import syslog
 import inspect
+import jpylib as y
 
 # properties of the alert levels; the decoration will be formatted with the
 # locals() values
 alert_levels = [
     # level name, message decoration, fd
-    ("L_ERROR", "{program}: Error:", sys.stderr),
-    ("L_NOTICE", None,   sys.stderr),
-    ("L_INFO",   None,   sys.stderr),
-    ("L_DEBUG",  "DBG",   sys.stderr),
-    ("L_TRACE", "TRC",   sys.stderr),
+    ("L_ERROR", "{alert_program}: Error:", sys.stderr),
+    ("L_NOTICE", None,                     sys.stderr),
+    ("L_INFO",   None,                     sys.stderr),
+    ("L_DEBUG",  "DBG",                    sys.stderr),
+    ("L_TRACE",  "TRC",                    sys.stderr),
 ]
 # message decoration and output file descriptor by level, to be initialised
 # below
 alert_decoration = []
 alert_fd = []
+
 
 # initialise some data structures from the alert_levels[] properties
 for i, props in enumerate(alert_levels):
@@ -31,24 +34,42 @@ alert_max_level = i
 alert_level_level = 1
 
 # the program 
-program = os.path.basename(sys.argv[0])
+alert_program = os.path.basename(sys.argv[0])
 
-alert_use_syslog = False
+alert_syslog_facility = False
+syslog_opened = False
+syslog_prio = [
+    syslog.LOG_ERR,
+    syslog.LOG_NOTICE,
+    syslog.LOG_INFO,
+    syslog.LOG_DEBUG,
+    None,
+]
 
+# register if we had errors
 had_errors = False
 
 
-def alert_config(*, level=None, program=None, level_fds=None,
-                         use_syslog=None):
+def alert_config(*, level=None, program=None, syslog_facility=None):
+    """Set a few configuration values."""
     if level is not None:
         alert_level(level)
     if program is not None:
+        global alert_program
         alert_program = program
-    if level_fds is not None:
-        alert_fd = level_fds
-    if use_syslog is not None:
-        alert_use_syslog = use_syslog
+    if syslog_facility is not None:
+        global alert_syslog_facility
+        alert_syslog_facility = syslog_facility
 
+
+def alert_redirect(level, file):
+    """Redirect printing of alerts from `level` to `file`."""
+    alert_fd[level] = file
+
+
+def get_mod_var(name):
+    """Get the value of a module variable, for testing."""
+    return globals()[name]
 
 def alert_level(level=None):
     """Get or set the verbosity level for the alert functions.
@@ -63,7 +84,7 @@ def alert_level(level=None):
         
     if level is not None:
         if type(level) is str:
-            level = alert_level_map[level]
+            level = globals()[level]
         alert_level_level = max(0, min(level, alert_max_level))
     return alert_level_level
 
@@ -127,22 +148,28 @@ def alert_if_level(level, *msgs):
     If one of the    {XXX TODO what tf did I want to say here?}
 
     """
+    # print(f"TRC alert_if_level({level}, {', '.join(map(repr, msgs))})",
+    #       file=y.ttyo())
     # make all msgs elements strings, calling those that are callable
+    if level > alert_level_level:
+        return
+
     msgs = list(msgs)                   # is a tuple before
     for i, elem in enumerate(msgs):
         if callable(elem):
             msgs[i] = elem()
-        elif type(elem) is not str:
-            msgs[i] = str(elem)
+        msgs[i] = str(elem)
     if alert_decoration[level]:
         msgs = [alert_decoration[level].format(**globals()), *msgs]
 
-    if level <= alert_level_level:
-        print(*msgs, file=alert_fd[level])
+    print(*msgs, file=alert_fd[level])
 
-    if alert_use_syslog:
+    if alert_syslog_facility and syslog_prio[level]:
+        global syslog_opened
         if not syslog_opened:
-            syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_MAIL)
+            syslog.openlog(logoption=syslog.LOG_PID,
+                           facility=alert_syslog_facility)
+            syslog_opened = True
         level = max(0, min(alert_max_level, level))
         message = " ".join(map(str, msgs))
         syslog.syslog(syslog_prio[level], message)

@@ -10,7 +10,7 @@ from .alerts import L_ERROR, L_NOTICE, L_INFO, L_DEBUG, L_TRACE, \
     alert_config, alert_level, alert_level_name, \
     alert_level_up, alert_level_zero, is_notice, is_info, is_debug, is_trace, \
     debug_vars, fatal, err, notice, info, debug, trace
-from .fntrace import fntrace
+from .fntrace import tracefn
 from .stringreader import StringReader
 from .kvs import parse_kvs
 from .namespace import Namespace
@@ -25,3 +25,26 @@ version = "$__package_version$"
 program = os.path.basename(sys.argv[0])
 real_home = pwd.getpwuid(os.getuid()).pw_dir
 home = os.environ.get("HOME") or real_home
+
+def ttyo(close=False):
+    if close:
+        if getattr(ttyo, "file", None):
+            ttyo.file.close()
+            ttyo.file = None
+        return
+    if not getattr(ttyo, "file", None):
+        ttyo.file = open("/dev/tty", "w")
+    return ttyo.file
+
+def ttyi(close=False):
+    if close:
+        if getattr(ttyi, "file", None):
+            ttyi.file.close()
+            ttyi.file = None
+        return
+    if not getattr(ttyi, "file", None):
+        ttyi.file = open("/dev/tty")
+    return ttyi.file
+
+def ptty(*args, **kwargs):
+    print(*args, file=ttyo(), **kwargs)

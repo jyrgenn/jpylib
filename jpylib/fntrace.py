@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from .alerts import is_trace, trace, alert_level, L_TRACE
+from jpylib import is_trace, trace, alert_level, L_TRACE
 
-def fntrace(func):
+def tracefn(func):
     """Decorator: trace decorated function if trace level is set."""
     def wrapper(*args, **kwargs):
         if is_trace():
@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     alert_level(L_TRACE)
 
-    @fntrace
+    @tracefn
     def this_function(start, end, step=1):
         hadone = False
         print("=> i am func({}, {}, {})".format(

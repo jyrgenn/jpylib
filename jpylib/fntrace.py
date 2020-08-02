@@ -14,25 +14,3 @@ def tracefn(func):
         return func(*args, **kwargs)
     return wrapper
 
-
-if __name__ == "__main__":
-
-    alert_level(L_TRACE)
-
-    @tracefn
-    def this_function(start, end, step=1):
-        hadone = False
-        print("=> i am func({}, {}, {})".format(
-            repr(start), repr(end), repr(step))
-        )
-        for i in range(start, end, step):
-            hadone = True
-            print("{} ".format(i), end="")
-        if hadone:
-            print()
-
-
-    print("Hoolalah")
-
-    this_function(2, 35, step=2)
-    this_function(1, 5)

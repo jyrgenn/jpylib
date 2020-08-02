@@ -23,13 +23,13 @@ class Config(Namespace):
             raise KeyError("variable not in config: " + repr(key))
         return self.__dict__[key]
 
-    def load_from(self, filename, reject_unknown=True, file_must_exist=False):
+    def load_from(self, filename, reject_unknown=True, file_must_exist=True):
         """Read a configuration from file 'filename'."""
         try:
             with open(filename, "r") as f:
                 contents = f.read()
-        except OSError as exc:
-            if not file_must_exist and exc.errno == errno.ENOENT:
+        except FileNotFoundError as exc:
+            if not file_must_exist:
                 return None
             else:
                 raise exc
@@ -44,7 +44,7 @@ class Config(Namespace):
         return True
 
     def load_config_files(self, config_files, notice_func=None,
-                          reject_unknown=True):
+                          reject_unknown=True, files_must_exist=False):
         """Read the configuration from the config files.
 
         Optional "notice_func" is a function to print a message
@@ -53,13 +53,14 @@ class Config(Namespace):
         """
         loaded = 0
         for file in config_files:
-            if self.load_from(file, reject_unknown=reject_unknown):
+            if self.load_from(file, reject_unknown=reject_unknown,
+                              file_must_exist=files_must_exist):
                 loaded += 1
                 if notice_func:
-                    notice_func("configuration loaded from " + file)
+                    notice_func("configuration loaded from", file)
         return loaded
 
-    def update_from_string(self, cfgstring, reject_unknown=True):
+    def update_from_string(self, cfgstring, reject_unknown=True, intvals=True):
         """Update the configuration from a key-value string.
 
         This can be used to pass config snippets on the command line.
@@ -68,4 +69,5 @@ class Config(Namespace):
         "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not"
 
         """
-        self.update(parse_kvs(cfgstring), reject_unknown=reject_unknown)
+        self.update(parse_kvs(cfgstring, intvals=intvals),
+                    reject_unknown=reject_unknown)

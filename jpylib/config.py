@@ -13,23 +13,23 @@ class Config(Namespace):
         super().update(new_values, skip_underscore=True,
                        reject_unknown=reject_unknown)
 
-    def set(self, key, value):
-        if key not in self.__dict__:
-            raise KeyError("key not in config: " + repr(key))
+    def set(self, key, value, reject_unknown=True):
+        if key not in self.__dict__ and reject_unknown:
+            raise KeyError("variable not in config: " + repr(key))
         self.__dict__[key] = value
 
     def get(self, key):
         if key not in self.__dict__:
-            raise KeyError("key not in config: " + repr(key))
+            raise KeyError("variable not in config: " + repr(key))
         return self.__dict__[key]
 
-    def load_from(self, filename, reject_unknown=True, must_exist=False):
+    def load_from(self, filename, reject_unknown=True, file_must_exist=False):
         """Read a configuration from file 'filename'."""
         try:
             with open(filename, "r") as f:
                 contents = f.read()
         except OSError as exc:
-            if not must_exist and exc.errno == errno.ENOENT:
+            if not file_must_exist and exc.errno == errno.ENOENT:
                 return None
             else:
                 raise exc

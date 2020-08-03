@@ -9,7 +9,7 @@ import shutil
 import collections
 from datetime import datetime
 
-from .alerts import notice
+from .alerts import notice, debug_vars
 
 # Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
@@ -27,23 +27,23 @@ default_char_encoding = "utf-8"
 
 # En- and decoder functions. The names must be {en,de}code_{tag}.
 
-def encode_b64(string, char_encoding):
-    """Encode string in base64."""
-    return str(base64.b64encode(bytes(string, char_encoding)), char_encoding)
+def encode_b64(data):
+    """Encode data in base64."""
+    return base64.b64encode(data)
 
-def decode_b64(string, char_encoding):
-    """Decode base64-encoded string."""
-    return str(base64.b64decode(string), char_encoding)
+def decode_b64(data):
+    """Decode base64-encoded data."""
+    return base64.b64decode(data)
 
-def decode_zip(string, char_encoding):
+def decode_zip(data):
     """Decode a zipped string. Implies base64 encoding of zip data."""
-    binary = decode_b64(string, char_encoding)
-    return str(zlib.decompress(binary), char_encoding)
+    zipped = decode_b64(data)
+    return zlib.decompress(zipped)
 
-def encode_zip(string, char_encoding):
-    """Zip-compress a string. Implies base64 encoding of zip data."""
-    binary = zlib.compress(bytes(string, char_encoding))
-    return encode_b64(binary, char_encoding)
+def encode_zip(data):
+    """Zip-compress data. Implies base64 encoding of zip data."""
+    zipped = zlib.compress(data)
+    return encode_b64(zipped)
 
 
 # encode/decode direction
@@ -75,7 +75,8 @@ def maybe_decode(fields, key, char_encoding):
             for opt in options.split(","):
                 coder_func = find_coder_func(opt, dir_decode)
                 if coder_func:
-                    string = coder_func(string, char_encoding)
+                    data = coder_func(bytes(string, char_encoding))
+                    string = str(data, char_encoding)
                 else:
                     string = ":".join([options, string])
     else:
@@ -105,11 +106,11 @@ def putsecret(key, value, fname=None, options=[],
                     else:
                         entries[tag] = rest
                 for opt in options:
-                    value = find_coder_func(opt, dir_encode
-                                            )(value, char_encoding)
+                    data = bytes(value, char_encoding)
+                    data = find_coder_func(opt, dir_encode)(data)
+                    value = str(data, char_encoding)
                 entries[key] = [",".join(options), value]
                 for key, fields in entries.items():
-                    print([key, *fields])
                     print(":".join([key, *fields]), file=out)
                 print(end_prefix + datetime.now().isoformat(timespec="seconds"),
                       file=out)
@@ -144,6 +145,10 @@ def getsecret(key, fname=None, char_encoding=default_char_encoding):
     """
     if fname is None:
         fname = default_filename
+    try:
+        os.chmod(fname, 0o600)
+    except:
+        pass
     with open(fname) as f:
         for line in f:
             tag, *rest = line.split(":", 2)

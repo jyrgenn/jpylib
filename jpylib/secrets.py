@@ -25,7 +25,8 @@ end_prefix = "# written by putsecret() "
 # but I am too lazy to do that now.
 default_char_encoding = "utf-8"
 
-# En- and decoder functions. The names must be {en,de}code_{tag}.
+# En- and decoder functions. The names must be {en,de}code_{tag}, so they can be
+# found in globals().
 
 def encode_b64(data):
     """Encode data in base64."""
@@ -50,14 +51,20 @@ def encode_zip(data):
 dir_encode = 0
 dir_decode = 1
 de_en_prefix = ["encode_", "decode_"]
+
+
+class OptionUnknownError(LookupError):
+    """An exception indicating that a corresponding option was not found."""
+    pass
+
     
-def find_coder_func(option, direction):
+def find_coder_func(option, direction, must_find=False):
     coder_name = de_en_prefix[direction] + option
     coder_func = globals().get(coder_name)
-    if coder_func:
+    if coder_func or not must_find:
         return coder_func
-    notice("secrets: encountered unknown option '{}'".format(option))
-    return None
+    else:
+        raise OptionNotFoundError("encountered unknown option", option)
 
 
 def maybe_decode(fields, key, char_encoding):
@@ -67,7 +74,7 @@ def maybe_decode(fields, key, char_encoding):
     `key`            the key we originally searched for;
     `char_encoding`  the bytes => string encoding to use.
     """
-    assert 1 <= len(fields) <= 2
+    assert 1 <= len(fields) <= 2, "length of `fields` not in (1, 2)"
     if len(fields) == 2:
         options, string = fields
         string = string.rstrip()
@@ -86,40 +93,52 @@ def maybe_decode(fields, key, char_encoding):
 
 def putsecret(key, value, fname=None, options=[],
               char_encoding=default_char_encoding):
-    """Put a secret tagged with `key` into the secrets file `fname`."""
+    """Put a secret tagged with `key` into the secrets file `fname`.
+
+    A backup copy is made as {fname}.backup. A temporary file named
+    .../.{basename}.newtmp is created, which also serves as a lockfile. After
+    all records are written to the temporary file, it is moved into place,
+    deleting the original secrets file.
+
+    """
     fname = fname or default_filename
     entries = collections.OrderedDict()
     shutil.copy2(fname, fname + backup_suffix)
-    with open(fname) as f:
-        newfile = os.path.join(os.path.dirname(fname),
-                               "." + os.path.basename(fname) + ".newtmp")
+    
+    for opt in options:
+        data = bytes(value, char_encoding)
+        data = find_coder_func(opt, dir_encode, must_find=True)(data)
+        value = str(data, char_encoding)
+    newfile = os.path.join(os.path.dirname(fname),
+                           "." + os.path.basename(fname) + ".newtmp")
+    try:
         with open(newfile, "x") as out:
-            try:
+            with open(fname) as f:
                 os.chmod(newfile, 0o600)
                 for line in f:
                     if line.startswith(end_prefix):
                         continue
                     tag, *rest = line.rstrip().split(":", 2)
                     if tag in entries:
-                        notice("putsecret: ignoring additional entry for '{}'"
+                        notice("putsecret: ignore additional entry for '{}'"
                                .format(tag))
                     else:
                         entries[tag] = rest
-                for opt in options:
-                    data = bytes(value, char_encoding)
-                    data = find_coder_func(opt, dir_encode)(data)
-                    value = str(data, char_encoding)
-                entries[key] = [",".join(options), value]
+                    entries[key] = [",".join(options), value]
                 for key, fields in entries.items():
                     print(":".join([key, *fields]), file=out)
-                print(end_prefix + datetime.now().isoformat(timespec="seconds"),
-                      file=out)
-                os.rename(newfile, fname)
-            finally:
-                try:
-                    os.remove(newfile)
-                except:
-                    pass
+                    print(end_prefix
+                          + datetime.now().isoformat(timespec="seconds"),
+                          file=out)
+        os.rename(newfile, fname)
+    except FileExistsError:
+        raise FileExistsError("temporary file {} exists, aborting"
+                              .format(newfile))
+    finally:
+        try:
+            os.remove(newfile)
+        except:
+            pass
 
 
 def getsecret(key, fname=None, char_encoding=default_char_encoding):

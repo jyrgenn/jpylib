@@ -28,5 +28,9 @@ class SecretsTestcase(unittest.TestCase):
     def test_putsecret(self):
         # should not trigger an error, wouldn't that be nice
         alert_level(4)
-        y.putsecret("dumdi", "schlummbaladumdibroing", options=["zip"])
-        self.assertEqual(y.getsecret("dumdi"), "schlummbaladumdibroing")
+        key = "dumdi"
+        secret = "schlummbaladumdibroing"
+        y.putsecret(key, secret, options=["zip"])
+        self.assertEqual(y.getsecret(key), secret)
+
+    

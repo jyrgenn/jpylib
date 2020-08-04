@@ -9,7 +9,7 @@ import shutil
 import collections
 from datetime import datetime
 
-from .alerts import notice, debug_vars
+from .alerts import info
 
 # Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
@@ -120,8 +120,8 @@ def putsecret(key, value, fname=None, options=[],
                         continue
                     tag, *rest = line.rstrip().split(":", 2)
                     if tag in entries:
-                        notice("putsecret: ignore additional entry for '{}'"
-                               .format(tag))
+                        info("putsecret: ignore duplicate entry for '{}'"
+                             .format(tag))
                     else:
                         entries[tag] = rest
                     entries[key] = [",".join(options), value]

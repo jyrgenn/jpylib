@@ -127,9 +127,9 @@ def putsecret(key, value, fname=None, options=[],
                     entries[key] = [",".join(options), value]
                 for key, fields in entries.items():
                     print(":".join([key, *fields]), file=out)
-                    print(end_prefix
-                          + datetime.now().isoformat(timespec="seconds"),
-                          file=out)
+                print(end_prefix
+                      + datetime.now().isoformat(timespec="seconds"),
+                      file=out)
         os.rename(newfile, fname)
     except FileExistsError:
         raise FileExistsError("temporary file {} exists, aborting"

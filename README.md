@@ -59,11 +59,11 @@ Current Status
 To Do Next
 ----------
 
-* testing
+* testing (work in progress)
 
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)
 
-
+* table formatting
 
 [ni 2020-07-02] started

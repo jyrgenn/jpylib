@@ -7,7 +7,7 @@
 
 import json
 
-secrets_file = "lib/secrets"
+secrets_file = "tmp/secrets"
 max_fields = 2
 valid_opts = ("b64", "zip")
 
@@ -29,7 +29,7 @@ with open(secrets_file) as s:
                 f"unexpected length of rest: {len(rest)}"
             field1, value = rest
             all_valid = True
-            maybeopts = field1.split(",")
+            maybeopts = list(filter(None, field1.split(",")))
             for opt in maybeopts:
                 # beware, opt may be empty
                 if opt and opt not in valid_opts:
@@ -37,7 +37,8 @@ with open(secrets_file) as s:
                     break
             if all_valid:
                 # this includes the case of an empty field1
-                secrets[key] = dict(opts=maybeopts, value=value, secret=None)
+                secrets[key] = dict(opts=maybeopts or None,
+                                    value=value, secret=None)
             else:
                 # field1 is not all valid options, so it is actually part of the
                 # value

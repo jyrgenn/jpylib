@@ -3,6 +3,7 @@
 import jpylib as y
 from jpylib import *
 
+import os
 import shutil
 import unittest
 
@@ -16,12 +17,17 @@ import unittest
 # [ ] put existing one
 # [ ] put multiple existing ones
 # [ ] all still there
+# [ ] non-existent secrets file (with the main(), too)
+# [ ] mode of file after putsecret
+# [ ] not far too many putsecret comments in it
 
-default_secrets = "tmp/secrets"
+tmpdir = "tmp"
+default_secrets = os.path.join(tmpdir, "secrets")
 
 class SecretsTestcase(unittest.TestCase):
 
     def setUp(self):
+        os.makedirs(tmpdir, exist_ok=True)
         shutil.copyfile("lib/secrets", default_secrets)
         y.secrets.default_filename = default_secrets
 

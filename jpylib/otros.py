@@ -1,7 +1,7 @@
 # assorted smallish functions
 
-means_true = "yes y ja j klar si claro on true aye 1 affirmative".split()
-means_false = "no n nein off false nay 0 negative".split()
+means_true = set("yes y sure ja j jou si on t true  aye 1 affirmative".split())
+means_false = set("no n nope nein nee   off f false nay 0 negative".split())
 
 def boolish(value, default=None):
     """Return a truth value for the argument.
@@ -12,10 +12,10 @@ def boolish(value, default=None):
 
     """
 
-    value = value.lower()
-    if value in means_true:
+    val = value.lower()
+    if val in means_true:
         return True
-    if value in means_false:
+    if val in means_false:
         return False
     if default is None:
         raise ValueError("value '{}' cannot be understood as false or true".

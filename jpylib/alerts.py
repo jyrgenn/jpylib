@@ -173,11 +173,10 @@ def alert_if_level(level, *msgs):
         msgs = [cfg.decoration[level].format(**globals()), *msgs]
 
     channel = cfg.fd[level]
-    if channel == 1:
-        channel = sys.stdout
-    elif channel == 2:
-        channel = sys.stderr
-    print(*msgs, file=channel)
+    channel = { 1: sys.stdout, 2: sys.stderr }.get(channel) or channel
+
+    msgtext = " ".join(msgs).rstrip()
+    print(msgtext, file=channel)
 
     if cfg.syslog_facility and cfg.syslog_prio[level]:
         if not cfg.syslog_opened:

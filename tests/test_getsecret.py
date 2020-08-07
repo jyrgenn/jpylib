@@ -9,18 +9,18 @@ import shutil
 import unittest
 
 # [x] single colon, just read
-# [ ] single colon, put and get
+# [x] single colon, put and get
 # [x] with skipping non-entry lines
 # [x] double colon, no options, just read
-# [ ] double colon, no options, put & get
+# [x] double colon, no options, put & get
 # [x] b64 option, get
-# [ ] b64 option, put
+# [x] b64 option, put
 # [x] zip option, get
-# [ ] zip option, put
-# [ ] put existing one
-# [ ] put multiple existing ones
-# [ ] all still there
-# [ ] non-existent secrets file (with the main(), too)
+# [x] zip option, put
+# [x] put existing one
+# [x] put multiple existing ones
+# [x] all still there
+# [x] non-existent secrets file (with the main(), too)
 # [ ] mode of file after putsecret
 # [ ] not far too many putsecret comments in it
 
@@ -44,14 +44,23 @@ class SecretsTestcase(unittest.TestCase):
         key = "dumdi"
         secret = "schlummbaladumdibroing"
         y.putsecret(key, secret, options=["zip"])
-        self.assertEqual(y.getsecret(key), secret)
+        self.assertEqual(y.getsecret(key, bomb=False), secret)
+        self.assertEqual(os.stat(default_secrets).st_mode & 0o777, 0o600)
 
     def test_getsecret(self):
         for key in self.data.keys():
             self.assertEqual(y.getsecret(key), self.data[key]["secret"])
 
+    def test_getsecret_none(self):
+        os.remove(default_secrets)
+        with self.assertRaises(FileNotFoundError):
+            for key in self.data.keys():
+                self.assertEqual(y.getsecret(key), self.data[key]["secret"])
+        
+
     def test_putall(self):
         for key in self.data.keys():
-            y.putsecret(key, self.data[key]["secret"], self.data[key]["opts"])
+            y.putsecret(key, self.data[key]["secret"],
+                        options=self.data[key]["opts"])
         newdata = self.getdata()
         self.assertEqual(self.data, newdata)

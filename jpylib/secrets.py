@@ -9,7 +9,7 @@ import shutil
 import collections
 from datetime import datetime
 
-from .alerts import info
+from .alerts import *
 
 # Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
@@ -46,6 +46,9 @@ def encode_zip(data):
     zipped = zlib.compress(data)
     return encode_b64(zipped)
 
+valid_options = set([
+    name[7:] for name in globals().keys()
+    if name.startswith("encode_") or name.startswith("decode_") ])
 
 # encode/decode direction
 dir_encode = 0
@@ -67,31 +70,83 @@ def find_coder_func(option, direction, must_find=False):
         raise OptionNotFoundError("encountered unknown option", option)
 
 
-def maybe_decode(fields, key, char_encoding):
+def maybe_decode(options, value, char_encoding):
     """Decode the found value, if options are present.
 
-    `fields`         the fields after the key, value only or with options;
-    `key`            the key we originally searched for;
+    `options`        array of options
+    `value`          the value to decode
     `char_encoding`  the bytes => string encoding to use.
     """
-    assert 1 <= len(fields) <= 2, "length of `fields` not in (1, 2)"
-    if len(fields) == 2:
-        options, string = fields
-        string = string.rstrip()
-        if options:                       # skip an empty string => no options
-            for opt in options.split(","):
-                coder_func = find_coder_func(opt, dir_decode)
-                if coder_func:
-                    data = coder_func(bytes(string, char_encoding))
-                    string = str(data, char_encoding)
+    for opt in options:
+        coder_func = find_coder_func(opt, dir_decode)
+        if coder_func:
+            data = coder_func(bytes(value, char_encoding))
+            value = str(data, char_encoding)
+        else:
+            notice("secrets: found unknown encoding '{}'".format(opt))
+    return value
+
+
+def read_secrets(fname, get_invalids=False):
+    """Read in a secrets file and return its entries.
+
+    Return an ordered dictionary with entries key:([opts], value). If the key is
+    a comment line or otherwise not a valid key:value or key:opts:value line,
+    opts and value are None, or if get_invalids is false (the default), it is
+    not included at all.
+
+    Otherwise, opts is a list of options, which may be empty.
+
+    If there are two colons in a line and the field between the colons is not
+    empty, but contains no valid options, the line is treated as a key:value
+    line.
+
+    """
+    entries = collections.OrderedDict()
+    with open(fname) as f:
+        for line in f:
+            line = line.rstrip()
+            if line.lstrip().startswith("#"):
+                # a comment line
+                if line.startswith(end_prefix):
+                    # the "written by putsecret()" line, skip it
+                    continue
+                if get_invalids:
+                    entries[line] = (None, None)
+                continue
+            # non-commented lines
+            fields = line.split(":", 2)
+            nfields = len(fields)
+            assert 1 <= nfields <= 3, "unexpected # of fields: "+str(nfields)
+            if nfields == 1:
+                # not a key:[opts:]value line
+                if get_invalids:
+                    entries[line] = (None, None)
+                continue
+            key = fields[0]
+            if key in entries:
+                info("secrets: ignore duplicate entry for '{}'".format(tag))
+                continue
+            if nfields == 2:
+                # key:value
+                entries[key] = ([], fields[1])
+                continue
+            if nfields == 3:
+                # key:[opts]:value
+                if fields[1] == "":
+                    # key::value
+                    entries[key] = ([], fields[2])
+                    continue
+                opts = fields[1].split(",")
+                if all([ opt in valid_options for opt in opts ]):
+                    # valid options
+                    entries[key] = (opts, fields[2])
                 else:
-                    string = ":".join([options, string])
-    else:
-        return fields[0].rstrip()
-    return string
+                    # non-valid options field, so it's key:value again
+                    entries[key] = ([], ":".join(fields[1:]))
+    return entries
 
-
-def putsecret(key, value, fname=None, options=[],
+def putsecret(key, value, fname=None, options=None,
               char_encoding=default_char_encoding):
     """Put a secret tagged with `key` into the secrets file `fname`.
 
@@ -101,10 +156,18 @@ def putsecret(key, value, fname=None, options=[],
     deleting the original secrets file.
 
     """
+    def write_line(key, opts=None, value=None):
+        if opts is None:
+            line = key
+        else:
+            line = ":".join([key, ",".join(opts), value])
+        print(line, file=out)
+    
     fname = fname or default_filename
     entries = collections.OrderedDict()
     shutil.copy2(fname, fname + backup_suffix)
-    
+
+    options = options or []
     for opt in options:
         data = bytes(value, char_encoding)
         data = find_coder_func(opt, dir_encode, must_find=True)(data)
@@ -113,27 +176,20 @@ def putsecret(key, value, fname=None, options=[],
                            "." + os.path.basename(fname) + ".newtmp")
     try:
         with open(newfile, "x") as out:
-            with open(fname) as f:
-                os.chmod(newfile, 0o600)
-                for line in f:
-                    if line.startswith(end_prefix):
-                        continue
-                    tag, *rest = line.rstrip().split(":", 2)
-                    if tag in entries:
-                        info("putsecret: ignore duplicate entry for '{}'"
-                             .format(tag))
-                    else:
-                        entries[tag] = rest
-                    entries[key] = [",".join(options), value]
-                for key, fields in entries.items():
-                    print(":".join([key, *fields]), file=out)
-                print(end_prefix
-                      + datetime.now().isoformat(timespec="seconds"),
-                      file=out)
+            os.chmod(newfile, 0o600)
+            # now, read in entries, change/set new one, write out again
+            entries = read_secrets(fname, get_invalids=True)
+            entries[key] = (options, value)
+            for key, data in entries.items():
+                options, value = data
+                if options is not None:
+                    write_line(key, options, value)
+                else:
+                    write_line(key)
+            write_line(end_prefix+datetime.now().isoformat(timespec="seconds"))
         os.rename(newfile, fname)
     except FileExistsError:
-        raise FileExistsError("temporary file {} exists, aborting"
-                              .format(newfile))
+        raise FileExistsError("temp file {} exists, aborting" .format(newfile))
     finally:
         try:
             os.remove(newfile)
@@ -141,7 +197,7 @@ def putsecret(key, value, fname=None, options=[],
             pass
 
 
-def getsecret(key, fname=None, char_encoding=default_char_encoding):
+def getsecret(key, fname=None, char_encoding=default_char_encoding, bomb=True):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
     The default pathname for the secrets file is `/etc/secrets` if
@@ -168,12 +224,13 @@ def getsecret(key, fname=None, char_encoding=default_char_encoding):
         os.chmod(fname, 0o600)
     except:
         pass
-    with open(fname) as f:
-        for line in f:
-            tag, *rest = line.split(":", 2)
-            if rest and tag == key:
-                return maybe_decode(rest, key, char_encoding)
-    raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
+    
+    data = read_secrets(fname).get(key)
+    if data and data[0] is not None:
+            return maybe_decode(*data, char_encoding)
+    if bomb:
+        raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
+    return None
 
 
 def main():

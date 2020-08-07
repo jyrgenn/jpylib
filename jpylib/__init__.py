@@ -21,6 +21,8 @@ from .secrets import putsecret
 from .sighandler import sanesighandler
 from .terminal import terminal_size
 from .capture import outputCaptured, outputAndExitCaptured
+from .process import backquote
+from .otros import boolish
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

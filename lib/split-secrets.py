@@ -6,6 +6,8 @@
 # enough implementation.
 
 import json
+import zlib
+import base64
 
 secrets_file = "tmp/secrets"
 max_fields = 2
@@ -14,6 +16,8 @@ valid_opts = ("b64", "zip")
 with open(secrets_file) as s:
     secrets = {}
     for line in s:
+        if line.lstrip().startswith("#"):
+            continue
         key, *rest = line.rstrip().split(":", max_fields)
         if len(rest) == 0:
             # not a valid key:[opts:]value line at all
@@ -21,7 +25,7 @@ with open(secrets_file) as s:
         if len(rest) == 1:
             # no options, obviously, so the secret is the value
             value = rest[0]
-            secrets[key] = dict(value=value, opts=None, secret=value)
+            secrets[key] = dict(value=value, opts=None)
         else:
             # While in this case we have three fields separated by colons, the
             # second need not be options.
@@ -38,12 +42,22 @@ with open(secrets_file) as s:
             if all_valid:
                 # this includes the case of an empty field1
                 secrets[key] = dict(opts=maybeopts or None,
-                                    value=value, secret=None)
+                                    value=value)
             else:
                 # field1 is not all valid options, so it is actually part of the
                 # value
                 value = field1+":"+value
-                secrets[key] = dict(opts=None, value=value, secret=value)
+                secrets[key] = dict(opts=None, value=value)
+        value = secrets[key]["value"]
+        if secrets[key]["opts"]:
+            for opt in secrets[key]["opts"]:
+                if opt in ("b64", "zip"):
+                    value = base64.b64decode(value)
+                if opt == "zip":
+                    value = zlib.decompress(value)
+                value = str(value, "utf-8")
+        secrets[key]["secret"] = value
+                
 print(json.dumps(secrets, indent=4))
                 
             

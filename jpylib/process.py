@@ -5,11 +5,11 @@
 import subprocess
 
 
-def backquote(command, touchy=False, shell=None):
+def backquote(command, touchy=False, shell=None, stdout_only=True):
     """Similar to Perl's `command` feature: run process, return result.
 
     If we are touchy, we raise an exception at the slightest provocation, i.e.
-    stderr output or non-zero exit status.
+    non-empty stderr output or non-zero exit status.
 
     If command is a tuple or a list, run it directly. Otherwise, make it a
     string if necessary and:
@@ -24,6 +24,9 @@ def backquote(command, touchy=False, shell=None):
 
         If run_shell is otherwise false, split the string into a list and run it
         directly.
+
+    If stdout_only is true (the default), return stdout only. Otherwise, a tuple
+    of (stdout, stderr, exit status).
 
     """
     shellmeta = "\"'`|&;[(<>)]*? \t"
@@ -42,7 +45,7 @@ def backquote(command, touchy=False, shell=None):
             command = command.split()
 
     with subprocess.Popen(command, stdin=subprocess.DEVNULL,
-                            stderr=subprocess.PIPE,
+                          stderr=subprocess.PIPE,
                           stdout=subprocess.PIPE) as proc:
         proc.wait()
         result = (proc.stdout.read().decode("utf-8"),
@@ -51,4 +54,6 @@ def backquote(command, touchy=False, shell=None):
         if touchy and (result[1] or result[2]):
             raise ChildProcessError("command {} exited status {}; stderr: '{}'"
                                     .format(command, result[2], result[1]))
+    if stdout_only:
+        return result[0]
     return result

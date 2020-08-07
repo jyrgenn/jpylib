@@ -197,7 +197,7 @@ def putsecret(key, value, fname=None, options=None,
             pass
 
 
-def getsecret(key, fname=None, char_encoding=default_char_encoding, bomb=True):
+def getsecret(key, fname=None, char_encoding=None, error_exception=True):
     """Get a secret tagged with `key` from the secrets file `fname`.
 
     The default pathname for the secrets file is `/etc/secrets` if
@@ -227,7 +227,7 @@ def getsecret(key, fname=None, char_encoding=default_char_encoding, bomb=True):
     
     data = read_secrets(fname).get(key)
     if data and data[0] is not None:
-            return maybe_decode(*data, char_encoding)
+            return maybe_decode(*data, char_encoding or default_char_encoding)
     if bomb:
         raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
     return None

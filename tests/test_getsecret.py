@@ -44,7 +44,7 @@ class SecretsTestcase(unittest.TestCase):
         key = "dumdi"
         secret = "schlummbaladumdibroing"
         y.putsecret(key, secret, options=["zip"])
-        self.assertEqual(y.getsecret(key, bomb=False), secret)
+        self.assertEqual(y.getsecret(key, error_exception=False), secret)
         self.assertEqual(os.stat(default_secrets).st_mode & 0o777, 0o600)
 
     def test_getsecret(self):

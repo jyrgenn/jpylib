@@ -24,14 +24,12 @@ class Namespace:
         are not considered for update.
 
         """
-        if reject_unknown:
-            for key in new_values.keys():
-                if key not in self.__dict__:
-                    raise KeyError("unknown key in {}: {}".format(
-                        self.__class__.__name__, key))
         for key, value in new_values.items():
             if key.startswith("_") and skip_underscore:
                 continue
+            if reject_unknown and key not in self.__dict__:
+                raise KeyError("unknown key in {}: {}".format(
+                    self.__class__.__name__, key))
             self.__dict__[key] = value
 
     def set(self, key, value):

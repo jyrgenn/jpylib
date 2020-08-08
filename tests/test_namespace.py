@@ -19,6 +19,15 @@ class TemplateTestcase(unittest.TestCase):
         )
         pass
 
+    def test_update(self):
+        self.ns.update(dict(site_name="w31", _bully=[], nreps=13),
+                       reject_unknown=True, skip_underscore=True)
+        self.assertEqual(str(self.ns),
+                         str(y.Namespace(include="/etc/example/conf.d/*",
+                                              site_name="w31",
+                                              suffixes=["*.c", "*.h", "*.in"],
+                                              nreps=13,)))
+
     def test_get(self):
         self.assertEqual(self.ns.get("site_name"), "w21")
         self.assertEqual(self.ns.site_name, "w21")

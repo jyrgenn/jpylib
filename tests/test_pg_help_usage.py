@@ -20,7 +20,7 @@ class UsageTestcase(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
                          """usage: {} [-vz]
-use '-?' option to get help on options""".format(ovc._program))
+use '-?' option to get more help""".format(ovc._program))
         self.assertEqual(status.value, 64)
 
 
@@ -36,7 +36,7 @@ use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
                          """usage: {} [-vz]
-use '-?' option to get help on options""".format(ovc._program))
+use '-?' option to get more help""".format(ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage2(self):
@@ -53,7 +53,7 @@ use '-?' option to get help on options""".format(ovc._program))
                          """{}: sis is rong
 
 usage: {} [-vz]
-use '-?' option to get help on options""".format(ovc._program, ovc._program))
+use '-?' option to get more help""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage3(self):
@@ -70,7 +70,7 @@ use '-?' option to get help on options""".format(ovc._program, ovc._program))
                          """{}: sis is rong
 
 usage: {} [-vz]
-use '-?' option to get help on options""".format(ovc._program, ovc._program))
+use '-?' option to get more help""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 64)
 
     def test_usage4(self):
@@ -85,7 +85,7 @@ use '-?' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
                          """usage: {} [-vz]
-use '-?' option to get help on options""".format(ovc._program))
+use '-?' option to get more help""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
     def test_usage5(self):
@@ -100,7 +100,7 @@ use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
                          """usage: {} [-vz] 1 2 drei
-use '-?' option to get help on options""".format(ovc._program))
+use '-?' option to get more help""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
 
@@ -124,17 +124,17 @@ class HelpTestcase(unittest.TestCase):
 usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
- -?, --help 
+ -?, --help:
     show help on options and things
- -d, --debug DEBUG_TOPIC
+ -d, --debug DEBUG_TOPIC:
     debug topics (str arg, default [])
- -h, --help 
+ -h, --help:
     show help on options and things
- -n, --repetitions ARG
+ -n, --repetitions ARG:
     number of repetitions (int arg, default 3)
- -o, --output-file NAME
+ -o, --output-file NAME:
     output file (or stdout) (str arg, default None)
- -s, --schmooze 
+ -s, --schmooze:
     more schmooziness
 
 This is just an example program.""")
@@ -160,17 +160,17 @@ This is just an example program.""")
 usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
- -?, --help 
+ -?, --help:
     show help on options and things
- -d, --debug DEBUG_TOPIC
+ -d, --debug DEBUG_TOPIC:
     debug topics (str arg, default [])
- -h, --help 
+ -h, --help:
     show help on options and things
- -n, --repetitions ARG
+ -n, --repetitions ARG:
     number of repetitions (int arg, default 3)
- -o, --output-file NAME
+ -o, --output-file NAME:
     output file (or stdout) (str arg, default None)
- -s, --schmooze 
+ -s, --schmooze:
     more schmooziness
 
 This is just an example program.
@@ -199,17 +199,17 @@ This is just an example program.
 usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
- -?, --help 
+ -?, --help:
     show help on options and things
- -d, --debug DEBUG_TOPIC
+ -d, --debug DEBUG_TOPIC:
     debug topics (str arg, default [])
- -h, --help 
+ -h, --help:
     show help on options and things
- -n, --repetitions ARG
+ -n, --repetitions ARG:
     number of repetitions (int arg, default 3)
- -o, --output-file NAME
+ -o, --output-file NAME:
     output file (or stdout) (str arg, default None)
- -s, --schmooze 
+ -s, --schmooze:
     more schmooziness
 
 This is just an example program.

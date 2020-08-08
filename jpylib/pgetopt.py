@@ -150,8 +150,8 @@ class OptionValueContainer:
             desc = self._opts[opt]
             arg = ""
             if desc[1] in (str, int):
-                arg = (desc[4] if len(desc) == 5 else "ARG")
-            msg += " -%s, --%s %s\n    %s" % (
+                arg = " " + (desc[4] if len(desc) == 5 else "ARG")
+            msg += " -%s, --%s%s:\n    %s" % (
                 opt, desc[0].replace('_', '-'), arg, desc[3])
             if desc[1] in (int, str):
                 msg += " (%s arg, default %s)" % (
@@ -168,7 +168,7 @@ class OptionValueContainer:
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
         print(self.ovc_usage_msg(), file=out)
-        print("use '-?' option to get help on options", file=out)
+        print("use '-?' option to get more help", file=out)
         sys.exit(exit_status)
 
 

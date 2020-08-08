@@ -44,6 +44,9 @@ descriptsion, but exploiting this sloppyness will not be of any use.
 
 from .stringreader import StringReader
 
+# def debug(*msg):
+#     print("DBG", *msg)
+
 class SyntaxError(Exception):
     """An exception raised when the parser sees a syntax error.
 
@@ -66,8 +69,7 @@ def next_token(buf, intvals=False):
         ch = buf.next()
         if ch in separators:
             if token:
-                if ch != ",":
-                    buf.backup()
+                buf.backup()
             else:
                 token = ch
             break
@@ -77,6 +79,7 @@ def next_token(buf, intvals=False):
             token = int(token)
         except:
             pass
+    #debug("next_token", repr(token))
     return token or None
 
 
@@ -84,22 +87,41 @@ def parse_valuelist(buf, intvals=False):
     """Parse a list of values."""
     result = []
     while True:
+        # state: want a value
         t = next_token(buf, intvals=intvals)
         if t is None:
             syntax_error(str(buf), "value list misses closing ']'")
-        if t == "]":
+        elif t == "]":
+            if result:
+                syntax_error(str(buf), "value list misses value after ','")
             return result
-        if t == "[":
+        elif t == "[":
             result.append(parse_valuelist(buf))
-            continue
-        if t == "{":
+        elif t == "{":
             result.append(parse_kvpairs(buf))
-            continue
-        if str(t) in "=}":
+        elif str(t) in "=}":
             syntax_error(buf, "unexpected in {} value list", repr(t))
-        if t == ",":
+        elif t == ",":
             result.append("")
-        result.append(t)
+            continue            # don't wait for comma, had one already
+        else:
+            result.append(t)
+        # now want a comma
+        t = next_token(buf, intvals=intvals)
+        if t is None:
+            syntax_error(str(buf), "value list misses closing ']'")
+        elif t == "]":
+            return result
+        elif t in "[{}=":
+            syntax_error(buf, "unexpected in {} value list", repr(t))
+        elif t == "{":
+            result.append(parse_kvpairs(buf))
+        elif str(t) in "=}":
+            syntax_error(buf, "unexpected in {} value list", repr(t))
+        elif t == ",":
+            pass                # *so* pass!
+        else:
+            syntax_error(buf, "unexpected in {} value list", repr(t))
 
 
 def parse_kvpairs(buf, need_brace=False, intvals=False):

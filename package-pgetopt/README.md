@@ -24,8 +24,8 @@ On return, the option value container `ovc` has the following fields:
     `ovc.repetitions`: the parameter of `-n` or `--repetitions`, or `3`  
     `ovc.debug`:       a list with all parameters given to `-d` or `--debug`  
 
-Options `-h`, `--help`, `-?`, `--usage` are installed by default and
-print a help message or a brief usage message, respectively.
+Options `-?`, `-h`, `--help` are installed by default and print a
+help message.
 
 `args` holds the remaining arguments behind the last option.
 
@@ -35,4 +35,4 @@ More information at <https://git.w21.org/ni/jpylib/>
 The full documentation for this version is at
 <https://git.w21.org/ni/jpylib/-/blob/v$__package_version$/README-pgetopt.md>
 
-[ni@w21.org 2020-05-22]
+[ni@w21.org 2020-08-08]

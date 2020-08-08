@@ -3,7 +3,7 @@ My Python Library
 
 This is meant to be a library package of things I want to have at
 hand for my own daily python programming. It shall include all the
-things I have developed and want to re-use — modules, utility
+things I have developed and want to re-use — modules, small utility
 functions, and things.
 
 I want to make a PyPi package out of this, such that I can access it
@@ -13,7 +13,7 @@ a whole. That could look like this:
     import jpylib as y
 
     # trace calls of this function
-    @y.fntrace
+    @y.tracefn
     def foo(bar, moo=None):
         pass
 
@@ -21,9 +21,8 @@ a whole. That could look like this:
         "v": (...),
     })
 
-The two functions called above, `fntrace` and `pgetopts` (which
-actually would be `pgetopt.parse`) are indeed the first two I have
-in mind.
+The two functions called above, `tracefn` and `pgetopts` were indeed
+the first two I had in mind. Quite a few more followed in between.
 
 
 Current Status
@@ -55,11 +54,21 @@ Current Status
 * `program`, `home`, `real_home` — basename of `argv[0]`, `$HOME`,
   and the uid's home dir as variables
 
+* `outputCaptured`, `outputAndExitCaptured` – context managers to
+  capture the output and/or system exit status of some code.
+
+* `backquote` — get the output of an external command as simple as
+  with the Perl backquote construct.
+
+* `boolish` — a function to make bool values from strings like
+  "yes", "no", "on", "off", etc. that are potentially used in
+  interactive answers and some config files.
+
 
 To Do Next
 ----------
 
-* testing (work in progress)
+* more testing (work in progress)
 
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)

@@ -16,7 +16,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": [],
         }, ["-v"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: {} [options]".format(ovc._program))
+                         "usage: {} [-vz]".format(ovc._program))
 
     def test_usage1(self):
         """-h/--hounds option"""
@@ -26,7 +26,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": ["mangia"],
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: {} [options] mangia".format(ovc._program))
+                         "usage: {} [-vz] mangia".format(ovc._program))
 
     def test_usage2(self):
         """-h/--hounds option"""
@@ -36,7 +36,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": ["mangia", "[file1 ...]"],
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: {} [options] mangia [file1 ...]".format(
+                         "usage: {} [-vz] mangia [file1 ...]".format(
                              ovc._program))
 
     def test_usage_own(self):
@@ -60,7 +60,7 @@ class UsageTestcase(unittest.TestCase):
             "_program": "schnörkelate",
         }, ["-v", "foo!"], exit_on_error=False)
         self.assertEqual(ovc.ovc_usage_msg(),
-                         "usage: schnörkelate [options] mangia [file1 ...]")
+                         "usage: schnörkelate [-vz] mangia [file1 ...]")
 
 
     def test_usage_string_arguments(self):
@@ -70,7 +70,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": "...",
             "_program": "lala",
         })
-        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options] ...")
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [-v] ...")
 
 
     def test_usage_empty_string_arguments(self):
@@ -80,7 +80,7 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": "",
             "_program": "lala",
         })
-        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options]")
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [-v]")
 
     def test_usage_empty_list_arguments(self):
         """_arguments as string"""
@@ -89,4 +89,4 @@ class UsageTestcase(unittest.TestCase):
             "_arguments": [],
             "_program": "lala",
         }, [])
-        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [options]")
+        self.assertEqual(ovc.ovc_usage_msg(), "usage: lala [-v]")

@@ -19,8 +19,8 @@ class UsageTestcase(unittest.TestCase):
             ovc.ovc_usage()
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         """usage: {} [options]
-use '-h' option to get help on options""".format(ovc._program))
+                         """usage: {} [-vz]
+use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 64)
 
 
@@ -35,8 +35,8 @@ use '-h' option to get help on options""".format(ovc._program))
             ovc.ovc_usage(exit_status=63)
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue().rstrip(),
-                         """usage: {} [options]
-use '-h' option to get help on options""".format(ovc._program))
+                         """usage: {} [-vz]
+use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage2(self):
@@ -52,8 +52,8 @@ use '-h' option to get help on options""".format(ovc._program))
         self.assertEqual(err.getvalue().rstrip(),
                          """{}: sis is rong
 
-usage: {} [options]
-use '-h' option to get help on options""".format(ovc._program, ovc._program))
+usage: {} [-vz]
+use '-?' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 63)
 
     def test_usage3(self):
@@ -69,8 +69,8 @@ use '-h' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(err.getvalue().rstrip(),
                          """{}: sis is rong
 
-usage: {} [options]
-use '-h' option to get help on options""".format(ovc._program, ovc._program))
+usage: {} [-vz]
+use '-?' option to get help on options""".format(ovc._program, ovc._program))
         self.assertEqual(status.value, 64)
 
     def test_usage4(self):
@@ -84,8 +84,8 @@ use '-h' option to get help on options""".format(ovc._program, ovc._program))
             ovc.ovc_usage(exit_status=0)
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
-                         """usage: {} [options]
-use '-h' option to get help on options""".format(ovc._program))
+                         """usage: {} [-vz]
+use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
     def test_usage5(self):
@@ -99,8 +99,8 @@ use '-h' option to get help on options""".format(ovc._program))
             ovc.ovc_usage(exit_status=0)
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(out.getvalue().rstrip(),
-                         """usage: {} [options] 1 2 drei
-use '-h' option to get help on options""".format(ovc._program))
+                         """usage: {} [-vz] 1 2 drei
+use '-?' option to get help on options""".format(ovc._program))
         self.assertEqual(status.value, 0)
 
 
@@ -120,8 +120,8 @@ class HelpTestcase(unittest.TestCase):
             "_help_footer": "This is just an example program.",
             "_program": "schmooze",
         }, ["gnaddel"])
-        self.assertEqual(ovc.ovc_help_msg(),
-                         """usage: schmooze [options] string_to_print ...
+        self.assertEqual(ovc.ovc_help_msg(), """\
+usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help 
@@ -156,8 +156,8 @@ This is just an example program.""")
                 }, ["-h"], exit_on_error=False)
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(status.value, 0)
-        self.assertEqual(out.getvalue(),
-                         """usage: schmooze [options] string_to_print ...
+        self.assertEqual(out.getvalue(), """\
+usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help 
@@ -195,8 +195,8 @@ This is just an example program.
             ovc.ovc_help()
         self.assertEqual(err.getvalue(), "")
         self.assertEqual(status.value, 0)
-        self.assertEqual(out.getvalue(),
-                         """usage: schmooze [options] string_to_print ...
+        self.assertEqual(out.getvalue(), """\
+usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help 

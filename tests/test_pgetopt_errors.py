@@ -107,8 +107,8 @@ class ErrorTestCase(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
 
-usage: bungabunga [options] bunga
-use '-h' option to get help on options
+usage: bungabunga [-i] bunga
+use '-?' option to get help on options
 """.format(ErrorNotopt))
         
     def test_err_exit_noargs(self):
@@ -122,7 +122,7 @@ use '-h' option to get help on options
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
 
-usage: bungabunga [options] <arguments>
-use '-h' option to get help on options
+usage: bungabunga [-i] <arguments>
+use '-?' option to get help on options
 """.format(ErrorNotopt))
         

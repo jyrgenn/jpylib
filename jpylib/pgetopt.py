@@ -168,7 +168,7 @@ class OptionValueContainer:
         if error:
             print(self._program + ":", error, file=out, end="\n\n")
         print(self.ovc_usage_msg(), file=out)
-        print("use '-h' option to get help on options", file=out)
+        print("use '-?' option to get help on options", file=out)
         sys.exit(exit_status)
 
 
@@ -179,8 +179,21 @@ class OptionValueContainer:
             args = " <arguments>"
         elif self._arguments:
             args = " " + self._arguments
-        return self._usage or "usage: " + self._program + " [options]" + args
-
+        noarg = ""
+        w_arg = []
+        for key, desc in self._opts.items():
+            if len(key) > 1 or key in "h?":
+                continue
+            if desc[1] is str:
+                w_arg.append((key, (desc[4] if len(desc) == 5 else "ARG")))
+            else:
+                noarg += key
+        options = " "
+        if noarg:
+            options += "[-" + "".join(sorted(noarg)) + "]"
+        for opt in w_arg:
+            options += " [-{} {}]".format(opt[0], opt[1])
+        return self._usage or "usage: " + self._program + options + args
 
     def ovc_values(self):
         """Return a dict of options and their values (for testing)."""

@@ -1,5 +1,13 @@
 ;; -*- text -*-
 
+2020-808:
+
+ * In the usage message, instead of just "[options]", all options
+   are listed with argument names, where applicable.
+
+ * -? is now the "help" option, with -h as an alias; no --usage
+   option any more.
+
 2020-710:
 
  * Integrated pgetopt into the jpylib Python library.

@@ -5,9 +5,8 @@ The lib/ directory
 
 Here are some files used in the build and test processes.
 
-`README-pgetopt.md-sans-toc`: source of the pgetops README, with
-includes for the ToC and the errors table, both of which are
-generated.
+`README-pgetopt.source`: source of the pgetops README, with includes
+for the ToC and the errors table, both of which are generated.
 
 `README.md`: this README file.
 

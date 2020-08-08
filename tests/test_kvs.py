@@ -62,6 +62,43 @@ class KVSTestcase(unittest.TestCase):
         with self.assertRaises(y.kvs.SyntaxError):
             print(y.parse_kvs("foo=bar,dang=[1,,2,15}"))
 
+    def test_syntax_error_4(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("foo=bar,dang=[1,,2,15,}"))
+
+    def test_no_syntax_error_5(self):
+        value = y.parse_kvs("foo=bar,dang=[1,,2,15,\"]", intvals=True)
+        self.assertEqual(value, dict(dang=[1, "", 2, 15, '"'], foo="bar"))
+
+    def test_syntax_error_6(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("foo={b=6", intvals=True))
+        
+    def test_syntax_error_7(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("foo=6}", intvals=True))
+        
+    def test_syntax_error_8(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("foo,6", intvals=True))
+        
+    def test_kvpairs_syntax_error_9(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("dang={f=6,hummm=,g=", intvals=True))
+
+    def test_syntax_error_10(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            print(y.parse_kvs("dang=[34,]", intvals=True))
+
+    def test_kvpairs_empty_value(self):
+        value = y.parse_kvs("dang={f=6,hummm=,g=2}", intvals=True)
+        self.assertEqual(value, dict(dang=dict(f=6,g=2,hummm="")))
+
+    def test_kvpairs_empty_value_2(self):
+        value = y.parse_kvs("f=6,hummm=", intvals=True)
+        self.assertEqual(value, dict(f=6,hummm=""))
+
+        
     def test_nested_list1(self):
         value = y.parse_kvs("dang=[1,,2,[]]", intvals=True)
         self.assertEqual(value, dict(dang=[1, "", 2, []]))
@@ -70,3 +107,19 @@ class KVSTestcase(unittest.TestCase):
         value = y.parse_kvs("dang=[1,2,[]]", intvals=True)
         self.assertEqual(value, dict(dang=[1, 2, []]))
 
+    def test_syntax_closing_list1(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            value = y.parse_kvs("dang=[1,2,[]", intvals=True)
+        
+    def test_syntax_closing_list2(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            value = y.parse_kvs("dang=[1,2,[],", intvals=True)
+        
+    def test_syntax_closing_list3(self):
+        with self.assertRaises(y.kvs.SyntaxError):
+            value = y.parse_kvs("dang=[1,2,[],", intvals=True)
+        
+    def test_list_kvp(self):
+        value = y.parse_kvs("dang=[1,2,{a=4}]", intvals=True)
+        self.assertEqual(value, dict(dang=[1, 2, {"a":4}]))
+        

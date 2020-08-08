@@ -79,7 +79,7 @@ def next_token(buf, intvals=False):
             token = int(token)
         except:
             pass
-    #debug("next_token", repr(token))
+    # debug("next_token", repr(token))
     return token or None
 
 
@@ -98,7 +98,7 @@ def parse_valuelist(buf, intvals=False):
         elif t == "[":
             result.append(parse_valuelist(buf))
         elif t == "{":
-            result.append(parse_kvpairs(buf))
+            result.append(parse_kvpairs(buf, need_brace=True, intvals=intvals))
         elif str(t) in "=}":
             syntax_error(buf, "unexpected in {} value list", repr(t))
         elif t == ",":
@@ -114,14 +114,9 @@ def parse_valuelist(buf, intvals=False):
             return result
         elif t in "[{}=":
             syntax_error(buf, "unexpected in {} value list", repr(t))
-        elif t == "{":
-            result.append(parse_kvpairs(buf))
-        elif str(t) in "=}":
-            syntax_error(buf, "unexpected in {} value list", repr(t))
         elif t == ",":
             pass                # *so* pass!
-        else:
-            syntax_error(buf, "unexpected in {} value list", repr(t))
+        # nothing else can happen here -- I hope
 
 
 def parse_kvpairs(buf, need_brace=False, intvals=False):
@@ -129,7 +124,7 @@ def parse_kvpairs(buf, need_brace=False, intvals=False):
     result = {}
     while True:
         # read key
-        t = next_token(buf)
+        t = next_token(buf, intvals=intvals)
         if t is None:
             if need_brace:
                 syntax_error(str(buf), "kvpairs list misses closing '}'")
@@ -144,7 +139,7 @@ def parse_kvpairs(buf, need_brace=False, intvals=False):
             syntax_error(str(buf), "unexpected '{}' in kvpairs list", t)
         key = t
         # expect "="
-        t = next_token(buf)
+        t = next_token(buf, intvals=intvals)
         if t != "=":
             syntax_error(str(buf), "expected '=' after key in kvpairs list")
         # read value

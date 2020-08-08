@@ -21,12 +21,21 @@ class SighandlerTestcase(unittest.TestCase):
         with y.outputAndExitCaptured() as (out, err, status):
             func_keyboard_interrupt()
         self.assertEqual(out.getvalue(), "right\n")
-        #self.assertTrue(err.getvalue().endswith(" aw rite!\n"))
+        # stderr has been closed by the handler, so we cannot read it any more
+        with self.assertRaises(ValueError):
+            self.assertTrue(err.getvalue().endswith(" aw rite!\n"))
+        self.assertEqual(status.value, 130)
+
+    def test_keyboard_interrupt(self):
+        with y.outputAndExitCaptured() as (out, err, status):
+            func_keyboard_interrupt()
         self.assertEqual(status.value, 130)
 
     def test_broken_pipe(self):
         with y.outputAndExitCaptured() as (out, err, status):
             func_broken_pipe()
         self.assertEqual(out.getvalue(), "std out\n")
-        #self.assertTrue(err.getvalue().endswith(" yeah shit!\n"))
+        # same as above
+        with self.assertRaises(ValueError):
+            self.assertTrue(err.getvalue().endswith(" yeah shit!\n"))
         self.assertEqual(status.value, 141)

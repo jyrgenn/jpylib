@@ -50,7 +50,7 @@ is the traditional Unix style.
 POSIX Conformance
 -----------------
 
-POSIX-conformance means, in the context of command-line options,
+POSIX conformance means, in the context of command-line options,
 (single-letter) options can be clustered; also, the argument of a
 single-letter option (if it demands one) may be placed in the next
 `argv[]` element, or in the same one, meaning that after an option

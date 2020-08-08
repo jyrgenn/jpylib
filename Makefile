@@ -1,6 +1,6 @@
 # Makefile for the pgetopt Python module
 
-PREVIEW = $${TMPDIR-/tmp}/pgetopt-README.html
+PREVIEW = tmp/pgetopt-README.html
 
 default: doc test
 
@@ -8,16 +8,16 @@ doc: README-pgetopt.md
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
 README-pgetopt.md: lib/README-pgetopt.md-sans-toc lib/include.py Makefile \
-	   readme-pgetopt-toc.tmp readme-pgetopt-errtable.tmp
+	   tmp/readme-pgetopt-toc tmp/readme-pgetopt-errtable
 	rm -f $@
 	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
 	./lib/include.py $<>>$@
 	chmod -w $@
 
-readme-pgetopt-toc.tmp: lib/README-pgetopt.md-sans-toc Makefile
+tmp/readme-pgetopt-toc: lib/README-pgetopt.md-sans-toc Makefile tmp
 	tail +2 $<| gh-md-toc --hide-header --hide-footer | tail +2 >$@
 
-readme-pgetopt-errtable.tmp: jpylib/pgetopt.py lib/generrtable.py 
+tmp/readme-pgetopt-errtable: jpylib/pgetopt.py lib/generrtable.py tmp
 	lib/generrtable.py $<>$@
 
 test:
@@ -49,8 +49,11 @@ preview: README.md
 	markdown README-pgetopt.md > $(PREVIEW)
 	open $(PREVIEW)
 
+tmp:
+	mkdir tmp
+
 clean:
-	-rm -rf *.tmp .coverage
+	-rm -rf tmp .coverage
 	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +
 	cd package-pgetopt && $(MAKE) clean
 	cd package-jpylib && $(MAKE) clean

@@ -9,7 +9,7 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
-#include readme-pgetopt-toc.tmp
+#include tmp/readme-pgetopt-toc
 
 Motivation
 ----------
@@ -284,7 +284,7 @@ as text constants, so they can be used for comparison:
 
 | Constant    | Message                             | Argument |
 |-------------|-------------------------------------|----------|
-#include readme-pgetopt-errtable.tmp
+#include tmp/readme-pgetopt-errtable
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)

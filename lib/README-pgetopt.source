@@ -164,25 +164,25 @@ others) the following attributes:
 this in the context of a program.)
 
 When the program is called with an invalid option or the wrong
-number of arguments (in this case: none), or when it sees the `-?`
-or `--usage` option, a corresponding error and a brief usage message
-are printed and the program exits with an exit status of 64. When
-the program is called with `-h` or `--help`, a more detailed help
-message is printed, consisting of the usage, the `_help_header`
-value (if present), an explanation of the options constructed from
-the option descriptors, and the `_help_footer` value (if present).
+number of arguments (in this case: none), a corresponding error and
+a brief usage message are printed and the program exits with an exit
+status of 64 (that is EX_USAGE in <sysexits.h> as defined in BSD
+Unix). When the program is called with `-?` or `-h` or `--help`, a
+more detailed help message is printed, consisting of the usage, the
+`_help_header` value (if present), an explanation of the options
+constructed from the option descriptors, and the `_help_footer`
+value (if present).
 
 The help and usage messages are available from the option value
 container by calling the `ovc_help_msg` and `ovc_usage_msg` methods,
 which return the respective message. Or call the `ovc_help` and
 `ovc_usage` methods, which print their message and end the program.
 
-You can override the `-?`/`--usage` and the `-h`/`--help` options by
+You can override the `-?`/`--help` and the `-h` options by
 specifying your own descriptor for these options in the descriptors
-dictionary. However, you cannot override the `--usage` option with
-any other short option than `-?`, or `--help` with any other short
-option than `-h`, as the short options are the decisive parameters
-here.
+dictionary. However, you cannot override the `--help` option with
+any other short option than `-?`, as the short options are the
+decisive parameters here.
 
 
 Argument count checking
@@ -317,9 +317,9 @@ interest. Their names begin with `ovc_` or `_` to avoid conflicts
 with option names.
 
 `ovc.ovc_usage`: Method that prints a brief usage message. This is
-the function invoked with the default `-?` or `--usage` option. The
+the function invoked by default on an option or argument error. The
 message describes the command arguments (from the `_arguments`
-value), prints a reference to the `-h` option, and then exits the
+value), prints a hint at the `-?` option, and then exits the
 program. This is used internally when the given options or the
 number of arguments are incorrect, but it can also be used by the
 user. Optional argument `error` may contain an error message that is
@@ -331,7 +331,7 @@ above as a string.
 
 `ovc.ovc_help`: Method that prints a more detailed help message and
 exits the program. This is the function invoked with the default
-`-h` or `--help` option. The help message consists of the usage
+`-?` or `--help` option. The help message consists of the usage
 message (see above), the `_help_header` argument of the descriptors
 dictionary to `parse()`, a description of the options (constructed
 from the descriptors), and the `_help_footer` argument.
@@ -397,13 +397,13 @@ encountered on the command line, and its return value (which must
 not be `None`) will be used as the option's value.
 
 This is not a fully planned feature; rather, it fell more or less
-accidentally out of the implementation of the default `help` and
-`usage` options. At the beginning I did not even really see a useful
-application, but in between one has dawned on me.
+accidentally out of the implementation of the default `help` option.
+At the beginning I did not even really see a useful application, but
+in between one has dawned on me.
 
 I have to admit this feature isn't the prime example for clarity of
-the user interface. But then it was an afterthought and can safely
-be just ignored.
+the user interface. But then it was an afterthought, and it can
+safely be just ignored anyway.
 
 
 Documentation, Examples and Testing

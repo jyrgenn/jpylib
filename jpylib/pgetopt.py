@@ -46,12 +46,11 @@ class OptionValueContainer:
                 assert callable(typ), "invalid option type: -"+opt
             self.__dict__[name] = default
 
-        if "h" not in self._opts:
-            self._opts["h"] = \
-                ("help", self.ovc_help, None, "show help on options")
         if "?" not in self._opts:
             self._opts["?"] = \
-                ("usage", self.ovc_usage, None, "show usage briefly")
+                ("help", self.ovc_help, None, "show help on options and things")
+        if "h" not in self._opts:
+            self._opts["h"] = self._opts["?"]
         for field in _keywords:
             self.__dict__[field] = self._opts.get(field)
         if not self._program:
@@ -243,12 +242,12 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
       "_usage": string to use as usage message instead of the default
       constructed one
 
-    If no '?' or 'h' option is specified, they will default to a 'help'
-    or a 'usage' function, respectively, which will be called
-    immediately when the option is seen. 'help' prints a description of
-    the options, framed by the _help_header and the _help_footer;
-    'usage' prints a brief summary of the program's parameters. Both
-    terminate the program after printing the message.
+    If no '?' or 'h' option is specified, they will default to a long
+    form of '--help' and a 'help' function, which will be called
+    immediately when the option is seen. It prints a brief summary of
+    the program's parameters and a description of the options, framed
+    by the _help_header and the _help_footer; it terminates the program
+    after printing the message.
 
     In case of a normal return of parse() (i.e. options and number of
     arguments okay), it returns an OptionValueContainer and a list of

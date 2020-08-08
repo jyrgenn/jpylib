@@ -124,12 +124,12 @@ class HelpTestcase(unittest.TestCase):
                          """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
- -?, --usage 
-    show usage briefly
+ -?, --help 
+    show help on options and things
  -d, --debug DEBUG_TOPIC
     debug topics (str arg, default [])
  -h, --help 
-    show help on options
+    show help on options and things
  -n, --repetitions ARG
     number of repetitions (int arg, default 3)
  -o, --output-file NAME
@@ -160,12 +160,12 @@ This is just an example program.""")
                          """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
- -?, --usage 
-    show usage briefly
+ -?, --help 
+    show help on options and things
  -d, --debug DEBUG_TOPIC
     debug topics (str arg, default [])
  -h, --help 
-    show help on options
+    show help on options and things
  -n, --repetitions ARG
     number of repetitions (int arg, default 3)
  -o, --output-file NAME
@@ -199,12 +199,12 @@ This is just an example program.
                          """usage: schmooze [options] string_to_print ...
 print a string a number of times
 
- -?, --usage 
-    show usage briefly
+ -?, --help 
+    show help on options and things
  -d, --debug DEBUG_TOPIC
     debug topics (str arg, default [])
  -h, --help 
-    show help on options
+    show help on options and things
  -n, --repetitions ARG
     number of repetitions (int arg, default 3)
  -o, --output-file NAME

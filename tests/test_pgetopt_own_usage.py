@@ -27,7 +27,7 @@ class HelpTestcase(unittest.TestCase):
         """-h/--help option"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
-            "h": ("help", int, 1, "number of hounds"),
+            "?": ("help", int, 1, "number of hounds"),
             "_arguments": [],
         }, ["-v", "--help=5"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, help=5))
@@ -45,16 +45,16 @@ class HelpTestcase(unittest.TestCase):
         """-h/--help option"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
-            "h": ("help", bool, 1, "number of hounds"),
+            "h": ("own_help", bool, 1, "number of hounds"),
             "_arguments": [],
-        }, ["-v", "--help"], exit_on_error=False)
-        self.assertEqual(ovc.ovc_values(), dict(verbose=2, help=2))
+        }, ["-v", "--own-help"], exit_on_error=False)
+        self.assertEqual(ovc.ovc_values(), dict(verbose=2, own_help=2))
 
     def test_help_func(self):
         """call help function"""
         ovc, args = parse({
             "v": ("verbose", bool, 1, "increase verbosity"),
-            "h": ("help", my_help, None, "number of hounds"),
+            "?": ("help", my_help, None, "number of hounds"),
             "_arguments": [],
         }, ["-v", "--help"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(), dict(verbose=2, help=6))

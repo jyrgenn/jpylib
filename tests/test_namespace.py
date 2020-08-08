@@ -37,8 +37,6 @@ class TemplateTestcase(unittest.TestCase):
     def test_repr(self):
         self.assertEqual(repr(self.ns), ns_string)
 
-
-    def test_raises(self):
-        with self.assertRaises(NameError):
-            self.dodo = gipsnich
+    def test_reread(self):
+        self.assertEqual(str(self.ns), str(eval("y."+repr(self.ns))))
 

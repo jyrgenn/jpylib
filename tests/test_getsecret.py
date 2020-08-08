@@ -30,7 +30,7 @@ default_secrets = os.path.join(tmpdir, "secrets")
 class SecretsTestcase(unittest.TestCase):
 
     def getdata(self):
-        return json.loads(backquote("lib/split-secrets.py", touchy=True))
+        return json.loads(backquote("lib/split-secrets.py"))
 
     def setUp(self):
         os.makedirs(tmpdir, exist_ok=True)

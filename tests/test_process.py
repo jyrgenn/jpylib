@@ -70,15 +70,15 @@ class ProcessTestcase(unittest.TestCase):
         full_result = backquote("echo doodeedoo; exit 13", full_result=True)
         self.assertEqual(full_result, ("doodeedoo\n", "", 13))
 
-    def test_touchy(self):
+    def test_silent(self):
 
-        full_result = backquote("echo doodeedoo", full_result=True, touchy=True)
+        full_result = backquote("echo doodeedoo", full_result=True)
         self.assertEqual(full_result, ("doodeedoo\n", "", 0))
 
         with self.assertRaises(ChildProcessError):
-            full_result = backquote("echo doodeedoo 1>&2",
-                                    full_result=True, touchy=True)
+            backquote("echo doodeedoo 1>&2")
+        backquote("echo doodeedoo 1>&2", silent=True)
 
         with self.assertRaises(ChildProcessError):
-            full_result = backquote("echo doodeedoo; exit 13",
-                                    full_result=True, touchy=True)
+            backquote("echo doodeedoo; exit 13")
+        backquote("echo doodeedoo; exit 13", silent=True)

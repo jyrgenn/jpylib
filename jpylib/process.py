@@ -9,11 +9,8 @@ from .alerts import *
 # not otherwise indicated
 shellmeta = "\"'`|&;[(<>)]*?"
 
-def backquote(command, touchy=False, shell=None, full_result=False):
+def backquote(command, shell=None, full_result=False, silent=False):
     """Similar to Perl's `command` feature: run process, return result.
-
-    If we are touchy, we raise an exception at the slightest provocation, i.e.
-    non-empty stderr output or non-zero exit status.
 
     If command is a tuple or a list, run it directly. Otherwise, make it a
     string if necessary and:
@@ -29,8 +26,14 @@ def backquote(command, touchy=False, shell=None, full_result=False):
         If run_shell is otherwise false, split the string into a list and run it
         directly.
 
-    If full_result is false (the default), return only stdout as a string.
-    Otherwise, a tuple of (stdout, stderr, exit status).
+    If full_result is false (the default), return only stdout as a string. In
+    this case, a ChildProcessError is raised if the exit status of the command
+    is non-zero or stderr is not empty. This can be suppressed by setting silent
+    to true.
+
+    If full_result is true, return a tuple of (stdout, stderr, exit status). No
+    exception for exit status or stderr is raised, regardless of the value of
+    silent.
 
     """
     run_shell = False                   # for testing
@@ -57,11 +60,16 @@ def backquote(command, touchy=False, shell=None, full_result=False):
         result = (proc.stdout.read().decode("utf-8"),
                   proc.stderr.read().decode("utf-8"),
                   proc.returncode)
-        if touchy and (result[1] or result[2]):
+        if not full_result and not silent and (result[1] or result[2]):
             raise ChildProcessError("command {} exited status {}; stderr: '{}'"
                                     .format(command, result[2], result[1]))
     if full_result:
         if full_result == "plus":
             return result, run_shell
         return result
-    return result[0]
+    else:
+        if not silent and (result[1] or result[2]):
+            raise ChildProcessError("command {} exited status {}; stderr: {}"
+                                    .format(command, result[2],
+                                            repr(result[1])))
+        return result[0]

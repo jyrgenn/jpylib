@@ -3,9 +3,13 @@
 # Do things with processes.
 
 import subprocess
+from .alerts import *
 
+# we take these characters as the indication to run a command in the shell, if
+# not otherwise indicated
+shellmeta = "\"'`|&;[(<>)]*?"
 
-def backquote(command, touchy=False, shell=None, stdout_only=True):
+def backquote(command, touchy=False, shell=None, full_result=False):
     """Similar to Perl's `command` feature: run process, return result.
 
     If we are touchy, we raise an exception at the slightest provocation, i.e.
@@ -25,20 +29,22 @@ def backquote(command, touchy=False, shell=None, stdout_only=True):
         If run_shell is otherwise false, split the string into a list and run it
         directly.
 
-    If stdout_only is true (the default), return stdout only. Otherwise, a tuple
-    of (stdout, stderr, exit status).
+    If full_result is false (the default), return only stdout as a string.
+    Otherwise, a tuple of (stdout, stderr, exit status).
 
     """
-    shellmeta = "\"'`|&;[(<>)]*? \t"
+    run_shell = False                   # for testing
     if not isinstance(command, (list, tuple)):
         command = str(command)
         if shell:
             if shell is True:
                 shell = "/bin/sh"
             command = [shell, "-c", command]
+            run_shell = True
         elif shell is None:
             if any([ ch in shellmeta for ch in command ]):
-                command = [shell, "-c", command]
+                command = ["/bin/sh", "-c", command]
+                run_shell = True
             else:
                 command = command.split()
         else:
@@ -54,6 +60,8 @@ def backquote(command, touchy=False, shell=None, stdout_only=True):
         if touchy and (result[1] or result[2]):
             raise ChildProcessError("command {} exited status {}; stderr: '{}'"
                                     .format(command, result[2], result[1]))
-    if stdout_only:
-        return result[0]
-    return result
+    if full_result:
+        if full_result == "plus":
+            return result, run_shell
+        return result
+    return result[0]

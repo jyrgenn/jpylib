@@ -26,7 +26,7 @@ class AlertsTestcase(unittest.TestCase):
         self.assertEqual(alcf().program, "the_program")
         self.assertEqual(alcf().syslog_facility, syslog.LOG_LPR)
 
-        debug("it ain't me babe")       # need to trigger syslog open
+        debug("Step on it, Arnold! Step on it!") # need to trigger syslog open
         self.assertTrue(alcf().syslog_opened)
         nulldev = open("/dev/null", "w")
         alert_redirect(L_DEBUG, nulldev)

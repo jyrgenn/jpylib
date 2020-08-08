@@ -9,7 +9,7 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
-#include tmp/readme-pgetopt-toc
+#include !tail +2 $SOURCE| gh-md-toc --hide-header --hide-footer | tail +2
 
 Motivation
 ----------
@@ -284,7 +284,7 @@ as text constants, so they can be used for comparison:
 
 | Constant    | Message                             | Argument |
 |-------------|-------------------------------------|----------|
-#include tmp/readme-pgetopt-errtable
+#include !lib/generrtable.py jpylib/pgetopt.py
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)

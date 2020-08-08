@@ -14,13 +14,16 @@ for the ToC and the errors table, both of which are generated.
 implement an own testing mechanism. That pretty soon showed that the
 effort would be just too much compared to an existing testing
 framework. Actually, I am quite happy with Python's `unittest`
-framewor now.
+framework now.
 
 `doop`: a program used in the process tests.
 
 `generrtable.py`: error table generator for the pgetops README.
 
 `include.py`: include file processor for the pgetops README.
+
+`jpylib`: a symlink to the jpylib under development, for the benefit
+of `include.py`.
 
 `secrets`: secrets example file for testing. Don't exert yourself,
 the secrets in there are no longer used (or have never been)

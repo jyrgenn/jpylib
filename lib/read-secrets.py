@@ -19,6 +19,8 @@ with open(secrets_file) as s:
         if line.lstrip().startswith("#"):
             continue
         key, *rest = line.rstrip().split(":", max_fields)
+        if key in secrets:
+            continue
         if len(rest) == 0:
             # not a valid key:[opts:]value line at all
             continue

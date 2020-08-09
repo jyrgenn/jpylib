@@ -43,7 +43,7 @@ class KVSTestcase(unittest.TestCase):
         self.assertEqual(y.parse_kvs("cfg={file=~/etc/foo.conf,syntax=INI}"),
                          dict(cfg=dict(file="~/etc/foo.conf", syntax="INI")))
 
-    def test_kvs_1(self):
+    def test_kvs_3(self):
         self.assertEqual(y.parse_kvs("foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f]}",
                                      intvals=True),
                          dict(foo="bar",

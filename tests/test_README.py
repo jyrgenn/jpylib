@@ -4,7 +4,7 @@ import jpylib as y
 
 import unittest
 
-readme = "README-pgetopt.md"
+readme = "doc/pgetopt.md"
 
 class ReadmeTestcase(unittest.TestCase):
 

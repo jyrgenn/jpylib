@@ -1,13 +1,14 @@
 # Makefile for the pgetopt Python module
 
-PREVIEW = tmp/pgetopt-README.html
+PREVIEW = tmp/pgetopt.html
 
-default: doc test
+default: documentation test
 
-doc: README-pgetopt.md
+documentation: doc/pgetopt.md
+
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
-README-pgetopt.md: lib/README-pgetopt.source lib/include.py Makefile
+doc/pgetopt.md: lib/pgetopt.source lib/include.py Makefile
 	rm -f $@
 	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
 	./lib/include.py $<>>$@
@@ -38,8 +39,8 @@ install-pgetopt:
 install-jpylib:
 	cd package-jpylib && $(MAKE) install
 
-preview: README.md
-	markdown README-pgetopt.md > $(PREVIEW)
+preview: doc/pgetopt.md
+	markdown doc/pgetopt.md > $(PREVIEW)
 	open $(PREVIEW)
 
 clean:

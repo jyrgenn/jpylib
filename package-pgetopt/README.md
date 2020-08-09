@@ -33,6 +33,6 @@ Call `help(pgetopt)` for details.
 More information at <https://git.w21.org/ni/jpylib/>
 
 The full documentation for this version is at
-<https://git.w21.org/ni/jpylib/-/blob/v$__package_version$/README-pgetopt.md>
+<https://git.w21.org/ni/jpylib/-/blob/v$__package_version$/doc/pgetopt.md>
 
-[ni@w21.org 2020-08-08]
+[ni@w21.org 2020-08-09]

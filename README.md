@@ -6,9 +6,8 @@ hand for my own daily python programming. It shall include all the
 things I have developed and want to re-use — modules, small utility
 functions, and things.
 
-I want to make a PyPi package out of this, such that I can access it
-from everywhere (just like pgetopt now) and import into programs as
-a whole. That could look like this:
+This is a PyPi package so I can access it from everywhere and import
+it into programs as a whole. That could look like this:
 
     import jpylib as y
 
@@ -21,8 +20,9 @@ a whole. That could look like this:
         "v": (...),
     })
 
-The two functions called above, `tracefn` and `pgetopts` were indeed
-the first two I had in mind. Quite a few more followed in between.
+The two functions called above, the `tracefn` decorator and
+`pgetopts` were indeed the first two I had in mind. Quite a few more
+followed in between.
 
 
 Current Status
@@ -65,10 +65,23 @@ Current Status
   interactive answers and some config files.
 
 
+Documentation
+-------------
+
+Real documentation is still to be written for most things. For now,
+refer to the source code, in particular to the function docstrings.
+
+This is what is already there:
+
+* [pgetopt](doc/pgetopt.md)
+
+
 To Do Next
 ----------
 
 * more testing (work in progress)
+
+* real documentation
 
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)

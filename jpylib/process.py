@@ -35,6 +35,9 @@ def backquote(command, shell=None, full_result=False, silent=False):
     exception for exit status or stderr is raised, regardless of the value of
     silent.
 
+    In any case, however, there will be an exception raised if the
+    called program cannot be found.
+
     """
     run_shell = False                   # for testing
     if not isinstance(command, (list, tuple)):
@@ -60,9 +63,6 @@ def backquote(command, shell=None, full_result=False, silent=False):
         result = (proc.stdout.read().decode("utf-8"),
                   proc.stderr.read().decode("utf-8"),
                   proc.returncode)
-        if not full_result and not silent and (result[1] or result[2]):
-            raise ChildProcessError("command {} exited status {}; stderr: '{}'"
-                                    .format(command, result[2], result[1]))
     if full_result:
         if full_result == "plus":
             return result, run_shell

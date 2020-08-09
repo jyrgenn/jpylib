@@ -19,8 +19,6 @@ class StringReader():
             ch = self.content[self._next]
             self._next += 1
             return ch
-        else:
-            return None
 
     def backup(self):
         if self._next > 1:

@@ -9,7 +9,7 @@ import shutil
 import collections
 from datetime import datetime
 
-from jpylib.alerts import info, notice
+from jpylib import info, notice, pgetopts
 
 # Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
@@ -119,7 +119,7 @@ def read_secrets(fname, get_invalids=False):
             nfields = len(fields)
             assert 1 <= nfields <= 3, "unexpected # of fields: "+str(nfields)
             if nfields == 1:
-                notice("{}:{}: not a valid key:opts:value line"
+                notice("{}:{}: not a valid key:opts:value line, ignored"
                        .format(fname, lineno))
                 continue
             key = fields[0]
@@ -169,7 +169,12 @@ def putsecret(key, value, fname=None, options=None,
     entries = collections.OrderedDict()
     shutil.copy2(fname, fname + backup_suffix)
 
-    options = options or []
+    options = set(options or [])
+    if "zip" in options:
+        try:
+            options.remove("b64")       # would be redundant *and* confusing
+        except:
+            pass
     for opt in options:
         data = bytes(value, char_encoding)
         data = find_coder_func(opt, dir_encode, must_find=True)(data)
@@ -235,7 +240,7 @@ def getsecret(key, fname=None, char_encoding=None, error_exception=True):
     return None
 
 
-def main():
+def getsecret_main():
     if not (2 <= len(sys.argv) <= 3):
         sys.exit("usage: getsecret key [filename]")
     try:
@@ -243,6 +248,24 @@ def main():
     except Exception as e:
         sys.exit("getsecret: " + e.args[0].format(*e.args[1:]))
 
-
-if __name__ == '__main__':
-    main()
+def putsecret_main():
+    ovc, args = pgetopts({
+        "_help_header": "put a secret into the secrets file",
+        "b": ("base64", bool, False, "encode secret with base64"),
+        "z": ("zip", bool, False,
+              "encode secret with zip/zlib (and base64)"),
+        "o": ("options", str, None, "encoding options (valid: {})"
+              .format(",".join(list(valid_options)))),
+        "_arguments": ["key", "secret", "[filename]"],
+        "_help_footer": "Default secrets file is '{}'"
+                        .format(default_filename),
+    }, sys.argv[1:])                    # needed for testing (WTF?)
+    options = list(filter(None, (ovc.options or "").split(",")))
+    for opt in options:
+        if opt not in valid_options:
+            ovc.ovc_usage("'{}' is not a valid encoding option".format(opt))
+    if ovc.base64:
+        options.append("b64")
+    if ovc.zip:
+        options.append("zip")
+    putsecret(*args, options=options)

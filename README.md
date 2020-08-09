@@ -25,8 +25,8 @@ The two functions called above, the `tracefn` decorator and
 followed in between.
 
 
-Current Status
---------------
+Components
+----------
 
 * `fntrace` — function call tracing decorator.
 
@@ -78,8 +78,6 @@ This is what is already there:
 
 To Do Next
 ----------
-
-* more testing (work in progress)
 
 * real documentation
 

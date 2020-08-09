@@ -32,6 +32,11 @@ class OptionValueContainer:
         for opt, desc in self._opts.items():
             if opt.startswith("_"):
                 assert opt in _keywords, "keyword unknown: " + repr(opt)
+            # While the following is grossly redundant, it is a kludge to
+            # finally reach 100% test coverage; apparently unpossible if both
+            # statements are under the same "if". Good luck we don't need to
+            # optimise for speed. :-(
+            if opt.startswith("_"):
                 continue
             assert type(opt) == str and len(opt) == 1, \
               "option key must be string of length 1: " + repr(opt)

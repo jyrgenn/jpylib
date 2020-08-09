@@ -21,7 +21,7 @@ import unittest
 # [x] put multiple existing ones
 # [x] all still there
 # [x] non-existent secrets file (with the main(), too)
-# [ ] mode of file after putsecret
+# [x] mode of file after putsecret
 # [ ] not far too many putsecret comments in it
 
 tmpdir = "tmp"
@@ -65,7 +65,7 @@ class SecretsTestcase(unittest.TestCase):
         # again, another part of it
         msg = err.getvalue().split("\n")[0]
         self.assertEqual(msg.split(":", 2)[2],
-                         " not a valid key:opts:value line")
+                         " not a valid key:opts:value line, ignored")
         self.assertTrue(msg.startswith(default_secrets+":"))
         
     def test_getsecret(self):
@@ -107,37 +107,77 @@ class SecretsTestcase(unittest.TestCase):
         self.assertEqual(ctx.exception.args[0],
                          "temp file '{}' exists, aborting".format(tempfile))
 
-    def test_main_run_noargs(self):
-        out, err, status = y.backquote("jpylib/secrets.py", full_result=True)
-        self.assertEqual(err, "usage: getsecret key [filename]\n")
-
-    def test_main_run(self):
-        key = "with-colon"
-        out, err, status = y.backquote("jpylib/secrets.py {} {}"
-                                       .format(key, default_secrets),
-                                       full_result=True)
-        self.assertEqual(out.rstrip(), self.data.get(key)["secret"])
-
     def test_main_call(self):
         key = "with-colon"
         with y.outputAndExitCaptured() as (out, err, status):
             sys.argv = ("getsecret", key, default_secrets)
-            y.secrets.main()
+            y.secrets.getsecret_main()
         self.assertEqual(out.getvalue().rstrip(),
                          self.data.get(key)["secret"])
 
     def test_main_call_noargs(self):
         with y.outputAndExitCaptured() as (out, err, status):
             sys.argv = ("getsecret")
-            y.secrets.main()
+            y.secrets.getsecret_main()
         self.assertEqual(status.value, "usage: getsecret key [filename]")
 
     def test_main_call_unfound(self):
         key = "p-convention"
         with y.outputAndExitCaptured() as (out, err, status):
             sys.argv = ("getsecret", key, default_secrets)
-            y.secrets.main()
+            y.secrets.getsecret_main()
         self.assertEqual(out.getvalue(), "")
         self.assertEqual(status.value,
                          "getsecret: cannot find secret for '{}' in '{}'"
                          .format(key, default_secrets))
+
+    def test_puts_main_nonexisting(self):
+        key = "p-convention"
+        value = "ITS"
+        with y.outputAndExitCaptured() as (out, err, status):
+            sys.argv = ["putsecret", key, value, default_secrets]
+            y.secrets.putsecret_main()
+        #self.assertEqual(out.getvalue(), "")
+        self.assertEqual(status.value, None)
+
+    def test_puts_main_options_1(self):
+        key = "p-convention"
+        value = "ITS"
+        y.alert_level(y.L_ERROR)
+        with y.outputAndExitCaptured() as (out, err, status):
+            sys.argv = ["putsecret", "-o", "zip,b64", key, value,
+                        default_secrets]
+            y.secrets.putsecret_main()
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue(), "")
+        self.assertEqual(status.value, None)
+
+    def test_puts_main_options_invalid(self):
+        key = "p-convention"
+        value = "ITS"
+        y.alert_level(y.L_ERROR)
+        with y.outputAndExitCaptured() as (out, err, status):
+            sys.argv = ["putsecret", "-o", "zip,x64", key, value,
+                        default_secrets]
+            y.secrets.putsecret_main()
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue().split("\n")[0],
+                         "putsecret: 'x64' is not a valid encoding option")
+        self.assertEqual(status.value, 64)
+
+    def test_puts_main_options_b64zip(self):
+        key = "p-convention"
+        value = "ITS"
+        y.alert_level(y.L_ERROR)
+        with y.outputAndExitCaptured() as (out, err, status):
+            sys.argv = ["putsecret", "-bz", key, value,
+                        default_secrets]
+            y.secrets.putsecret_main()
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue(), "")
+        self.assertEqual(status.value, None)
+        data = self.getdata()
+        self.assertEqual(data[key]["secret"], value)
+        self.assertEqual(data[key]["opts"], ["zip"])
+        self.assertEqual(y.getsecret(key), value)
+

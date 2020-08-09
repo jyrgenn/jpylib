@@ -15,9 +15,7 @@ from .stringreader import StringReader
 from .kvs import parse_kvs
 from .namespace import Namespace
 from .config import Config
-from .secrets import getsecret
-from .secrets import main as getsecret_main
-from .secrets import putsecret
+from .secrets import putsecret, getsecret, getsecret_main, putsecret_main
 from .sighandler import sanesighandler
 from .terminal import terminal_size, ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured

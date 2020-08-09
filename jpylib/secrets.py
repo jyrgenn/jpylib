@@ -9,7 +9,7 @@ import shutil
 import collections
 from datetime import datetime
 
-from .alerts import *
+from jpylib.alerts import info, notice
 
 # Where to look for the secrets file.
 basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
@@ -67,10 +67,10 @@ def find_coder_func(option, direction, must_find=False):
     if coder_func or not must_find:
         return coder_func
     else:
-        raise OptionNotFoundError("encountered unknown option", option)
+        raise OptionUnknownError("encountered unknown option", option)
 
 
-def maybe_decode(options, value, char_encoding):
+def decode_val(options, value, char_encoding):
     """Decode the found value, if options are present.
 
     `options`        array of options
@@ -79,11 +79,9 @@ def maybe_decode(options, value, char_encoding):
     """
     for opt in options:
         coder_func = find_coder_func(opt, dir_decode)
-        if coder_func:
-            data = coder_func(bytes(value, char_encoding))
-            value = str(data, char_encoding)
-        else:
-            notice("secrets: found unknown encoding '{}'".format(opt))
+        assert coder_func, "secrets:decode_val: coder_func unfound"
+        data = coder_func(bytes(value, char_encoding))
+        value = str(data, char_encoding)
     return value
 
 
@@ -104,7 +102,9 @@ def read_secrets(fname, get_invalids=False):
     """
     entries = collections.OrderedDict()
     with open(fname) as f:
+        lineno = 0
         for line in f:
+            lineno += 1
             line = line.rstrip()
             if line.lstrip().startswith("#"):
                 # a comment line
@@ -119,13 +119,13 @@ def read_secrets(fname, get_invalids=False):
             nfields = len(fields)
             assert 1 <= nfields <= 3, "unexpected # of fields: "+str(nfields)
             if nfields == 1:
-                # not a key:[opts:]value line
-                if get_invalids:
-                    entries[line] = (None, None)
+                notice("{}:{}: not a valid key:opts:value line"
+                       .format(fname, lineno))
                 continue
             key = fields[0]
             if key in entries:
-                info("secrets: ignore duplicate entry for '{}'".format(tag))
+                info("{}:{}: ignoring duplicate entry for '{}'"
+                     .format(fname, lineno, key))
                 continue
             if nfields == 2:
                 # key:value
@@ -142,6 +142,8 @@ def read_secrets(fname, get_invalids=False):
                     # valid options
                     entries[key] = (opts, fields[2])
                 else:
+                    info("{}:{}: invalid options in '{}:...', maybe should be '{}::...'"
+                         .format(fname, lineno, key, key))
                     # non-valid options field, so it's key:value again
                     entries[key] = ([], ":".join(fields[1:]))
     return entries
@@ -189,7 +191,7 @@ def putsecret(key, value, fname=None, options=None,
             write_line(end_prefix+datetime.now().isoformat(timespec="seconds"))
         os.rename(newfile, fname)
     except FileExistsError:
-        raise FileExistsError("temp file {} exists, aborting" .format(newfile))
+        raise FileExistsError("temp file '{}' exists, aborting".format(newfile))
     finally:
         try:
             os.remove(newfile)
@@ -227,8 +229,8 @@ def getsecret(key, fname=None, char_encoding=None, error_exception=True):
     
     data = read_secrets(fname).get(key)
     if data and data[0] is not None:
-            return maybe_decode(*data, char_encoding or default_char_encoding)
-    if bomb:
+            return decode_val(*data, char_encoding or default_char_encoding)
+    if error_exception:
         raise KeyError("cannot find secret for '{}' in '{}'", key, fname)
     return None
 

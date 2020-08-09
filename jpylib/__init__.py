@@ -19,7 +19,7 @@ from .secrets import getsecret
 from .secrets import main as getsecret_main
 from .secrets import putsecret
 from .sighandler import sanesighandler
-from .terminal import terminal_size
+from .terminal import terminal_size, ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured
 from .process import backquote
 from .assorted import boolish
@@ -29,25 +29,3 @@ program = os.path.basename(sys.argv[0])
 real_home = pwd.getpwuid(os.getuid()).pw_dir
 home = os.environ.get("HOME") or real_home
 
-def ttyo(close=False):
-    if close:
-        if getattr(ttyo, "file", None):
-            ttyo.file.close()
-            ttyo.file = None
-        return
-    if not getattr(ttyo, "file", None):
-        ttyo.file = open("/dev/tty", "w")
-    return ttyo.file
-
-def ttyi(close=False):
-    if close:
-        if getattr(ttyi, "file", None):
-            ttyi.file.close()
-            ttyi.file = None
-        return
-    if not getattr(ttyi, "file", None):
-        ttyi.file = open("/dev/tty")
-    return ttyi.file
-
-def ptty(*args, **kwargs):
-    print(*args, file=ttyo(), **kwargs)

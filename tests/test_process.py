@@ -56,6 +56,14 @@ class ProcessTestcase(unittest.TestCase):
         full_result = backquote("echo doodeedoo", full_result="plus",
                                 shell=True)
         self.assertTrue(full_result[1])
+
+        # bug: $ was not recognised as a shell meta character
+        varname = "_shellvar"
+        value = "a day at a time"
+        os.environ[varname] = value
+        result = backquote("echo ${}".format(varname))
+        self.assertEqual(result.rstrip(), value)
+        
         
     def test_full(self):
         full_result = backquote("echo doodeedoo", full_result=True)

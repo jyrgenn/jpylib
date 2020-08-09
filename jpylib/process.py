@@ -7,7 +7,7 @@ from .alerts import *
 
 # we take these characters as the indication to run a command in the shell, if
 # not otherwise indicated
-shellmeta = "\"'`|&;[(<>)]*?"
+shellmeta = "\"'`|&;[(<>)]*?$"
 
 def backquote(command, shell=None, full_result=False, silent=False):
     """Similar to Perl's `command` feature: run process, return result.

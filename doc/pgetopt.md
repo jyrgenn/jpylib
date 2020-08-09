@@ -18,10 +18,9 @@ implemented capabilities.
   * [Exceptions](#exceptions)
   * [The OptionValueContainer](#the-optionvaluecontainer)
   * [Limitations](#limitations)
-  * [Semi\-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
+  * [Semi-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
   * [Documentation, Examples and Testing](#documentation-examples-and-testing)
   * [The PyPi package](#the-pypi-package)
-
 
 Motivation
 ----------

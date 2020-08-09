@@ -9,7 +9,7 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
-#include !tail +2 $SOURCE| gh-md-toc --hide-header --hide-footer | tail +2
+#include !lib/make-toc $SOURCE
 
 Motivation
 ----------

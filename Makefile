@@ -8,7 +8,7 @@ documentation: doc/pgetopt.md
 
 # uses the table of contents generator from
 # https://github.com/ekalinin/github-markdown-toc.go
-doc/pgetopt.md: lib/pgetopt.source lib/include.py Makefile
+doc/pgetopt.md: lib/pgetopt.source lib/include.py lib/make-toc Makefile
 	rm -f $@
 	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
 	./lib/include.py $<>>$@

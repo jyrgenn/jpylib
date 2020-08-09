@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Generate a table of contents for a Markdown text, headings level 2 only.
+#
+# This is pretty crude and done without deeper knowledge of Markdown, but for
+# now it seems to work. The links work with GitLab-flavored Markdown.
+
+levels=[12]
+
+grep -v ^#include "$@" |
+    markdown |
+    sed -n "s,<h$levels>\([^<]*\)</h$levels>,\1,p" |
+    sed 's/<[^<]*>//g' |
+    while read heading; do
+        link=$(echo $heading |
+                   sed 's/ /-/g' |
+                   tr A-Z a-z |
+                   tr -d ':,()')
+        echo "  * [$heading](#$link)"
+    done

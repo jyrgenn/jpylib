@@ -5,9 +5,6 @@ The lib/ directory
 
 Here are some files used in the build and test processes.
 
-`README-pgetopt.source`: source of the pgetops README, with includes
-for the ToC and the errors table, both of which are generated.
-
 `README.md`: this README file.
 
 `_morgue/`: obsolete/historic files; currently an aborted attempt to
@@ -24,6 +21,11 @@ framework now.
 
 `jpylib`: a symlink to the jpylib under development, for the benefit
 of `include.py`.
+
+`make-toc`: table of contents generator for the doc file(s to be).
+
+`read-secrets`: alternate secrets reader implementation to test
+against.
 
 `secrets`: secrets example file for testing. Don't exert yourself,
 the secrets in there are no longer used (or have never been)

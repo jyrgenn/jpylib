@@ -5,12 +5,12 @@
 # This is pretty crude and done without deeper knowledge of Markdown, but for
 # now it seems to work. The links work with GitLab-flavored Markdown.
 
-levels=[12]
+levels=[2]
 
 grep -v ^#include "$@" |
     markdown |
-    sed -n "s,<h$levels>\([^<]*\)</h$levels>,\1,p" |
-    sed 's/<[^<]*>//g' |
+    sed -n "s,<h$levels>\(.*\)</h$levels>,\1,p" |
+    sed 's/<[^<>]*>//g' |
     while read heading; do
         link=$(echo $heading |
                    sed 's/ /-/g' |

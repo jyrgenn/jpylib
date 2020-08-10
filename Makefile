@@ -4,13 +4,8 @@ PREVIEW = tmp/pgetopt.html
 
 default: documentation test
 
-documentation: doc/pgetopt.md
-
-doc/pgetopt.md: lib/pgetopt.source lib/include.py lib/make-toc Makefile
-	rm -f $@
-	echo "<!-- GENERATED FILE, DO NOT EDIT -->" > $@
-	./lib/include.py $<>>$@
-	chmod -w $@
+documentation:
+	cd doc && $(MAKE)
 
 test:
 	python3 -m unittest discover tests

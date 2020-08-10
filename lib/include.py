@@ -40,9 +40,9 @@ def do_fd(fd, fname=stdin_fname):
 def do_command(command, source):
     """Run command and print it to stdout.
 
-    Make sure the output is terminated by a newline. Set the SOURCE environment
-    variable to the file from which the "#include !..." command is currently
-    being processed. This may be a file included by another.
+    Make sure the included text is terminated by a newline. Set the SOURCE
+    environment variable to the file from which the "#include !..." command is
+    currently being processed. This may be a file included by another.
 
     """
     os.environ["SOURCE"] = source

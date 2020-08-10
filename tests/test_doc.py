@@ -4,7 +4,7 @@ import jpylib as y
 
 import unittest
 
-readme = "doc/pgetopt.md"
+docfile = "doc/pgetopt.md"
 
 class ReadmeTestcase(unittest.TestCase):
 
@@ -19,7 +19,7 @@ class ReadmeTestcase(unittest.TestCase):
 
         """
         am_motivated = False
-        with open(readme) as f:
+        with open(docfile) as f:
             for line in f:
                 if "[Motivation](#motivation)" in line:
                     am_motivated = True
@@ -30,7 +30,7 @@ class ReadmeTestcase(unittest.TestCase):
         source = "jpylib/pgetopt.py"
         errors = y.backquote("sed -n '/^Error/s/ .*//p' " + source)
         errorset = set(errors.split())
-        with open(readme) as f:
+        with open(docfile) as f:
             for line in f:
                 if line.startswith("| Error"):
                     the_error = line.split()[1]

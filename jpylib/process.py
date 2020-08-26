@@ -23,7 +23,7 @@ def backquote(command, shell=None, full_result=False, silent=False):
         contains shell meta characters. Otherwise, split the string into a list
         and run it directly.
 
-        If run_shell is otherwise false, split the string into a list and run it
+        If shell is otherwise false, split the string into a list and run it
         directly.
 
     If full_result is false (the default), return only stdout as a string. In

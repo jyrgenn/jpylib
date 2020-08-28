@@ -42,3 +42,23 @@ def flatten(seq):
             yield from flatten(elem)
     else:
         yield seq
+
+
+def maybe_int(arg):
+    """Return the corresponding int if the arguments represents one, or None."""
+    try:
+        return int(arg)
+    except:
+        return None
+
+
+def is_int(arg):
+    """Return True if the arguments represents an int, or False.
+    
+    The argument may be not an int (maybe e.g. a string), but if it
+    can be cast to an int, it represents an int.
+
+    """
+    return maybe_int(arg) is not None
+
+

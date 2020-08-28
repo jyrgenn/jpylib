@@ -76,3 +76,22 @@ class FlattenTestcase(unittest.TestCase):
                 "abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx", "yzß"
             ])
         
+
+class IntTestcase(unittest.TestCase):
+
+    pairs = ((" ", None), ("23", 23), (" 23", 23), ("23x", None), ([], None), 
+             ({}, None), ("25.6", None), ("25,6", None), ("0", 0), ("+42", 42),
+             (" -42", -42), ("-1", -1),
+    )
+
+    def test_maybe_int(self):
+        """maybe_int on all pairs"""
+        for arg, value in self.pairs:
+            self.assertEqual(y.maybe_int(arg), value)
+
+    def test_is_int(self):
+        """is_int on all pairs"""
+        for arg, value in self.pairs:
+            self.assertEqual(y.is_int(arg), value is not None)
+        
+              

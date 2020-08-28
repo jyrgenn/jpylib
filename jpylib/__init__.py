@@ -20,7 +20,7 @@ from .sighandler import sanesighandler
 from .terminal import terminal_size, ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured
 from .process import backquote
-from .assorted import boolish, flatten
+from .assorted import boolish, flatten, maybe_int, is_int
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

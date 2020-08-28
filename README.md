@@ -64,6 +64,8 @@ Components
   "yes", "no", "on", "off", etc. that are potentially used in
   interactive answers and some config files.
 
+* `flatten` — generator, flatten a sequence (except strings)
+
 
 Documentation
 -------------

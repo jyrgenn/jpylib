@@ -27,3 +27,18 @@ def boolish(value, default=None):
                          format(value))
     else:
         return default
+
+
+def flatten(seq):
+    """Flatten a nested sequence into a flat one with the same elements.
+
+    Return a flat generator object containing just the elements. If the
+    argument is a string or not a sequence, the generator object will
+    contain just the argument.
+
+    """
+    if not isinstance(seq, str) and isinstance(seq, collections.abc.Iterable):
+        for elem in seq:
+            yield from flatten(elem)
+    else:
+        yield seq

@@ -1,7 +1,12 @@
 # assorted smallish functions
 
-means_true = set("yes y sure ja j jou si on t true  aye 1 affirmative".split())
-means_false = set("no n nope nein nee   off f false nay 0 negative".split())
+import collections
+
+# Yes, this is a bit silly. But hey...
+means_true = \
+  set("yes y sure ja j jou si on oui t true  aye 1 affirmative".split())
+means_false = \
+  set("no n  nope nein nee   off non f false nay 0 negative".split())
 
 def boolish(value, default=None):
     """Return a truth value for the argument.
@@ -12,7 +17,7 @@ def boolish(value, default=None):
 
     """
 
-    val = value.lower()
+    val = value.strip().lower()
     if val in means_true:
         return True
     if val in means_false:

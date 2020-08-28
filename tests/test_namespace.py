@@ -8,7 +8,7 @@ import unittest
 
 ns_string = "Namespace(include='/etc/example/conf.d/*', site_name='w21', suffixes=['*.c', '*.h', '*.in'], nreps=15)"
 
-class TemplateTestcase(unittest.TestCase):
+class NamespaceTestcase(unittest.TestCase):
 
     def setUp(self):
         self.ns = y.Namespace(

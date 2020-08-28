@@ -7,7 +7,7 @@ trues = "yes y sure ja j jou si on t true  aye 1 affirmative"
 falses = "no n nope nein nee   off f false nay 0 negative"
 bullsh = "do da di  sdf sdf fs df gdfssaxs dcsgdv fd"
 
-class TemplateTestcase(unittest.TestCase):
+class BoolishTestcase(unittest.TestCase):
 
     def setUp(self):
         pass

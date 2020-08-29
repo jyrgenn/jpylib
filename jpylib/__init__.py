@@ -21,6 +21,7 @@ from .terminal import ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured
 from .process import backquote
 from .assorted import boolish, flatten, maybe_int, is_int
+from .time import isotime, iso_time, iso_time_ms, iso_time_us
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

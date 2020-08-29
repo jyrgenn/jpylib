@@ -61,6 +61,9 @@ def alert_config(*, decoration=None, fd=None, level=None, program=None,
             # maximum alert level
             max_level=len(alert_levels)-1,
 
+            # print timestamps with messages
+            timestamps=False,
+
             # had any errors yet?
             had_errors=False,
         )
@@ -68,6 +71,8 @@ def alert_config(*, decoration=None, fd=None, level=None, program=None,
     for var, value in locals().items():
         if value is not None:
             cfg.set(var, value)
+    if cfg.timestamps is True:
+        cfg.timestamps = y.isotime
 
 def alert_init(**kwargs):
     alert_config(reset_defaults=True, **kwargs)
@@ -171,6 +176,8 @@ def alert_if_level(level, *msgs):
             msgs[i] = str(elem)
     if cfg.decoration[level]:
         msgs = [cfg.decoration[level].format(**globals()), *msgs]
+    if cfg.timestamps:
+        msgs.insert(0, cfg.timestamps())
 
     channel = cfg.fd[level]
     channel = { 1: sys.stdout, 2: sys.stderr }.get(channel) or channel

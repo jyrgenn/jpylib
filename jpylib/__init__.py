@@ -17,7 +17,7 @@ from .namespace import Namespace
 from .config import Config
 from .secrets import putsecret, getsecret, getsecret_main, putsecret_main
 from .sighandler import sanesighandler
-from .terminal import terminal_size, ttyi, ttyo, ptty
+from .terminal import ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured
 from .process import backquote
 from .assorted import boolish, flatten, maybe_int, is_int

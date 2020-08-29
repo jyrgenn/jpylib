@@ -1,0 +1,19 @@
+;; -*- text -*-
+
+Also see Changelog-pgetopt for pgetopt changes.
+
+2020-829:
+
+ * Removed the terminal_size() function as I learned about
+   os.get_terminal_size(), which has the exact same call signature,
+   except it doesn't swallow the OSError exception when stdout is
+   not a terminal.
+
+ * function flatten() to flatten sequences (e.g. for counting)
+
+ * functions is_int(), maybe_int()
+
+ * functions isotime(), iso_time(), iso_time_ms(), iso_time_us() for
+   formatting ISO time strings; also optional timestamps for alerts
+
+Never mind previous versions.

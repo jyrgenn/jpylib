@@ -69,6 +69,8 @@ Components
 * `is_int` — return True iff if the argument (e.g. a string)
   represents an integer, False otherwise.
 
+* `Table` — an ASCII table formatter.
+
 
 Documentation
 -------------

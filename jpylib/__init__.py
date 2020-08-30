@@ -22,9 +22,11 @@ from .capture import outputCaptured, outputAndExitCaptured
 from .process import backquote
 from .assorted import boolish, flatten, maybe_int, is_int
 from .time import isotime, iso_time, iso_time_ms, iso_time_us
+from .table import Table
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])
 real_home = pwd.getpwuid(os.getuid()).pw_dir
 home = os.environ.get("HOME") or real_home
-
+verbosity_option = ("verbose", alert_level_up, alert_level(L_NOTICE),
+                    "increase verbosity")

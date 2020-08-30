@@ -147,6 +147,15 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
             info("terminal")
         self.assertTrue(err.getvalue().endswith("terminal\n"))
 
+    def test_info_timestamp_0(self):
+        alert_level(L_TRACE)
+        alert_config(timestamps=True)
+        with outputCaptured() as (out, err):
+            info("terminal")
+        value = err.getvalue()
+        self.assertTrue(value.endswith("terminal\n"))
+        self.assertTrue(value.startswith(y.isotime()))
+
     def test_debug(self):
         alert_init(level=L_TRACE)
         with outputCaptured() as (out, err):

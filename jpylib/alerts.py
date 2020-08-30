@@ -26,7 +26,8 @@ for i, props in enumerate(alert_levels):
 cfg = None
 
 def alert_config(*, decoration=None, fd=None, level=None, program=None,
-                 syslog_facility=None, syslog_prio=None, reset_defaults=None):
+                 syslog_facility=None, syslog_prio=None, reset_defaults=None,
+                 timestamps=None):
     """Reset everything to the specified or default values."""
     global cfg
     if not any(locals().values()) or reset_defaults:

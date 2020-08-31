@@ -4,33 +4,43 @@ import jpylib as y
 
 y.alert_level(y.L_TRACE)
 
-data = [[ "exp " + str(exp) for exp in range(8)]]
-for base in range(11):
-    row = []
+data = [[""] + [ "exp " + str(exp) for exp in range(8)]]
+for base in range(10):
+    row = ["base " + str(base)]
     for exp in range(8):
         row.append(base ** exp)
     data.append(row)
 
 data2 = [
-    ["&", "A", "B"],
-    ["1", "A1", "B1"],
-    ["2", "A2", "B2"],
+    ["&", "False", "True"],
+    ["False", "False", "False"],
+    ["True", "False", "True"],
 
 ]
 
-tformat1 = r"""
-/-----\
-| : | |
-|=:===|
-| : | |
-|-:---+
-| : | |
-\-----/
+t_template = r"""
+.-----.
+| | | |
+|=====|
+| | | |
+|-|-+-|
+| | | |
+.-----.
 """
 
+print(y.Table(data=data, align=["c*", None], template=t_template).format())
 
+tformat0 = r"""
+0000000
+0     0
+0-----0
+0     0
+0000000
+0     0
+0000000
+"""
 
-tformat2 = r"""
+tformat1 = r"""
 0000000
 0 | 0 0
 0-+-0-0
@@ -40,20 +50,19 @@ tformat2 = r"""
 0000000
 """
 
-tformat0 = r"""
-0000000
-0 0 0 0
-0000000
-0 0 0 0
-0000000
-0 0 0 0
-0000000
+tformat2 = r"""
+/-----\
+| : | |
+|=:===|
+| : | |
+|-:---+
+| : | |
+\-----/
 """
 
-
 print(y.Table(data=data2, template=tformat1,
-              align=["r*", "lclrl*"]).format())
+              align=["cll"]).format())
 print(y.Table(data=data2, template=tformat2,
-              align=["r*", "lclrl*"]).format())
+              align=["cll", None]).format())
 print(y.Table(data=data2, template=tformat0,
-              align=["c*", None]).format())
+              align="c*", cell_pad="").format())

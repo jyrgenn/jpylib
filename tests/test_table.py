@@ -7,6 +7,16 @@ import unittest
 # stackoverflow.com/questions/5909873/how-can-i-pretty-print-ascii-tables-with-python
 # has more examples
 
+t_template = r"""
+.-----.
+| | | |
+|=====|
+| | | |
+|-+-+-|
+| | | |
+.-----.
+"""
+
 class TableTestcase(unittest.TestCase):
 
     def setUp(self):
@@ -18,7 +28,7 @@ class TableTestcase(unittest.TestCase):
             self.data.append(row)
 
     def test_table_1(self):
-        table = y.Table(data=self.data, have_header=True, corner=".")
+        table = y.Table(data=self.data, template=t_template)
         self.assertEqual(table.format(),
                          """\
 .---------------------------------------------------------------------.
@@ -49,8 +59,8 @@ class TableTestcase(unittest.TestCase):
 """)
 
     def test_table_2(self):
-        table = y.Table(data=self.data, have_header=True, corner=".",
-                        align=["r", None])
+        table = y.Table(data=self.data, template=t_template,
+                        align=["r*", None])
         self.assertEqual(table.format(),
                          """\
 .---------------------------------------------------------------------.
@@ -80,8 +90,8 @@ class TableTestcase(unittest.TestCase):
 .---------------------------------------------------------------------.
 """)
 
-    def test_table_2(self):
-        table = y.Table(data=self.data, have_header=True, corner=".",
+    def test_table_3(self):
+        table = y.Table(data=self.data, template=t_template,
                         align=["r*", "lclrl*"])
         self.assertEqual(table.format(),
                          """\
@@ -113,8 +123,8 @@ class TableTestcase(unittest.TestCase):
 """)
 
     def test_table_align(self):
-        table = y.Table(corner=".", align="lclr")
-        self.assertEqual(table.format(data=self.data, have_header=True),
+        table = y.Table(template=t_template, align="lclr")
+        self.assertEqual(table.format(data=self.data),
                          """\
 .---------------------------------------------------------------------.
 | exp 0 | exp 1 | exp 2 | exp 3 | exp 4 | exp 5  | exp 6   | exp 7    |
@@ -148,11 +158,9 @@ class TableTestcase(unittest.TestCase):
 
     def test_invalid_align(self):
         with self.assertRaises(ValueError):
-            result = y.Table(data=self.data, have_header=True, corner=".",
-                             align="lc*lr").format()
+            result = y.Table(data=self.data, align="lc*lr").format()
 
     def test_no_data(self):
         with self.assertRaises(AssertionError):
-            result = y.Table(have_header=True, corner=".",
-                             align="lc*lr").format()
+            result = y.Table(align="lc*lr").format()
 

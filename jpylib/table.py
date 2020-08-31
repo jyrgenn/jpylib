@@ -58,7 +58,7 @@ class Table:
             self.align = [align, align]
         else:
             try:
-                if len(align) < 1:
+                if len(align) == 1:
                     self.align = [align[0], align[0]]
                 else:
                     self.align = [align[0], align[1]]

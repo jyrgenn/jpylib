@@ -223,7 +223,6 @@ True  False True
     def test_tformat2(self):
         table = y.Table(data=data2, template=tformat2,
                         align=["cll", None]).format()
-        print("\n"+table)
         self.assertEqual(table,
                          r"""/-----------------------\
 |   &   : False | True  |
@@ -233,9 +232,3 @@ True  False True
 | True  : False | True  |
 \-----------------------/
 """)
-
-print(y.Table(data=data2, template=tformat1,
-              align=["cll"]).format())
-print(y.Table(data=data2, template=tformat2,
-              align=["cll", None]).format())
-print()

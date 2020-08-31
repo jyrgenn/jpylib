@@ -9,7 +9,7 @@ class Table:
     def __init__(self, *, corner=["", "", "", ""], border=["", "", "", ""],
                  hsep=["", ""], vsep=["", ""], tb_cross=["", ""],
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
-                 hb_cross=["", ""], nb_cross=["", ""], cell_pad=[" ", " "],
+                 hl_cross=["", ""], nl_cross=["", ""], cell_pad=[" ", " "],
                  pad_char=" ", template=None, align=None, data=None):
         """Initialise a Table formatting parameter set.
         

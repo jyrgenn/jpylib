@@ -17,6 +17,45 @@ t_template = r"""
 .-----.
 """
 
+tformat0 = r"""
+0000000
+0     0
+0-----0
+0     0
+0000000
+0     0
+0000000
+"""
+
+tformat1 = r"""
+0000000
+0 | 0 0
+0-+-0-0
+0 | 0 0
+0000000
+0 | 0 0
+0000000
+"""
+
+tformat2 = r"""
+/-----\
+| : | |
+|=:===|
+| : | |
+|-:---+
+| : | |
+\-----/
+"""
+
+
+data2 = [
+    ["&", "False", "True"],
+    ["False", "False", "False"],
+    ["True", "False", "True"],
+
+]
+
+
 class TableTestcase(unittest.TestCase):
 
     def setUp(self):
@@ -153,9 +192,6 @@ class TableTestcase(unittest.TestCase):
 .---------------------------------------------------------------------.
 """)
 
-    def test_true(self):
-        self.assertTrue(False is False)
-
     def test_invalid_align(self):
         with self.assertRaises(ValueError):
             result = y.Table(data=self.data, align="lc*lr").format()
@@ -164,3 +200,42 @@ class TableTestcase(unittest.TestCase):
         with self.assertRaises(AssertionError):
             result = y.Table(align="lc*lr").format()
 
+    def test_tformat0(self):
+        self.assertEqual(y.Table(data=data2, template=tformat0,
+                                 align="c*", cell_pad="").format(),
+                         """\
+  &   False True 
+-----------------
+False False False
+True  False True 
+""")
+
+    def test_tformat1(self):
+        self.assertEqual(y.Table(data=data2, template=tformat1,
+                                 align=["crr"]).format(),
+                         """\
+   &   | False   True 
+-------+--------------
+ False | False  False 
+ True  | False   True 
+""")
+
+    def test_tformat2(self):
+        table = y.Table(data=data2, template=tformat2,
+                        align=["cll", None]).format()
+        print("\n"+table)
+        self.assertEqual(table,
+                         r"""/-----------------------\
+|   &   : False | True  |
+|=======:===============|
+| False : False | False |
+|-------:---------------+
+| True  : False | True  |
+\-----------------------/
+""")
+
+print(y.Table(data=data2, template=tformat1,
+              align=["cll"]).format())
+print(y.Table(data=data2, template=tformat2,
+              align=["cll", None]).format())
+print()

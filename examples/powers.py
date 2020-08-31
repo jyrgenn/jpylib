@@ -11,6 +11,21 @@ for base in range(11):
         row.append(base ** exp)
     data.append(row)
 
+data2 = [
+    ["&", "A", "B"],
+    ["1", "A1", "B1"],
+    ["2", "A2", "B2"],
 
-print(y.Table(data=data, have_header=True, corner=".",
+]
+
+
+print(y.Table(data=data, corner="/\\\\/", cross="v*=@>+<^",
+              vsep="=-", hsep=":|",
               align=["r*", "lclrl*"]).format())
+print(y.Table(data=data2, corner=" ", cross="  -     ",
+              vsep=["-", None], hsep=["|", None], border=None,
+              align=["r*", "lclrl*"]).format())
+print(y.Table(data=data2, corner=" ", cross="  -     ",
+              vsep=[None, None], hsep=[" ", " "], border=None,
+              cell_pad=[0, 0],
+              align=["c*", None]).format())

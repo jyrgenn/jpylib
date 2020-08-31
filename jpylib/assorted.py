@@ -61,4 +61,8 @@ def is_int(arg):
     """
     return maybe_int(arg) is not None
 
-
+def is_sequence(arg):
+    """Return True iff the argument is a sequence other than string."""
+    if type(arg) is str:
+        return False
+    return isinstance(arg, collections.abc.Sequence)

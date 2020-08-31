@@ -18,14 +18,42 @@ data2 = [
 
 ]
 
+tformat1 = r"""
+/-----\
+| : | |
+|=:===|
+| : | |
+|-:---+
+| : | |
+\-----/
+"""
 
-print(y.Table(data=data, corner="/\\\\/", cross="v*=@>+<^",
-              vsep="=-", hsep=":|",
+
+
+tformat2 = r"""
+0000000
+0 | 0 0
+0-+-0-0
+0 | 0 0
+0000000
+0 | 0 0
+0000000
+"""
+
+tformat0 = r"""
+0000000
+0 0 0 0
+0000000
+0 0 0 0
+0000000
+0 0 0 0
+0000000
+"""
+
+
+print(y.Table(data=data2, template=tformat1,
               align=["r*", "lclrl*"]).format())
-print(y.Table(data=data2, corner=" ", cross="  -     ",
-              vsep=["-", None], hsep=["|", None], border=None,
+print(y.Table(data=data2, template=tformat2,
               align=["r*", "lclrl*"]).format())
-print(y.Table(data=data2, corner=" ", cross="  -     ",
-              vsep=[None, None], hsep=[" ", " "], border=None,
-              cell_pad=[0, 0],
+print(y.Table(data=data2, template=tformat0,
               align=["c*", None]).format())

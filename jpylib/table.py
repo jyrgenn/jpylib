@@ -72,7 +72,7 @@ class Table:
                     self.defaultalign[i] = self.align[i][-2]
                     self.align[i] = self.align[i][:-1]
         if data:
-            self.content(data)
+            self._fill(data)
 
     def _from_template(self, template):
         def s(char):
@@ -97,7 +97,7 @@ class Table:
         self.nl_cross = [s(tl[4][2]), s(tl[4][4])]
         
 
-    def content(self, data):
+    def _fill(self, data):
         """Assess and store the table data."""
         self.data = data
         self.cols = 0                   # maximum column number
@@ -173,7 +173,7 @@ class Table:
         """Return the formatted Table as a string. Data must be present."""
 
         if data:
-            self.content(data)
+            self._fill(data)
         assert self.data, "Table has no data yet, so cannot be formatted."
         r = [self._vert_sep(self.corner[0], self.corner[1],
                             self.border[0], self.tb_cross[0], self.tb_cross[1])]

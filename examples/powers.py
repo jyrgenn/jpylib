@@ -12,4 +12,5 @@ for base in range(11):
     data.append(row)
 
 
-print(y.Table(data=data, align="lclr", have_header=True, corner=".").format())
+print(y.Table(data=data, have_header=True, corner=".",
+              align=["r*", "lclrl*"]).format())

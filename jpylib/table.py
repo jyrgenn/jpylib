@@ -13,10 +13,13 @@ class Table:
         """Initialise a Table object. Parameters:
         * data:        a sequence of rows, which are sequences of data items
         * have_header: if true, first row in data is a header row
-        * align:       alignment descriptor, 1 char per column, l/r/c
-        * vsep:        vertical separator (no separator line if None)
+        * align:       alignment descriptor string, 1 char per column, l/r/c;
+                       may be sequence of 2 for first and following rows;
+                       asterisk at the end means default for folloing columns
+                       is the character in front of the asterisk
+        * vsep:        vertical separator (no separator line if None),
+                       or a sequence of 2 for first and following separators
         * hsep:        horizontal separator
-        * Hsep:        Header separator (no separator line if None)
         * field_pad:   minimum horizontal padding of a field on both sides
         * field_vpad:  vertical padding of the items in a cell
         * pad_char:    padding character
@@ -29,6 +32,27 @@ class Table:
 
         """
         self.__dict__.update(locals())
+        # Always have a separate alignment for the first and the following
+        # lines. They need not be different, though.
+        self.defaultalign = [None, None]
+        if align is None:
+            self.align = ["", ""]
+        elif type(align) == str:
+            self.align = [align, align]
+        else:
+            try:
+                if len(align) < 1:
+                    self.align = [align[0], align[0]]
+            except:
+                ValueError("align must be string or a sequence of strings, "
+                           + "but is {}".format(repr(align)))
+        # Set default alignment if align ends with "*"
+        for i in (0, 1):
+            if self.align[i]:
+                if self.align[i].endswith("*") and len(self.align[i]) > 1:
+                    self.defaultalign[i] = self.align[i][-2]
+                    self.align[i] = self.align[i][:-1]
+        print("self.defaultalign", self.defaultalign)
         if data:
             self.content(data, have_header)
 
@@ -88,10 +112,12 @@ class Table:
         return r
             
 
-    def _alignment(self, column):
-        if column >= len(self.align or ""):
-            return None
-        return self.align[column]
+    def _alignment(self, row, column):
+        index = 0 if row == 0 else 1
+        align = self.align[index]
+        if column >= len(align or ""):
+            return self.defaultalign[index]
+        return align[column]
 
 
     def format(self, data=None, have_header=False):
@@ -127,7 +153,7 @@ class Table:
                     r.append(padding)
                 had_first_col = True
                 r.extend(self._pad(str(data_item), self.col_width[col],
-                                  self._alignment(col)))
+                                  self._alignment(row, col)))
             r.append(self.pad_char)
             r.append(self.side_border)
             r.append("\n")

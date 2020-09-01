@@ -3,8 +3,65 @@
 import jpylib as y
 import functools
 
-def _identity(arg):
-    return arg
+templates = dict(
+    minimal="""
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000""",
+    columns="""
+0000000
+0 | | 0
+0-|-|-0
+0 | | 0
+0000000
+0 | | 0
+0000000""",
+    full="""
+.-----.
+| | | |
+|=====|
+| | | |
+|-+-+-|
+| | | |
+.-----.""",
+    heads="""
+0000000
+0     0
+0- - -0
+0     0
+0000000
+0     0
+0000000""",
+    box="""
+╒═╦═╤═╕
+│ ║ │ │
+╞═╬═╪═╡
+│ ║ │ │
+├─╫─┼─┤
+│ ║ │ │
+╘═╩═╧═╛""",
+)
+
+example_data = [
+    ["(O:O)", "col 1", "col 2", "col 3"],
+    ["row 1", "cell 12", "cell 13", "cell 14"], 
+    ["row 2", "cell 22", "cell 23", "cell 24"], 
+    ["row 3", "cell 32", "cell 33", "cell 34"], 
+]
+
+def template_names():
+    return sorted(templates.keys())
+
+def get_template(name):
+    return template[name]
+
+def get_template_example(name, data=example_data, **kwargs):
+    return Table(template=templates[name], data=data, **kwargs).format()
+
 
 class Table:
 
@@ -12,31 +69,34 @@ class Table:
                  hsep=["", ""], vsep=["", ""], tb_cross=["", ""],
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
                  hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
-                 pad_char=" ", template=None, align=None, data=None,
-                 rstrip=True, indent=""):
+                 pad_char=" ", template=None, template_name= None, align=None,
+                 data=None, rstrip=True, indent=""):
         """Initialise a Table formatting parameter set.
         
         Arguments:
-        * corner[4]:   top left, top right, bottom left, bottom right corners
-        * border[4]:   top, left, right, bottom border sans crossing or corner
-        * hsep[2]:     horizontal separator, after first column and others
-        * vsep[2]:     vertical separator, after first row and others
-        * tb_cross[2]: top border crossing, first and others
-        * lb_cross[2]: left border crossing, first and others
-        * rb_cross[2]: right border crossing, first and others
-        * bb_cross[2]: bottom border crossing, first and others
-        * hl_cross[2]: header separator line crossing, first and others
-        * nl_cross[2]: normal separator line crossing, first and others
-        * cell_pad[2]: minimum cell padding, left and right (integers)
-        * pad_char:    padding character
-        * template:    a template 7 x 7 drawing describing the table
-        * align:       alignment descriptor string, 1 char per column, l/r/c;
-                       may be sequence of 2 for first and following rows;
-                       asterisk at the end means default for folloing columns
-                       is the character in front of the asterisk
+        * corner[4]:     top left, top right, bottom left, bottom right corners
+        * border[4]:     top, left, right, bottom border sans crossing or corner
+        * hsep[2]:       horizontal separator, after first column and others
+        * vsep[2]:       vertical separator, after first row and others
+        * tb_cross[2]:   top border crossing, first and others
+        * lb_cross[2]:   left border crossing, first and others
+        * rb_cross[2]:   right border crossing, first and others
+        * bb_cross[2]:   bottom border crossing, first and others
+        * hl_cross[2]:   header separator line crossing, first and others
+        * nl_cross[2]:   normal separator line crossing, first and others
+        * cell_pad[2]:   minimum cell padding, left and right (integers)
+        * pad_char:      padding character
+        * template:      a template 7 x 7 drawing describing the table
+        * template_name: pick a pre-defined template
+        * align:         alignment descriptor string, 1 char per column, l/r/c;
+                         may be sequence of 2 for first and following rows;
+                         asterisk at the end means default for folloing columns
+                         is the character in front of the asterisk
         """
         self.__dict__.update(locals())
-        if template:
+        if self.template_name:
+            self._from_template(templates[self.template_name])
+        elif template:
             self._from_template(template)
 
         if cell_pad is None:

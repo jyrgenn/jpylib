@@ -7,12 +7,12 @@ import unittest
 # stackoverflow.com/questions/5909873/how-can-i-pretty-print-ascii-tables-with-python
 # has more examples
 
-def ptable(table, eol="<"):
-    print()
-    for line in table.split("\n"):
-        print(line, eol, sep="")
-    if not table.endswith("\n"):
-        print(">>>>>>> no newline")
+# def ptable(table, eol="<"):
+#     print()
+#     for line in table.split("\n"):
+#         print(line, eol, sep="")
+#     if not table.endswith("\n"):
+#         print(">>>>>>> no newline")
 
 t_template = r"""
 .-----.

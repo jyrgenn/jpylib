@@ -45,8 +45,8 @@ class Table:
             if len(cell_pad) == 1:
                 self.cell_pad = cell_pad * 2
             elif len(cell_pad) != 2:
-                raise ValueError("cell_pad is not sequence len 1 or 2, but {}"
-                                 .format(repr(cell_pad)))
+                raise ValueError("cell_pad is not a sequence len 1 or 2, but {}"
+                                 .format(len(cell_pad)))
         elif y.is_int(cell_pad):
             self.cell_pad = [cell_pad, cell_pad]
         else:
@@ -60,15 +60,20 @@ class Table:
             self.align = ["", ""]
         elif type(align) == str:
             self.align = [align, align]
+        elif y.is_sequence(align):
+            if not all([isinstance(elem, (str, type(None))) for elem in align]):
+                raise ValueError("align is not a sequence of str|None, but {}"
+                                 .format(repr(align)))
+            elif len(align) == 1:
+                self.align = [align[0], align[0]]
+            elif len(align) == 2:
+                self.align = [align[0], align[1]]
+            else:
+                raise ValueError("align must be sequence of len 1 or 2, not {}"
+                                 .format(len(align)))
         else:
-            try:
-                if len(align) == 1:
-                    self.align = [align[0], align[0]]
-                else:
-                    self.align = [align[0], align[1]]
-            except:
-                raise ValueError("align must be string or a seq of strings, "
-                                 + "but is {}".format(repr(align)))
+            raise ValueError("align must be str or None or a seq of str|None, "
+                             + "but is {}".format(repr(align)))
         # Set default alignment if align ends with "*"
         for i in (0, 1):
             if self.align[i]:

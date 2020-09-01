@@ -240,6 +240,26 @@ False False False
 True  False True 
 """)
 
+    def test_tformat0a(self):
+        self.assertEqual(y.Table(data=data2, template=tformat0,
+                                 align="cc*", cell_pad=[0]).format(),
+                         """\
+  &   False True 
+-----------------
+False False False
+True  False True 
+""")
+
+    def test_tformat0b(self):
+        self.assertEqual(y.Table(data=data2, template=tformat0,
+                                 align="cc*", cell_pad=0).format(),
+                         """\
+  &   False True 
+-----------------
+False False False
+True  False True 
+""")
+
     def test_tformat1(self):
         self.assertEqual(y.Table(data=data2, template=tformat1,
                                  align=["crr"]).format(),
@@ -291,3 +311,49 @@ C________^_________∆__________∆___________D
    3125 |   31250 |   312500 |   3125000 
  823543 | 8235430 | 82354300 | 823543000 
 """)
+
+    def test_cell_pad_non_int_seq(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=["c*", None],
+                            template=t_columns, cell_pad=["", ""])
+        self.assertEqual(ectx.exception.args,
+                         ("cell_pad is not a sequence of int, but ['', '']",))
+
+    def test_cell_pad_too_long_seq(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=["c*", None],
+                            template=t_columns, cell_pad=[1, 1, 1, 4])
+        self.assertEqual(ectx.exception.args,
+                         ("cell_pad is not a sequence len 1 or 2, but 4",))
+
+    def test_cell_pad_wrong_type(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=["c*", None],
+                            template=t_columns, cell_pad="")
+        self.assertEqual(ectx.exception.args,
+                         ("cell_pad is not None or int or seq of 2 ints: ''",))
+
+    def test_align_wrong_type_in_seq(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=("c*", 3),
+                            template=t_columns, cell_pad=None)
+        self.assertEqual(ectx.exception.args,
+                         ("align is not a sequence of str|None, but ('c*', 3)"
+                          ,))
+
+    def test_align_wrong_len_seq(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=[],
+                            template=t_columns, cell_pad=None)
+        self.assertEqual(ectx.exception.args,
+                         ("align must be sequence of len 1 or 2, not 0"
+                          ,))
+
+    def test_align_wrong_type(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=3,
+                            template=t_columns, cell_pad=None)
+        self.assertEqual(ectx.exception.args,
+                         ("align must be str or None or a seq of str|None, "
+                             + "but is 3",))
+

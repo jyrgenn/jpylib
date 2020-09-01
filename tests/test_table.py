@@ -27,6 +27,62 @@ t_columns = """
 0000000
 """
 
+# blanks-only line
+t_columns_b = """
+       
+0 | | 0
+0=====0
+0 | | 0
+0000000
+0 | | 0
+0000000
+"""
+
+# line with guard character
+t_columns_c = """
+       ;
+0 | | 0
+0=====0
+0 | | 0
+0000000
+0 | | 0
+0000000
+"""
+
+# guard character in a slightly more plausible scenario
+t_columns_d = """
+0000000
+       ;
+       ;
+       ;
+0000000;
+       ;
+0000000
+"""
+
+
+# guard character in a slightly more plausible scenario
+t_line_too_long = """
+0000000
+       ;
+       ;
+       ;
+ 0000000;
+       ;
+0000000
+"""
+
+
+# guard character in a slightly more plausible scenario
+t_too_few_lines = """
+0000000
+       ;
+       ;
+0000000;
+       ;
+0000000
+"""
+
 
 t_abc = """
 A-v-.-B
@@ -356,4 +412,59 @@ C________^_________∆__________∆___________D
         self.assertEqual(ectx.exception.args,
                          ("align must be str or None or a seq of str|None, "
                              + "but is 3",))
+
+    def test_template_line_too_long(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=3,
+                            template=t_line_too_long, cell_pad=None)
+        self.assertEqual(ectx.exception.args,
+                         ("template line is not 7 chars: 8 (line 4)",))
+
+    def test_template_too_few_lines(self):
+        with self.assertRaises(ValueError) as ectx:
+            table = y.Table(data=data3, align=3,
+                            template=t_too_few_lines, cell_pad=None)
+        self.assertEqual(ectx.exception.args,
+                         ("template must have 7 lines, not 6",))
+
+    def test_columns_b(self):
+        """Test fully blank template lines."""
+        table = y.Table(data=data3, align=["c*", None],
+                        template=t_columns_b).format()
+        self.assertEqual(table, """\
+                                           
+   *    |   10    |   100    |   1000    
+=========================================
+      4 |      40 |      400 |      4000 
+     27 |     270 |     2700 |     27000 
+   3125 |   31250 |   312500 |   3125000 
+ 823543 | 8235430 | 82354300 | 823543000 
+""")
+
+    def test_columns_c(self):
+        """Test fully blank template lines."""
+        table = y.Table(data=data3, align=["c*", None],
+                        template=t_columns_c).format()
+        self.assertEqual(table, """\
+                                           
+   *    |   10    |   100    |   1000    
+=========================================
+      4 |      40 |      400 |      4000 
+     27 |     270 |     2700 |     27000 
+   3125 |   31250 |   312500 |   3125000 
+ 823543 | 8235430 | 82354300 | 823543000 
+""")
+
+    def test_columns_d(self):
+        """Test fully blank template lines."""
+        table = y.Table(data=data3, align=["cr*", None],
+                        template=t_columns_d).format()
+        self.assertEqual(table, """\
+    *           10        100        1000  
+                                           
+       4        40        400        4000  
+      27       270       2700       27000  
+    3125     31250     312500     3125000  
+  823543   8235430   82354300   823543000  
+""")
 

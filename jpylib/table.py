@@ -87,13 +87,18 @@ class Table:
         def s(char):
             return "" if char == "0" else char
 
-        tl = [l.strip() for l in template.strip().split("\n")]
-        assert len(tl) == 7, \
-            "template must have 7 lines, not {}".format(len(tl))
+        # If a line ends with blanks, this can confuse the reader, as well as
+        # the author and maybe even a text editor. To avoid that, a template
+        # line may end with a guard character ";", which is then stripped from
+        # the line.
+        tl = [l.rstrip(";") for l in template.split("\n") if l]
+        if len(tl) != 7:
+            raise ValueError("template must have 7 lines, not {}"
+                             .format(len(tl)))
         for i, l in enumerate(tl):
-            assert len(l) == 7, \
-                "template line must b 7 chars long, not {} (line {})".format(
-                    len(l), i)
+            if len(l) != 7:
+                raise ValueError("template line is not 7 chars: {} (line {})"
+                                 .format(len(l), i))
         self.corner = [s(tl[0][0]), s(tl[0][6]), s(tl[6][0]), s(tl[6][6])]
         self.border = [s(tl[0][1]), s(tl[1][0]), s(tl[1][6]), s(tl[6][1])]
         self.hsep = [s(tl[1][2]), s(tl[1][4])]

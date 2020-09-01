@@ -232,7 +232,7 @@ class TableTestcase(unittest.TestCase):
 
     def test_tformat0(self):
         self.assertEqual(y.Table(data=data2, template=tformat0,
-                                 align="c*", cell_pad="").format(),
+                                 align="cc*", cell_pad=None).format(),
                          """\
   &   False True 
 -----------------

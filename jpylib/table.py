@@ -9,7 +9,7 @@ class Table:
     def __init__(self, *, corner=["", "", "", ""], border=["", "", "", ""],
                  hsep=["", ""], vsep=["", ""], tb_cross=["", ""],
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
-                 hl_cross=["", ""], nl_cross=["", ""], cell_pad=[" ", " "],
+                 hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
                  pad_char=" ", template=None, align=None, data=None):
         """Initialise a Table formatting parameter set.
         
@@ -24,7 +24,7 @@ class Table:
         * bb_cross[2]: bottom border crossing, first and others
         * hl_cross[2]: header separator line crossing, first and others
         * nl_cross[2]: normal separator line crossing, first and others
-        * cell_pad[2]: minimum cell padding, left and right
+        * cell_pad[2]: minimum cell padding, left and right (integers)
         * pad_char:    padding character
         * template:    a template 7 x 7 drawing describing the table
         * align:       alignment descriptor string, 1 char per column, l/r/c;
@@ -37,17 +37,21 @@ class Table:
             self._from_template(template)
 
         if cell_pad is None:
-            self.cell_pad = ["", ""]
+            self.cell_pad = [0, 0]
         elif y.is_sequence(cell_pad):
+            if not all(map(y.is_int, cell_pad)):
+                raise ValueError("cell_pad is not a sequence of int, but {}"
+                                 .format(repr(cell_pad)))
             if len(cell_pad) == 1:
                 self.cell_pad = cell_pad * 2
-            else:
-                self.cell_pad = cell_pad[:2]
-        elif isinstance(cell_pad, str):
+            elif len(cell_pad) != 2:
+                raise ValueError("cell_pad is not sequence len 1 or 2, but {}"
+                                 .format(repr(cell_pad)))
+        elif y.is_int(cell_pad):
             self.cell_pad = [cell_pad, cell_pad]
         else:
-            ValueError("cell_pad is not None or str or sequence of 2: {}"
-                       .format(repr(cell_pad)))
+            raise ValueError("cell_pad is not None or int or seq of 2 ints: {}"
+                             .format(repr(cell_pad)))
 
         # Always have a separate alignment for the first and the following
         # lines. They need not be different, though.
@@ -63,8 +67,8 @@ class Table:
                 else:
                     self.align = [align[0], align[1]]
             except:
-                ValueError("align must be string or a sequence of strings, "
-                           + "but is {}".format(repr(align)))
+                raise ValueError("align must be string or a seq of strings, "
+                                 + "but is {}".format(repr(align)))
         # Set default alignment if align ends with "*"
         for i in (0, 1):
             if self.align[i]:
@@ -72,7 +76,7 @@ class Table:
                     self.defaultalign[i] = self.align[i][-2]
                     self.align[i] = self.align[i][:-1]
         if data:
-            self._fill(data)
+            self._fill_table(data)
 
     def _from_template(self, template):
         def s(char):
@@ -97,7 +101,7 @@ class Table:
         self.nl_cross = [s(tl[4][2]), s(tl[4][4])]
         
 
-    def _fill(self, data):
+    def _fill_table(self, data):
         """Assess and store the table data."""
         self.data = data
         self.cols = 0                   # maximum column number
@@ -115,8 +119,8 @@ class Table:
                     max(self.col_width[col], len(str(data_item)))
         return self                     # so we can do Table().from().string()
 
-    def _pad(self, item, width, alignment):
-        """Return a list of the item with left and right padding."""
+    def _padded_item(self, item, width, alignment):
+        """Return a string of the item with left and right padding."""
         padding = width - len(item)
         if alignment is None:
             if y.is_int(item):
@@ -135,11 +139,9 @@ class Table:
         else:
             raise ValueError("invalid char in alignment: {}"
                              .format(repr(alignment)))
-        return (self.pad_char * lpad
-                + self.cell_pad[0]
+        return (self.pad_char * (lpad + self.cell_pad[0])
                 + str(item)
-                + self.cell_pad[1]
-                + self.pad_char * rpad)
+                + self.pad_char * (self.cell_pad[1] + rpad))
 
     def _vert_sep(self, left_border, right_border, line, cross1, cross2):
         r = []
@@ -152,8 +154,7 @@ class Table:
                     r.append(cross)
                     cross = cross2
                 had_first_col = True
-                r.append(line * (self.col_width[col] + len(self.cell_pad[0]
-                                                           + self.cell_pad[1])))
+                r.append(line * (self.col_width[col] + sum(self.cell_pad)))
             r.append(right_border)
         result = "".join(r)
         if result:
@@ -173,7 +174,7 @@ class Table:
         """Return the formatted Table as a string. Data must be present."""
 
         if data:
-            self._fill(data)
+            self._fill_table(data)
         assert self.data, "Table has no data yet, so cannot be formatted."
         r = [self._vert_sep(self.corner[0], self.corner[1],
                             self.border[0], self.tb_cross[0], self.tb_cross[1])]
@@ -202,8 +203,8 @@ class Table:
                     r.append(hsep)
                     hsep = self.hsep[1]
                 had_first_col = True
-                r.append(self._pad(str(data_item), self.col_width[col],
-                                   self._alignment(row, col)))
+                r.append(self._padded_item(str(data_item), self.col_width[col],
+                                           self._alignment(row, col)))
             r.append(self.border[2])
             r.append("\n")
                 

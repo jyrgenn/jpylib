@@ -296,8 +296,7 @@ class TableTestcase(unittest.TestCase):
   &   False True
 -----------------
 False False False
-True  False True
-""")
+True  False True""")
 
     def test_tformat0a(self):
         self.assertEqual(y.Table(data=data2, template=tformat0,
@@ -306,8 +305,7 @@ True  False True
   &   False True
 -----------------
 False False False
-True  False True
-""")
+True  False True""")
 
     def test_tformat0b(self):
         table = y.Table(data=data2, template=tformat0,
@@ -316,8 +314,7 @@ True  False True
   &   False True
 -----------------
 False False False
-True  False True
-""")
+True  False True""")
 
     def test_tformat1(self):
         table = y.Table(data=data2, template=tformat1, align=["crr"]).format()
@@ -325,8 +322,7 @@ True  False True
    &   | False   True
 -------+--------------
  False | False  False
- True  | False   True
-""")
+ True  | False   True""")
 
     def test_tformat2(self):
         table = y.Table(data=data2, template=tformat2,
@@ -365,8 +361,7 @@ C________^_________∆__________∆___________D""")
       4 |      40 |      400 |      4000
      27 |     270 |     2700 |     27000
    3125 |   31250 |   312500 |   3125000
- 823543 | 8235430 | 82354300 | 823543000
-""")
+ 823543 | 8235430 | 82354300 | 823543000""")
 
     def test_cell_pad_non_int_seq(self):
         with self.assertRaises(ValueError) as ectx:
@@ -438,8 +433,7 @@ C________^_________∆__________∆___________D""")
       4 |      40 |      400 |      4000
      27 |     270 |     2700 |     27000
    3125 |   31250 |   312500 |   3125000
- 823543 | 8235430 | 82354300 | 823543000
-""")
+ 823543 | 8235430 | 82354300 | 823543000""")
 
     def test_columns_c(self):
         """Test fully blank template lines."""
@@ -452,8 +446,20 @@ C________^_________∆__________∆___________D""")
       4 |      40 |      400 |      4000
      27 |     270 |     2700 |     27000
    3125 |   31250 |   312500 |   3125000
- 823543 | 8235430 | 82354300 | 823543000
-""")
+ 823543 | 8235430 | 82354300 | 823543000""")
+
+    def test_columns_c_indent(self):
+        """Test fully blank template lines."""
+        table = y.Table(data=data3, align=["c*", None],
+                        template=t_columns_c, indent="huhu").format()
+        self.assertEqual(table, """\
+huhu
+huhu   *    |   10    |   100    |   1000
+huhu=========================================
+huhu      4 |      40 |      400 |      4000
+huhu     27 |     270 |     2700 |     27000
+huhu   3125 |   31250 |   312500 |   3125000
+huhu 823543 | 8235430 | 82354300 | 823543000""")
 
     def test_columns_d(self):
         """Test fully blank template lines."""
@@ -465,6 +471,5 @@ C________^_________∆__________∆___________D""")
        4        40        400        4000
       27       270       2700       27000
     3125     31250     312500     3125000
-  823543   8235430   82354300   823543000
-""")
+  823543   8235430   82354300   823543000""")
 

@@ -13,7 +13,7 @@ class Table:
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
                  hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
                  pad_char=" ", template=None, align=None, data=None,
-                 rstrip=True):
+                 rstrip=True, indent=""):
         """Initialise a Table formatting parameter set.
         
         Arguments:
@@ -193,7 +193,7 @@ class Table:
         tb = self._vert_sep(self.corner[0], self.corner[1], self.border[0],
                             self.tb_cross[0], self.tb_cross[1])
         if tb:
-            result.append(tb)
+            result.append(self.indent + tb)
         had_first_row = False
         left_cross, int_cross1, int_cross2, right_cross = (
             self.lb_cross[0], self.hl_cross[0],
@@ -206,7 +206,7 @@ class Table:
                 sepline = self._vert_sep(left_cross, right_cross,
                                          vsep, int_cross1, int_cross2)
                 if sepline:
-                    result.append(sepline)
+                    result.append(self.indent + sepline)
 
                 left_cross, int_cross1, int_cross2, right_cross = (
                     self.lb_cross[1], self.nl_cross[0],
@@ -228,11 +228,13 @@ class Table:
                                                self.col_width[col],
                                                self._alignment(row, col)))
             rline.append(self.border[2])
-            result.append("".join(rline))
+            result.append(self.indent + "".join(rline))
     
         # bottom border
-        result.append(self._vert_sep(self.corner[2], self.corner[3],
-                                     self.border[3], *self.bb_cross))
+        bb = self._vert_sep(self.corner[2], self.corner[3],
+                            self.border[3], *self.bb_cross)
+        if bb:
+            result.append(self.indent + bb)
         for lino, line in enumerate(result):
             if self.rstrip:
                 line = line.rstrip()

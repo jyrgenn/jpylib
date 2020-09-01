@@ -7,6 +7,13 @@ import unittest
 # stackoverflow.com/questions/5909873/how-can-i-pretty-print-ascii-tables-with-python
 # has more examples
 
+def ptable(table, eol="<"):
+    print()
+    for line in table.split("\n"):
+        print(line, eol, sep="")
+    if not table.endswith("\n"):
+        print(">>>>>>> no newline")
+
 t_template = r"""
 .-----.
 | | | |
@@ -180,8 +187,7 @@ class TableTestcase(unittest.TestCase):
 |     1 |     9 |    81 |   729 |  6561 |  59049 |  531441 |  4782969 |
 |-------+-------+-------+-------+-------+--------+---------+----------|
 |     1 |    10 |   100 |  1000 | 10000 | 100000 | 1000000 | 10000000 |
-.---------------------------------------------------------------------.
-""")
+.---------------------------------------------------------------------.""")
 
     def test_table_2(self):
         table = y.Table(data=self.data, template=t_template,
@@ -212,8 +218,7 @@ class TableTestcase(unittest.TestCase):
 |     1 |     9 |    81 |   729 |  6561 |  59049 |  531441 |  4782969 |
 |-------+-------+-------+-------+-------+--------+---------+----------|
 |     1 |    10 |   100 |  1000 | 10000 | 100000 | 1000000 | 10000000 |
-.---------------------------------------------------------------------.
-""")
+.---------------------------------------------------------------------.""")
 
     def test_table_3(self):
         table = y.Table(data=self.data, template=t_template,
@@ -244,13 +249,12 @@ class TableTestcase(unittest.TestCase):
 | 1     |   9   | 81    |   729 | 6561  | 59049  | 531441  | 4782969  |
 |-------+-------+-------+-------+-------+--------+---------+----------|
 | 1     |  10   | 100   |  1000 | 10000 | 100000 | 1000000 | 10000000 |
-.---------------------------------------------------------------------.
-""")
+.---------------------------------------------------------------------.""")
 
     def test_table_align(self):
-        table = y.Table(template=t_template, align="lclr")
-        self.assertEqual(table.format(data=self.data),
-                         """\
+        table = y.Table(template=t_template, align="lclr").format(
+            data=self.data)
+        self.assertEqual(table, """\
 .---------------------------------------------------------------------.
 | exp 0 | exp 1 | exp 2 | exp 3 | exp 4 | exp 5  | exp 6   | exp 7    |
 |=====================================================================|
@@ -275,8 +279,7 @@ class TableTestcase(unittest.TestCase):
 | 1     |   9   | 81    |   729 |  6561 |  59049 |  531441 |  4782969 |
 |-------+-------+-------+-------+-------+--------+---------+----------|
 | 1     |  10   | 100   |  1000 | 10000 | 100000 | 1000000 | 10000000 |
-.---------------------------------------------------------------------.
-""")
+.---------------------------------------------------------------------.""")
 
     def test_invalid_align(self):
         with self.assertRaises(ValueError):
@@ -307,9 +310,9 @@ True  False True
 """)
 
     def test_tformat0b(self):
-        self.assertEqual(y.Table(data=data2, template=tformat0,
-                                 align="cc*", cell_pad=0).format(),
-                         """\
+        table = y.Table(data=data2, template=tformat0,
+                        align="cc*", cell_pad=0).format()
+        self.assertEqual(table, """\
   &   False True 
 -----------------
 False False False
@@ -317,9 +320,8 @@ True  False True
 """)
 
     def test_tformat1(self):
-        self.assertEqual(y.Table(data=data2, template=tformat1,
-                                 align=["crr"]).format(),
-                         """\
+        table = y.Table(data=data2, template=tformat1, align=["crr"]).format()
+        self.assertEqual(table, """\
    &   | False   True 
 -------+--------------
  False | False  False 
@@ -336,8 +338,7 @@ True  False True
 | False : False | False |
 |-------:---------------+
 | True  : False | True  |
-\-----------------------/
-""")
+\-----------------------/""")
 
     def test_abc(self):
         table = y.Table(data=data3, align=["c*", None],
@@ -353,8 +354,7 @@ A--------v---------.----------.-----------B
 |   3125 :   31250 $   312500 $   3125000 !
 @--------*---------+----------+-----------/
 | 823543 : 8235430 $ 82354300 $ 823543000 !
-C________^_________∆__________∆___________D
-""")
+C________^_________∆__________∆___________D""")
 
     def test_columns(self):
         table = y.Table(data=data3, align=["c*", None],

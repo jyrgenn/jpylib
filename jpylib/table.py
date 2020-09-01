@@ -3,6 +3,8 @@
 import jpylib as y
 import functools
 
+def _identity(arg):
+    return arg
 
 class Table:
 
@@ -10,7 +12,8 @@ class Table:
                  hsep=["", ""], vsep=["", ""], tb_cross=["", ""],
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
                  hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
-                 pad_char=" ", template=None, align=None, data=None):
+                 pad_char=" ", template=None, align=None, data=None,
+                 rstrip=False):
         """Initialise a Table formatting parameter set.
         
         Arguments:
@@ -167,9 +170,7 @@ class Table:
                 r.append(line * (self.col_width[col] + sum(self.cell_pad)))
             r.append(right_border)
         result = "".join(r)
-        if result:
-            return result + "\n"
-        return ""
+        return result
             
 
     def _alignment(self, row, column):
@@ -186,8 +187,13 @@ class Table:
         if data:
             self._fill_table(data)
         assert self.data, "Table has no data yet, so cannot be formatted."
-        r = [self._vert_sep(self.corner[0], self.corner[1],
-                            self.border[0], self.tb_cross[0], self.tb_cross[1])]
+        
+        # Start result with the top border line.
+        result = []
+        tb = self._vert_sep(self.corner[0], self.corner[1], self.border[0],
+                            self.tb_cross[0], self.tb_cross[1])
+        if tb:
+            result.append(tb)
         had_first_row = False
         left_cross, int_cross1, int_cross2, right_cross = (
             self.lb_cross[0], self.hl_cross[0],
@@ -195,9 +201,13 @@ class Table:
         )
         vsep = self.vsep[0]
         for row, data_line in enumerate(self.data):
+            # Vertical separator line, if necessary
             if had_first_row:
-                r.append(self._vert_sep(left_cross, right_cross,
-                                        vsep, int_cross1, int_cross2))
+                sepline = self._vert_sep(left_cross, right_cross,
+                                         vsep, int_cross1, int_cross2)
+                if sepline:
+                    result.append(sepline)
+
                 left_cross, int_cross1, int_cross2, right_cross = (
                     self.lb_cross[1], self.nl_cross[0],
                     self.nl_cross[1], self.rb_cross[1]
@@ -205,20 +215,26 @@ class Table:
                 vsep = self.vsep[1]
             had_first_row = True
 
+            rline = []
             had_first_col = False
             hsep = self.hsep[0]
-            r.append(self.border[1])
+            rline.append(self.border[1])
             for col, data_item in enumerate(data_line):
                 if had_first_col:
-                    r.append(hsep)
+                    rline.append(hsep)
                     hsep = self.hsep[1]
                 had_first_col = True
-                r.append(self._padded_item(str(data_item), self.col_width[col],
-                                           self._alignment(row, col)))
-            r.append(self.border[2])
-            r.append("\n")
-                
+                rline.append(self._padded_item(str(data_item),
+                                               self.col_width[col],
+                                               self._alignment(row, col)))
+            rline.append(self.border[2])
+            result.append("".join(rline))
+    
         # bottom border
-        r.extend(self._vert_sep(self.corner[2], self.corner[3],
-                                self.border[3], *self.bb_cross))
-        return "".join(r)
+        result.append(self._vert_sep(self.corner[2], self.corner[3],
+                                     self.border[3], *self.bb_cross))
+        for lino, line in enumerate(result):
+            if self.rstrip:
+                line = line.rstrip()
+                result[lino] = line
+        return "\n".join(result)

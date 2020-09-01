@@ -13,7 +13,7 @@ class Table:
                  lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
                  hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
                  pad_char=" ", template=None, align=None, data=None,
-                 rstrip=False):
+                 rstrip=True):
         """Initialise a Table formatting parameter set.
         
         Arguments:

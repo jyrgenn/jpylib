@@ -293,39 +293,39 @@ class TableTestcase(unittest.TestCase):
         self.assertEqual(y.Table(data=data2, template=tformat0,
                                  align="cc*", cell_pad=None).format(),
                          """\
-  &   False True 
+  &   False True
 -----------------
 False False False
-True  False True 
+True  False True
 """)
 
     def test_tformat0a(self):
         self.assertEqual(y.Table(data=data2, template=tformat0,
                                  align="cc*", cell_pad=[0]).format(),
                          """\
-  &   False True 
+  &   False True
 -----------------
 False False False
-True  False True 
+True  False True
 """)
 
     def test_tformat0b(self):
         table = y.Table(data=data2, template=tformat0,
                         align="cc*", cell_pad=0).format()
         self.assertEqual(table, """\
-  &   False True 
+  &   False True
 -----------------
 False False False
-True  False True 
+True  False True
 """)
 
     def test_tformat1(self):
         table = y.Table(data=data2, template=tformat1, align=["crr"]).format()
         self.assertEqual(table, """\
-   &   | False   True 
+   &   | False   True
 -------+--------------
- False | False  False 
- True  | False   True 
+ False | False  False
+ True  | False   True
 """)
 
     def test_tformat2(self):
@@ -360,12 +360,12 @@ C________^_________∆__________∆___________D""")
         table = y.Table(data=data3, align=["c*", None],
                         template=t_columns).format()
         self.assertEqual(table, """\
-   *    |   10    |   100    |   1000    
+   *    |   10    |   100    |   1000
 =========================================
-      4 |      40 |      400 |      4000 
-     27 |     270 |     2700 |     27000 
-   3125 |   31250 |   312500 |   3125000 
- 823543 | 8235430 | 82354300 | 823543000 
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000
 """)
 
     def test_cell_pad_non_int_seq(self):
@@ -432,13 +432,13 @@ C________^_________∆__________∆___________D""")
         table = y.Table(data=data3, align=["c*", None],
                         template=t_columns_b).format()
         self.assertEqual(table, """\
-                                           
-   *    |   10    |   100    |   1000    
+
+   *    |   10    |   100    |   1000
 =========================================
-      4 |      40 |      400 |      4000 
-     27 |     270 |     2700 |     27000 
-   3125 |   31250 |   312500 |   3125000 
- 823543 | 8235430 | 82354300 | 823543000 
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000
 """)
 
     def test_columns_c(self):
@@ -446,13 +446,13 @@ C________^_________∆__________∆___________D""")
         table = y.Table(data=data3, align=["c*", None],
                         template=t_columns_c).format()
         self.assertEqual(table, """\
-                                           
-   *    |   10    |   100    |   1000    
+
+   *    |   10    |   100    |   1000
 =========================================
-      4 |      40 |      400 |      4000 
-     27 |     270 |     2700 |     27000 
-   3125 |   31250 |   312500 |   3125000 
- 823543 | 8235430 | 82354300 | 823543000 
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000
 """)
 
     def test_columns_d(self):
@@ -460,11 +460,11 @@ C________^_________∆__________∆___________D""")
         table = y.Table(data=data3, align=["cr*", None],
                         template=t_columns_d).format()
         self.assertEqual(table, """\
-    *           10        100        1000  
-                                           
-       4        40        400        4000  
-      27       270       2700       27000  
-    3125     31250     312500     3125000  
-  823543   8235430   82354300   823543000  
+    *           10        100        1000
+
+       4        40        400        4000
+      27       270       2700       27000
+    3125     31250     312500     3125000
+  823543   8235430   82354300   823543000
 """)
 

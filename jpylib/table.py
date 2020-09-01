@@ -135,8 +135,8 @@ class Table:
     def _padded_item(self, item, width, alignment):
         """Return a string of the item with left and right padding."""
         padding = width - len(item)
-        if alignment is None:
-            if y.is_int(item):
+        if alignment in (None, "n"):
+            if y.is_num(item):
                 alignment = "r"
             else:
                 alignment = "l"                

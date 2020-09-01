@@ -2,6 +2,7 @@
 
 import jpylib as y
 import unittest
+import collections
 
 trues = "yes y sure ja j jou si on t true  aye 1 affirmative"
 falses = "no n nope nein nee   off f false nay 0 negative"
@@ -81,7 +82,7 @@ class IntTestcase(unittest.TestCase):
 
     pairs = ((" ", None), ("23", 23), (" 23", 23), ("23x", None), ([], None), 
              ({}, None), ("25.6", None), ("25,6", None), ("0", 0), ("+42", 42),
-             (" -42", -42), ("-1", -1),
+             (" -42", -42), ("-1", -1), ("", None),
     )
 
     def test_maybe_int(self):
@@ -95,3 +96,38 @@ class IntTestcase(unittest.TestCase):
             self.assertEqual(y.is_int(arg), value is not None)
         
               
+class SequenceTestcase(unittest.TestCase):
+
+    def test_isseq_0(self):
+        self.assertTrue(y.is_sequence([]))
+
+    def test_isseq_1(self):
+        self.assertFalse(y.is_sequence(set()))
+
+    def test_isseq_2(self):
+        self.assertFalse(y.is_sequence(3))
+
+    def test_isseq_3(self):
+        self.assertFalse(y.is_sequence("blabla"))
+
+    def test_isseq_4(self):
+        self.assertTrue(y.is_sequence((3, 4, 5)))
+
+    def test_isseq_5(self):
+        self.assertTrue(y.is_sequence(collections.deque([3, 4, 5])))
+
+    def test_isseq_6(self):
+        self.assertTrue(y.is_sequence(collections.UserList([3, 4, 5])))
+
+    def test_isseq_7(self):
+        self.assertFalse(y.is_sequence({}))
+
+    def test_isseq_8(self):
+        self.assertFalse(y.is_sequence(collections.UserString(5)))
+
+    def test_isseq_9(self):
+        self.assertTrue(y.is_sequence(range(22)))
+
+    def test_isseq_es(self):
+        self.assertFalse(y.is_sequence(""))
+        

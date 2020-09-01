@@ -63,6 +63,6 @@ def is_int(arg):
 
 def is_sequence(arg):
     """Return True iff the argument is a sequence other than string."""
-    if type(arg) is str:
+    if isinstance(arg, (str, collections.UserString)):
         return False
     return isinstance(arg, collections.abc.Sequence)

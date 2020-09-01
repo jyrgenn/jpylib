@@ -52,14 +52,36 @@ def maybe_int(arg):
         return None
 
 
+def maybe_num(arg):
+    """Return the corresponding int or float if arg represents one, or None."""
+    the_int = maybe_int(arg)
+    if the_int is None:
+        try:
+            return float(arg)
+        except:
+            return None
+    return the_int
+
+
 def is_int(arg):
     """Return True if the arguments represents an int, or False.
     
     The argument may be not an int (maybe e.g. a string), but if it
-    can be cast to an int, it represents an int.
+    can be read as an int, it represents an int.
 
     """
     return maybe_int(arg) is not None
+
+
+def is_num(arg):
+    """Return True if the arguments represents a number, or False.
+    
+    The argument may be not numeric (maybe e.g. a string), but if it
+    can be read as a number, it represents a number.
+
+    """
+    return maybe_num(arg) is not None
+
 
 def is_sequence(arg):
     """Return True iff the argument is a sequence other than string."""

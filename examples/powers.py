@@ -60,9 +60,22 @@ tformat2 = r"""
 \-----/
 """
 
+t_0 = """
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+0000000
+"""
+
+
 print(y.Table(data=data2, template=tformat1,
               align=["cll"]).format())
 print(y.Table(data=data2, template=tformat2,
               align=["cll", None]).format())
 print(y.Table(data=data2, template=tformat0,
-              align="c*", cell_pad="").format())
+              align="c*", cell_pad=None).format())
+print(y.Table(data=data2, template=t_0,
+              align="c*", cell_pad=[0, 1]).format())

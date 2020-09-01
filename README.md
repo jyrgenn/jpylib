@@ -64,10 +64,11 @@ Components
 * `flatten` — generator, flatten a sequence (except strings)
 
 * `maybe_int` — return the corresponding int if the argument (e.g. a
-  string) represents an integer, or None.
+  string) represents an integer, or None. `maybe_num` for ints and
+  floats.
 
 * `is_int` — return True iff if the argument (e.g. a string)
-  represents an integer, False otherwise.
+  represents an integer, False otherwise. `is_num` for ints and floats.
 
 * `Table` — an ASCII table formatter.
 

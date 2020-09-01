@@ -2,6 +2,12 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2020-901:
+
+ * Table formatter
+
+ * functions is_num(), maybe_num() (for floats as well as ints)
+
 2020-829:
 
  * Removed the terminal_size() function as I learned about

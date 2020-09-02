@@ -23,7 +23,7 @@ from .process import backquote
 from .assorted import boolish, flatten, is_sequence
 from .assorted import maybe_int, is_int, maybe_num, is_num
 from .time import isotime, iso_time, iso_time_ms, iso_time_us
-from .table import Table
+from .table import format_table
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

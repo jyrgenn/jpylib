@@ -2,75 +2,29 @@
 
 import jpylib as y
 import functools
+from .table_templates import *
 
-templates = dict(
-    minimal="""
-0000000
-0000000
-0000000
-0000000
-0000000
-0000000
-0000000""",
-    columns="""
-0000000
-0 | | 0
-0-|-|-0
-0 | | 0
-0000000
-0 | | 0
-0000000""",
-    full="""
-.-----.
-| | | |
-|=====|
-| | | |
-|-+-+-|
-| | | |
-.-----.""",
-    heads="""
-0000000
-0     0
-0- - -0
-0     0
-0000000
-0     0
-0000000""",
-    box="""
-╒═╦═╤═╕
-│ ║ │ │
-╞═╬═╪═╡
-│ ║ │ │
-├─╫─┼─┤
-│ ║ │ │
-╘═╩═╧═╛""",
+
+_default_params = dict(
+    corner=["", "", "", ""],
+    border=["", "", "", ""],
+    hsep=["", ""],
+    vsep=["", ""],
+    tb_cross=["", ""],
+    lb_cross=["", ""],
+    rb_cross=["", ""],
+    bb_cross=["", ""],
+    hl_cross=["", ""],
+    nl_cross=["", ""],
+    data=None,
 )
-
-example_data = [
-    ["(O:O)", "col 1", "col 2", "col 3"],
-    ["row 1", "cell 12", "cell 13", "cell 14"], 
-    ["row 2", "cell 22", "cell 23", "cell 24"], 
-    ["row 3", "cell 32", "cell 33", "cell 34"], 
-]
-
-def template_names():
-    return sorted(templates.keys())
-
-def get_template(name):
-    return template[name]
-
-def get_template_example(name, data=example_data, **kwargs):
-    return Table(template=templates[name], data=data, **kwargs).format()
-
 
 class Table:
 
-    def __init__(self, *, corner=["", "", "", ""], border=["", "", "", ""],
-                 hsep=["", ""], vsep=["", ""], tb_cross=["", ""],
-                 lb_cross=["", ""], rb_cross=["", ""], bb_cross=["", ""],
-                 hl_cross=["", ""], nl_cross=["", ""], cell_pad=[1, 1],
-                 pad_char=" ", template=None, template_name= None, align=None,
-                 data=None, rstrip=True, indent=""):
+    def __init__(self, *, corner=None, border=None, hsep=None, vsep=None,
+                 tb_cross=None, lb_cross=None, rb_cross=None, bb_cross=None,
+                 hl_cross=None, nl_cross=None, cell_pad=[1, 1], pad_char=" ",
+                 template=None, align=None, data=None, rstrip=True, indent=""):
         """Initialise a Table formatting parameter set.
         
         Arguments:
@@ -87,18 +41,25 @@ class Table:
         * cell_pad[2]:   minimum cell padding, left and right (integers)
         * pad_char:      padding character
         * template:      a template 7 x 7 drawing describing the table
-        * template_name: pick a pre-defined template
         * align:         alignment descriptor string, 1 char per column, l/r/c;
                          may be sequence of 2 for first and following rows;
                          asterisk at the end means default for folloing columns
                          is the character in front of the asterisk
-        """
-        self.__dict__.update(locals())
-        if self.template_name:
-            self._from_template(templates[self.template_name])
-        elif template:
-            self._from_template(template)
+        * data:          the data to format, as a sequence of rows, which are
+                         sequences of columns (the data items)
+        * rstrip:        strip trailing blanks off output lines
+        * intend:        a string to lead each output line
 
+        Parameters are first taken from the template, if any, and
+        can then tweaked by the other constructor arguments.
+
+        """
+        self.__dict__.update(_default_params)
+        if template:
+            self.__dict__.update(template_params(template))
+        self.__dict__.update({ k: v for k, v in locals().items()
+                               if v is not None })
+     
         if cell_pad is None:
             self.cell_pad = [0, 0]
         elif y.is_sequence(cell_pad):
@@ -146,33 +107,6 @@ class Table:
         if data:
             self._fill_table(data)
 
-    def _from_template(self, template):
-        def s(char):
-            return "" if char == "0" else char
-
-        # If a line ends with blanks, this can confuse the reader, as well as
-        # the author and maybe even a text editor. To avoid that, a template
-        # line may end with a guard character ";", which is then stripped from
-        # the line.
-        tl = [l.rstrip(";") for l in template.split("\n") if l]
-        if len(tl) != 7:
-            raise ValueError("template must have 7 lines, not {}"
-                             .format(len(tl)))
-        for i, l in enumerate(tl):
-            if len(l) != 7:
-                raise ValueError("template line is not 7 chars: {} (line {})"
-                                 .format(len(l), i))
-        self.corner = [s(tl[0][0]), s(tl[0][6]), s(tl[6][0]), s(tl[6][6])]
-        self.border = [s(tl[0][1]), s(tl[1][0]), s(tl[1][6]), s(tl[6][1])]
-        self.hsep = [s(tl[1][2]), s(tl[1][4])]
-        self.vsep = [s(tl[2][1]), s(tl[4][1])]
-        self.tb_cross = [s(tl[0][2]), s(tl[0][4])]
-        self.lb_cross = [s(tl[2][0]), s(tl[4][0])]
-        self.rb_cross = [s(tl[2][6]), s(tl[4][6])]
-        self.bb_cross = [s(tl[6][2]), s(tl[6][4])]
-        self.hl_cross = [s(tl[2][2]), s(tl[2][4])]
-        self.nl_cross = [s(tl[4][2]), s(tl[4][4])]
-        
 
     def _fill_table(self, data):
         """Assess and store the table data."""
@@ -300,3 +234,24 @@ class Table:
                 line = line.rstrip()
                 result[lino] = line
         return "\n".join(result)
+
+def format_table(data=example_data, template_name=None, template=None,
+                 **kwargs):
+    """Format a table from the specified data and (optional) template.
+
+    The template can be given by name, selecting one of the
+    pre-defined templates, or explicitly. In absence of a specified
+    template, the default parameters will be used, which is
+    equivalent to the "zero" template.
+
+    All parameters can be tweaked through the kwargs, which are
+    passed to the Table constructor.
+
+    """
+    if template is None:
+        template = get_template(template_name)
+    table = Table(template=template, data=data, **kwargs)
+    return table.format()
+
+
+# EOF

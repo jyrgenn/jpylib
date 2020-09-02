@@ -15,6 +15,16 @@ import unittest
 #         print(">>>>>>> no newline")
 #     print(end="", flush=True)
 
+t_storethis = """
+0000000
+0 | | 0
+0000000
+0 | | 0
+0000000
+0 | | 0
+0000000
+"""
+
 t_template = r"""
 .-----.
 | | | |
@@ -470,3 +480,108 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
     3125     31250     312500     3125000
   823543   8235430   82354300   823543000""")
 
+    def test_template_box(self):
+        """Test of template "box"."""
+        table = y.format_table(data3, "box", align=["cr*", None])
+        self.assertEqual(table, """\
+╒════════╦═════════╤══════════╤═══════════╕
+│   *    ║      10 │      100 │      1000 │
+╞════════╬═════════╪══════════╪═══════════╡
+│      4 ║      40 │      400 │      4000 │
+├────────╫─────────┼──────────┼───────────┤
+│     27 ║     270 │     2700 │     27000 │
+├────────╫─────────┼──────────┼───────────┤
+│   3125 ║   31250 │   312500 │   3125000 │
+├────────╫─────────┼──────────┼───────────┤
+│ 823543 ║ 8235430 │ 82354300 │ 823543000 │
+╘════════╩═════════╧══════════╧═══════════╛""")
+        
+    def test_template_minimal(self):
+        """Test of template "minimal"."""
+        table = y.format_table(data3, "minimal", align=["cr*", None])
+        self.assertEqual(table, """\
+   *          10       100       1000
+      4       40       400       4000
+     27      270      2700      27000
+   3125    31250    312500    3125000
+ 823543  8235430  82354300  823543000""")
+        
+    def test_template_columns(self):
+        """Test of template "columns"."""
+        table = y.format_table(data3, "columns", align=["cr*", None])
+        self.assertEqual(table, """\
+   *    |      10 |      100 |      1000
+--------|---------|----------|-----------
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000""")
+        
+    def test_template_full(self):
+        """Test of template "full"."""
+        table = y.format_table(data3, "full", align=["cr*", None])
+        self.assertEqual(table, """\
+.-----------------------------------------.
+|   *    |      10 |      100 |      1000 |
+|=========================================|
+|      4 |      40 |      400 |      4000 |
+|--------+---------+----------+-----------|
+|     27 |     270 |     2700 |     27000 |
+|--------+---------+----------+-----------|
+|   3125 |   31250 |   312500 |   3125000 |
+|--------+---------+----------+-----------|
+| 823543 | 8235430 | 82354300 | 823543000 |
+.-----------------------------------------.""")
+        
+    def test_template_heads(self):
+        """Test of template "heads"."""
+        table = y.format_table(data3, "heads", align=["cr*", None])
+        self.assertEqual(table, """\
+   *           10        100        1000
+-------- --------- ---------- -----------
+      4        40        400        4000
+     27       270       2700       27000
+   3125     31250     312500     3125000
+ 823543   8235430   82354300   823543000""")
+        
+    def test_template_markdown(self):
+        """Test of template "markdown"."""
+        table = y.format_table(data3, "markdown", align=["cr*", None])
+        self.assertEqual(table, """\
+|   *    |      10 |      100 |      1000 |
+|--------|---------|----------|-----------|
+|      4 |      40 |      400 |      4000 |
+|     27 |     270 |     2700 |     27000 |
+|   3125 |   31250 |   312500 |   3125000 |
+| 823543 | 8235430 | 82354300 | 823543000 |""")
+        
+    def test_template_stored(self):
+        """Test of stored template."""
+        y.table.store_template("stored 1", t_storethis)
+        table = y.format_table(data3, "stored 1", align=["cr*", None])
+        self.assertEqual(table, """\
+   *    |      10 |      100 |      1000
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000""")
+        self.assertTrue("stored 1" in y.table.template_names())
+
+    def test_example_data(self):
+        table = y.format_table(cell_pad=[0, 1])
+        self.assertEqual(table, """\
+(O:O) col 1   col 2   col 3
+row 1 cell 12 cell 13 cell 14
+row 2 cell 22 cell 23 cell 24
+row 3 cell 32 cell 33 cell 34""")        
+        
+    def test_template_names(self):
+        self.assertEqual(y.table.template_names(),
+                         ["box", "columns", "full", "heads",
+                          "markdown", "minimal"])
+
+    def test_unknown_template(self):
+        with self.assertRaises(KeyError) as ctx:
+            table = y.format_table(template_name="dunno")
+        self.assertEqual(ctx.exception.args[0],
+                         "not a valid template name: 'dunno'")

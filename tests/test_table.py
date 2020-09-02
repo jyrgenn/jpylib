@@ -190,8 +190,8 @@ class TableTestcase(unittest.TestCase):
 .---------------------------------------------------------------------.""")
 
     def test_table_2(self):
-        table = y.format_table(data=self.data, template=t_template,
-                        align=["r*", None])
+        table0 = y.table.Table(template=t_template, align=["r*", None])
+        table = table0.format(data=self.data)
         self.assertEqual(table, """\
 .---------------------------------------------------------------------.
 | exp 0 | exp 1 | exp 2 | exp 3 | exp 4 |  exp 5 |   exp 6 |    exp 7 |

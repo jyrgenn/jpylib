@@ -63,11 +63,23 @@ def template_names():
     return sorted(templates.keys())
 
 
-def store_template(name, template):
+def store_template(name, template, replace=False):
     """Store a table template for later use."""
     # Check table parameters before storing.
     template_params(template)
+    if name in templates and not replace:
+        raise ValueError("template {} already exists".format(repr(name)))
     templates[name] = template
+
+
+def remove_template(name, mustexist=True):
+    """Remove a stored table template."""
+    global templates
+    try:
+        del templates[name]
+    except KeyError:
+        if mustexist:
+            raise KeyError("template {} does not exist".format(repr(name)))
 
 
 def get_template(name):

@@ -585,3 +585,41 @@ row 3 cell 32 cell 33 cell 34""")
             table = y.format_table(template_name="dunno")
         self.assertEqual(ctx.exception.args[0],
                          "not a valid template name: 'dunno'")
+
+    def test_store_existing_a(self):
+        tname = "superduper"
+        y.table.store_template(tname, t_storethis)
+        with self.assertRaises(ValueError) as ctx:
+            y.table.store_template(tname, t_storethis)
+        self.assertEqual(ctx.exception.args[0],
+                         "template {} already exists".format(repr(tname)))
+        y.table.remove_template(tname)
+        
+    def test_store_existing_b(self):
+        tname = "superduper"
+        y.table.store_template(tname, t_storethis)
+        y.table.store_template(tname, t_columns_d, replace=True)
+        self.assertEqual(y.table.get_template(tname), t_columns_d)
+        y.table.remove_template(tname)
+
+        
+    def test_remove_existing(self):
+        tname = "superduper"
+        y.table.store_template(tname, t_storethis)
+        self.assertTrue(tname in y.table.template_names())
+        y.table.remove_template(tname)
+        self.assertFalse(tname in y.table.template_names())
+        
+    def test_remove_nonexisting_a(self):
+        tname = "superduper"
+        with self.assertRaises(KeyError) as ctx:
+            y.table.remove_template(tname)
+        self.assertEqual(ctx.exception.args[0],
+                         "template {} does not exist".format(repr(tname)))
+
+        
+    def test_remove_nonexisting_b(self):
+        tname = "superduper"
+        # will simply not raise an Exception
+        y.table.remove_template(tname, mustexist=False)
+        

@@ -75,8 +75,8 @@ def get_template(name):
         return None
     try:
         return templates[name]
-    except IndexError:
-        raise ValueError("not a valid template name: {}".format(repr(name)))
+    except KeyError:
+        raise KeyError("not a valid template name: {}".format(repr(name)))
 
 
 def template_params(template):

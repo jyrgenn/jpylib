@@ -176,8 +176,12 @@ class Table:
 
 
     def format(self, data=None):
-        """Return the formatted Table as a string. Data must be present."""
+        """Return the formatted Table as a string.
 
+        Table data must be specified here or earlier in the
+        constructor.
+
+        """
         if data:
             self._fill_table(data)
         assert self.data, "Table has no data yet, so cannot be formatted."
@@ -235,7 +239,7 @@ class Table:
                 result[lino] = line
         return "\n".join(result)
 
-def format_table(data=example_data, template_name=None, template=None,
+def format_table(data=None, template_name=None, template=None,
                  **kwargs):
     """Format a table from the specified data and (optional) template.
 
@@ -245,9 +249,11 @@ def format_table(data=example_data, template_name=None, template=None,
     equivalent to the "zero" template.
 
     All parameters can be tweaked through the kwargs, which are
-    passed to the Table constructor.
+    passed to the Table constructor (see there).
 
     """
+    if data is None:
+        data = example_data
     if template is None:
         template = get_template(template_name)
     table = Table(template=template, data=data, **kwargs)

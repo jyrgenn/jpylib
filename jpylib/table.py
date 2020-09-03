@@ -247,8 +247,7 @@ class Table:
                 result[lino] = line
         return "\n".join(result)
 
-def format_table(data=None, template_name=None, template=None,
-                 **kwargs):
+def format_table(data=None, template_name=None, template=None, **kwargs):
     """Format a table from the specified data and (optional) template.
 
     The template can be given by name, selecting one of the pre-defined

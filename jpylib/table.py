@@ -54,12 +54,17 @@ class Table:
         can then tweaked by the other constructor arguments.
 
         """
+        # (1) set default values
         self.__dict__.update(_default_params)
+        # (2) override them from the template
         if template:
             self.__dict__.update(template_params(template))
+        # (3) override with the constructor parameters
         self.__dict__.update({ k: v for k, v in locals().items()
                                if v is not None })
-     
+
+        # Some need special checking and handling:
+        # (1) cell_padding may be specified as list/tuple of 1 or 2, or as int
         if cell_pad is None:
             self.cell_pad = [0, 0]
         elif y.is_sequence(cell_pad):
@@ -77,8 +82,9 @@ class Table:
             raise ValueError("cell_pad is not None or int or seq of 2 ints: {}"
                              .format(repr(cell_pad)))
 
-        # Always have a separate alignment for the first and the following
-        # lines. They need not be different, though.
+        # (2) Always have a separate alignment for the first and the following
+        # lines. They need not be different, though. May be a list of 1 or 2
+        # or a simple string or None.
         self.defaultalign = [None, None]
         if align is None:
             self.align = ["", ""]
@@ -104,6 +110,7 @@ class Table:
                 if self.align[i].endswith("*") and len(self.align[i]) > 1:
                     self.defaultalign[i] = self.align[i][-2]
                     self.align[i] = self.align[i][:-1]
+        # Now incorporate the data, if specified here.
         if data:
             self._fill_table(data)
 
@@ -151,6 +158,7 @@ class Table:
                 + self.pad_char * (self.cell_pad[1] + rpad))
 
     def _vert_sep(self, left_border, right_border, line, cross1, cross2):
+        """Return a vertical separator (border or internal)."""
         r = []
         if line:
             r.append(left_border)
@@ -168,6 +176,7 @@ class Table:
             
 
     def _alignment(self, row, column):
+        """Return the alignment of the (row, column) cell."""
         index = 0 if row == 0 else 1
         align = self.align[index]
         if column >= len(align or ""):
@@ -178,9 +187,7 @@ class Table:
     def format(self, data=None):
         """Return the formatted Table as a string.
 
-        Table data must be specified here or earlier in the
-        constructor.
-
+        Table data must be specified here or earlier in the constructor.
         """
         if data:
             self._fill_table(data)
@@ -213,6 +220,7 @@ class Table:
                 vsep = self.vsep[1]
             had_first_row = True
 
+            # actual data line
             rline = []
             had_first_col = False
             hsep = self.hsep[0]
@@ -243,13 +251,13 @@ def format_table(data=None, template_name=None, template=None,
                  **kwargs):
     """Format a table from the specified data and (optional) template.
 
-    The template can be given by name, selecting one of the
-    pre-defined templates, or explicitly. In absence of a specified
-    template, the default parameters will be used, which is
-    equivalent to the "zero" template.
+    The template can be given by name, selecting one of the pre-defined
+    templates, or explicitly. In absence of a specified template, the
+    default parameters will be used, which is equivalent to the "minimal"
+    template.
 
-    All parameters can be tweaked through the kwargs, which are
-    passed to the Table constructor (see there).
+    All parameters can be tweaked through the kwargs, which are passed
+    to the Table constructor (see there).
 
     """
     if data is None:

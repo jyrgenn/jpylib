@@ -131,7 +131,7 @@ class Table:
                     self.col_width.append(0)
                 self.col_width[col] = \
                     max(self.col_width[col], len(str(data_item)))
-        return self                     # so we can do Table().from().string()
+        return self
 
     def _padded_item(self, item, width, alignment):
         """Return a string of the item with left and right padding."""

@@ -2,6 +2,12 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2020-910:
+
+ * Table alignment argument now a string only, consisting of one or
+   two alignment descriptors, comma-separated, for either both or
+   the first and following rows.
+
 2020-901:
 
  * Table formatter

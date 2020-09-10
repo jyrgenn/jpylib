@@ -28,4 +28,4 @@ template = """
 0 | 0 0
 0000000"""
 
-print(y.table.Table(data=data, align=["rn*", None], template=template).format())
+print(y.format_table(data=data, align="rn*,n*", indent=" ", template=template))

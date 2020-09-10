@@ -200,7 +200,7 @@ class TableTestcase(unittest.TestCase):
 .---------------------------------------------------------------------.""")
 
     def test_table_2(self):
-        table0 = y.table.Table(template=t_template, align=["r*", None])
+        table0 = y.table.Table(template=t_template, align="r*,n*")
         table = table0.format(data=self.data)
         self.assertEqual(table, """\
 .---------------------------------------------------------------------.
@@ -231,7 +231,7 @@ class TableTestcase(unittest.TestCase):
 
     def test_table_3(self):
         table = y.format_table(data=self.data, template=t_template,
-                        align=["r*", "lclrl*"])
+                               align="r*,lclrl*")
         self.assertEqual(table, """\
 .---------------------------------------------------------------------.
 | exp 0 | exp 1 | exp 2 | exp 3 | exp 4 |  exp 5 |   exp 6 |    exp 7 |
@@ -324,7 +324,7 @@ False False False
 True  False True""")
 
     def test_tformat1(self):
-        table = y.format_table(data=data2, template=tformat1, align=["crr"])
+        table = y.format_table(data=data2, template=tformat1, align="crr")
         self.assertEqual(table, """\
    &   | False   True
 -------+--------------
@@ -333,7 +333,7 @@ True  False True""")
 
     def test_tformat2(self):
         table = y.format_table(data=data2, template=tformat2,
-                        align=["cll", None])
+                               align="cll,")
         self.assertEqual(table,
                          r"""/-----------------------\
 |   &   : False | True  |
@@ -344,7 +344,7 @@ True  False True""")
 \-----------------------/""")
 
     def test_abc(self):
-        table = y.format_table(data=data3, align=["c*", None],
+        table = y.format_table(data=data3, align="c*,",
                         template=t_abc)
         self.assertEqual(table, """\
 A--------v---------.----------.-----------B
@@ -360,7 +360,7 @@ A--------v---------.----------.-----------B
 C________^_________∆__________∆___________D""")
 
     def test_columns(self):
-        table = y.format_table(data=data3, align=["c*", None],
+        table = y.format_table(data=data3, align="c*,",
                         template=t_columns)
         self.assertEqual(table, """\
    *    |   10    |   100    |   1000
@@ -372,21 +372,21 @@ C________^_________∆__________∆___________D""")
 
     def test_cell_pad_non_int_seq(self):
         with self.assertRaises(ValueError) as ectx:
-            table = y.format_table(data=data3, align=["c*", None],
+            table = y.format_table(data=data3, align="c*,",
                             template=t_columns, cell_pad=["", ""])
         self.assertEqual(ectx.exception.args,
                          ("cell_pad is not a sequence of int, but ['', '']",))
 
     def test_cell_pad_too_long_seq(self):
         with self.assertRaises(ValueError) as ectx:
-            table = y.format_table(data=data3, align=["c*", None],
+            table = y.format_table(data=data3, align="c*,",
                             template=t_columns, cell_pad=[1, 1, 1, 4])
         self.assertEqual(ectx.exception.args,
                          ("cell_pad is not a sequence len 1 or 2, but 4",))
 
     def test_cell_pad_wrong_type(self):
         with self.assertRaises(ValueError) as ectx:
-            table = y.format_table(data=data3, align=["c*", None],
+            table = y.format_table(data=data3, align="c*,",
                             template=t_columns, cell_pad="")
         self.assertEqual(ectx.exception.args,
                          ("cell_pad is not None or int or seq of 2 ints: ''",))
@@ -396,7 +396,7 @@ C________^_________∆__________∆___________D""")
             table = y.format_table(data=data3, align=("c*", 3),
                             template=t_columns, cell_pad=None)
         self.assertEqual(ectx.exception.args,
-                         ("align is not a sequence of str|None, but ('c*', 3)"
+                         ("align must be a string of one or two comma-separated fields, but is ('c*', 3)"
                           ,))
 
     def test_align_wrong_len_seq(self):
@@ -404,7 +404,7 @@ C________^_________∆__________∆___________D""")
             table = y.format_table(data=data3, align=[],
                             template=t_columns, cell_pad=None)
         self.assertEqual(ectx.exception.args,
-                         ("align must be sequence of len 1 or 2, not 0"
+                         ("align must be a string of one or two comma-separated fields, but is []"
                           ,))
 
     def test_align_wrong_type(self):
@@ -412,8 +412,7 @@ C________^_________∆__________∆___________D""")
             table = y.format_table(data=data3, align=3,
                             template=t_columns, cell_pad=None)
         self.assertEqual(ectx.exception.args,
-                         ("align must be str or None or a seq of str|None, "
-                             + "but is 3",))
+                         ("align must be a string of one or two comma-separated fields, but is 3",))
 
     def test_template_line_too_long(self):
         with self.assertRaises(ValueError) as ectx:
@@ -431,7 +430,7 @@ C________^_________∆__________∆___________D""")
 
     def test_columns_b(self):
         """Test fully blank template lines."""
-        table = y.format_table(data=data3, align=["c*", None],
+        table = y.format_table(data=data3, align="c*,",
                         template=t_columns_b)
         self.assertEqual(table, """\
 
@@ -444,7 +443,7 @@ C________^_________∆__________∆___________D""")
 
     def test_columns_c(self):
         """Test fully blank template lines."""
-        table = y.format_table(data=data3, align=["c*", None],
+        table = y.format_table(data=data3, align="c*,",
                         template=t_columns_c)
         self.assertEqual(table, """\
 
@@ -457,7 +456,7 @@ C________^_________∆__________∆___________D""")
 
     def test_columns_c_indent(self):
         """Test fully blank template lines."""
-        table = y.format_table(data=data3, align=["c*", None],
+        table = y.format_table(data=data3, align="c*,",
                         template=t_columns_c, indent="huhu")
         self.assertEqual(table, """\
 huhu
@@ -470,7 +469,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
 
     def test_columns_d(self):
         """Test fully blank template lines."""
-        table = y.format_table(data=data3, align=["cr*", None],
+        table = y.format_table(data=data3, align="cr*,",
                         template=t_columns_d)
         self.assertEqual(table, """\
     *           10        100        1000
@@ -482,7 +481,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
 
     def test_template_box(self):
         """Test of template "box"."""
-        table = y.format_table(data3, "box", align=["cr*", None])
+        table = y.format_table(data3, "box", align="cr*,")
         self.assertEqual(table, """\
 ╒════════╦═════════╤══════════╤═══════════╕
 │   *    ║      10 │      100 │      1000 │
@@ -498,7 +497,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
         
     def test_template_minimal(self):
         """Test of template "minimal"."""
-        table = y.format_table(data3, "minimal", align=["cr*", None])
+        table = y.format_table(data3, "minimal", align="cr*,")
         self.assertEqual(table, """\
    *          10       100       1000
       4       40       400       4000
@@ -508,7 +507,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
         
     def test_template_columns(self):
         """Test of template "columns"."""
-        table = y.format_table(data3, "columns", align=["cr*", None])
+        table = y.format_table(data3, "columns", align="cr*,")
         self.assertEqual(table, """\
    *    |      10 |      100 |      1000
 --------|---------|----------|-----------
@@ -519,7 +518,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
         
     def test_template_full(self):
         """Test of template "full"."""
-        table = y.format_table(data3, "full", align=["cr*", None])
+        table = y.format_table(data3, "full", align="cr*,")
         self.assertEqual(table, """\
 .-----------------------------------------.
 |   *    |      10 |      100 |      1000 |
@@ -535,7 +534,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
         
     def test_template_heads(self):
         """Test of template "heads"."""
-        table = y.format_table(data3, "heads", align=["cr*", None])
+        table = y.format_table(data3, "heads", align="cr*,")
         self.assertEqual(table, """\
    *           10        100        1000
 -------- --------- ---------- -----------
@@ -546,7 +545,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
         
     def test_template_markdown(self):
         """Test of template "markdown"."""
-        table = y.format_table(data3, "markdown", align=["cr*", None])
+        table = y.format_table(data3, "markdown", align="cr*,")
         self.assertEqual(table, """\
 |   *    |      10 |      100 |      1000 |
 |--------|---------|----------|-----------|
@@ -558,7 +557,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
     def test_template_stored(self):
         """Test of stored template."""
         y.table.store_template("stored 1", t_storethis)
-        table = y.format_table(data3, "stored 1", align=["cr*", None])
+        table = y.format_table(data3, "stored 1", align="cr*,")
         self.assertEqual(table, """\
    *    |      10 |      100 |      1000
       4 |      40 |      400 |      4000
@@ -566,6 +565,7 @@ huhu 823543 | 8235430 | 82354300 | 823543000""")
    3125 |   31250 |   312500 |   3125000
  823543 | 8235430 | 82354300 | 823543000""")
         self.assertTrue("stored 1" in y.table.template_names())
+        y.table.remove_template("stored 1")
 
     def test_example_data(self):
         table = y.format_table(cell_pad=[0, 1])
@@ -623,3 +623,22 @@ row 3 cell 32 cell 33 cell 34""")
         # will simply not raise an Exception
         y.table.remove_template(tname, mustexist=False)
         
+    def test_template_align_comma_a(self):
+        """Test of stored template."""
+        y.table.store_template("stored 1", t_storethis)
+        table = y.format_table(data3, "stored 1", align="cr*,n")
+        self.assertEqual(table, """\
+   *    |      10 |      100 |      1000
+      4 |      40 |      400 |      4000
+     27 |     270 |     2700 |     27000
+   3125 |   31250 |   312500 |   3125000
+ 823543 | 8235430 | 82354300 | 823543000""")
+        self.assertTrue("stored 1" in y.table.template_names())
+        y.table.remove_template("stored 1")
+
+    def test_template_align_comma_b(self):
+        """Test of stored template."""
+        with self.assertRaises(ValueError) as context:
+            table = y.format_table(data3, "minimal", align="cr*,n,c")
+        self.assertEqual(str(context.exception),
+                         "more than 2 comma-separated align strings: 'cr*,n,c'")

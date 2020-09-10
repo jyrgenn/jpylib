@@ -89,19 +89,18 @@ class Table:
         if align is None:
             self.align = ["", ""]
         elif type(align) == str:
-            self.align = [align, align]
-        elif y.is_sequence(align):
-            if not all([isinstance(elem, (str, type(None))) for elem in align]):
-                raise ValueError("align is not a sequence of str|None, but {}"
-                                 .format(repr(align)))
-            elif len(align) == 1:
-                self.align = [align[0], align[0]]
-            elif len(align) == 2:
-                self.align = [align[0], align[1]]
+            split_align = align.split(",")
+            if len(split_align) == 1:
+                self.align = [align, align]
+            elif len(split_align) == 2:
+                self.align = split_align
             else:
-                raise ValueError("align must be sequence of len 1 or 2, not {}"
-                                 .format(len(align)))
+                raise ValueError("more than 2 comma-separated align strings: {}"
+                                 .format(repr(align)))                
         else:
+            raise ValueError("align must be a string of one or two "
+                             + "comma-separated fields, "
+                             + "but is {}".format(repr(align)))
             raise ValueError("align must be str or None or a seq of str|None, "
                              + "but is {}".format(repr(align)))
         # Set default alignment if align ends with "*"

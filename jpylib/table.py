@@ -190,7 +190,7 @@ class Table:
         """
         if data:
             self._fill_table(data)
-        assert self.data, "Table has no data yet, so cannot be formatted."
+        assert self.data, "Table has no data, so cannot be formatted."
         
         # Start result with the top border line.
         result = []

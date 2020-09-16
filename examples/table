@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import sys
+import jpylib as y
+
+ovc, args = y.pgetopts({
+    "_help_header": "format input as a table",
+    "_help_footer": "see jpylib.table for more information",
+    "t": ("template", str, "minimal", "name of table template to use", "NAME"),
+    "l": ("list_templates", bool, False, "list table templates"),
+    "s": ("separator", str, None, "input field separator", "SEP"),
+    "a": ("align", str, None, "table cell alignment", "LINE1,OTHERS"),
+    "1": ("fields_line1", bool, False, "assume number of fields as in line 1"),
+    "p": ("padding", str, "1,1", "cell padding, 1 int or 2 (left and right)",
+          "LEFT,RIGHT"),
+    "_arguments": ["[input]"],
+})
+
+padding_error = "padding must be 'int' or 'int,int'"
+nfields = 0
+contents = []
+
+def collect(file):
+    global nfields
+    for line in file:
+        contents.append(line.split(ovc.separator, nfields - 1))
+        if ovc.fields_line1:
+            nfields = len(contents[0])
+
+def int_or_fail(value):
+    try:
+        return int(value)
+    except:
+        ovc.ovc_usage(padding_error)
+
+def decode_padding(s):
+    parts = s.split(",")
+    if len(parts) == 1:
+        value = int_or_fail(parts[0])
+        return [value, value]
+    if len(parts) == 2:
+        return [ int_or_fail(n) for n in parts ]
+    ovc.ovc_usage(padding_error)
+    
+
+if ovc.list_templates:
+    print(", ".join(y.table.template_names()))
+    sys.exit()
+
+if args:
+    sys.stdin = open(args[0])
+collect(sys.stdin)
+
+if not contents:
+    sys.exit()
+
+print(y.format_table(contents, template_name=ovc.template, align=ovc.align,
+                     cell_pad=decode_padding(ovc.padding)))

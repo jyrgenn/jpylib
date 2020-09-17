@@ -32,9 +32,9 @@ class OptionValueContainer:
         for opt, desc in self._opts.items():
             if opt.startswith("_"):
                 assert opt in _keywords, "keyword unknown: " + repr(opt)
-            # While the following is grossly redundant, it is a kludge to
-            # finally reach 100% test coverage; apparently unpossible if both
-            # statements are under the same "if". Good luck we don't need to
+            # The following is grossly redundant -- it is a kludge to finally
+            # reach 100% test coverage; apparently impossible if both
+            # statements are under the same "if". Luckly we don't need to
             # optimise for speed. :-(
             if opt.startswith("_"):
                 continue

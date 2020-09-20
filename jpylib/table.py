@@ -101,8 +101,6 @@ class Table:
             raise ValueError("align must be a string of one or two "
                              + "comma-separated fields, "
                              + "but is {}".format(repr(align)))
-            raise ValueError("align must be str or None or a seq of str|None, "
-                             + "but is {}".format(repr(align)))
         # Set default alignment if align ends with "*"
         for i in (0, 1):
             if self.align[i]:

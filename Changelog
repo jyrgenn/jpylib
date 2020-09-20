@@ -2,6 +2,12 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2020-920:
+
+ * Alert functions tracef, debugf, infof, noticef, errorf, fatalf
+   that print according to their level, taking a format string
+   argument and the format parameters.
+
 2020-910:
 
  * Table alignment argument now a string only, consisting of one or

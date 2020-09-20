@@ -169,6 +169,62 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
             trace("lines")
         self.assertTrue(err.getvalue().endswith("lines\n"))
 
+    def test_tracef(self):
+        alert_level(L_TRACE)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputCaptured() as (out, err):
+            tracef(template, *args)
+        self.assertTrue(err.getvalue().strip().endswith(shouldbe))
+
+    def test_debugf(self):
+        alert_level(L_DEBUG)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputCaptured() as (out, err):
+            debugf(template, *args)
+        self.assertTrue(err.getvalue().strip().endswith(shouldbe))
+
+    def test_infof(self):
+        alert_level(L_INFO)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputCaptured() as (out, err):
+            infof(template, *args)
+        self.assertTrue(err.getvalue().strip().endswith(shouldbe))
+
+    def test_noticef(self):
+        alert_level(L_NOTICE)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputCaptured() as (out, err):
+            noticef(template, *args)
+        self.assertTrue(err.getvalue().strip().endswith(shouldbe))
+
+    def test_errorf(self):
+        alert_level(L_ERROR)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputCaptured() as (out, err):
+            errorf(template, *args)
+        self.assertTrue(err.getvalue().strip().endswith(shouldbe))
+
+    def test_fatalf(self):
+        alert_level(L_ERROR)
+        template = "foo {:3} bar {} dong"
+        args = 13, "nuggi"
+        shouldbe = template.format(*args)
+        with outputAndExitCaptured() as (out, err, status):
+            fatalf(template, *args)
+        value = err.getvalue().strip()
+        #print("\n{}\n{}".format(shouldbe, value))
+        self.assertTrue(value.endswith(shouldbe))
+        self.assertEqual(status.value, 1)
 
     def test_redirect(self):
         alert_level(alcf().max_level)

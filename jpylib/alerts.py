@@ -210,26 +210,54 @@ def err(*msgs):
     alert_if_level(L_ERROR, *msgs)
 error = err                             # alias
 
+def errf(template, *args):
+    """Print error level output."""
+    err(template.format(*args))
+errorf = errf
+
 def fatal(*msgs, exit_status=1):
     """Print error level output."""
     alert_if_level(L_ERROR, "Fatal", *msgs)
     sys.exit(exit_status)
 
+def fatalf(template, *args, exit_status=1):
+    fatal(template.format(*args), exit_status=exit_status)
+
 def notice(*msgs):
     """Print notice level output according to alert level."""
     alert_if_level(L_NOTICE, *msgs)
 
+def noticef(template, *args):
+    """Print notice level output according to alert level."""
+    if is_notice():
+        alert_if_level(L_NOTICE, template.format(*args))
+
 def info(*msgs):
     """Print info level output according to alert level."""
     alert_if_level(L_INFO, *msgs)
+
+def infof(template, *args):
+    """Print info level output according to alert level."""
+    if is_info():
+        info(template.format(*args))
 
 def debug(*msgs):
     """Print debug level output according to alert level."""
     alert_if_level(L_DEBUG, *msgs)
 dbg = debug                             # alias
 
+def debugf(template, *args):
+    """Print debug level output according to alert level."""
+    if is_debug():
+        debug(template.format(*args))
+
 def trace(*msgs):
     """Print debug level output according to alert level."""
     alert_if_level(L_TRACE, *msgs)
+
+def tracef(template, *args):
+    """Print debug level output according to alert level."""
+    if is_trace():
+        trace(template.format(*args))
 
 # EOF

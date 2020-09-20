@@ -4,6 +4,8 @@ Also see Changelog-pgetopt for pgetopt changes.
 
 2020-920:
 
+ * Singleton metaclass
+
  * Alert functions tracef, debugf, infof, noticef, errorf, fatalf
    that print according to their level, taking a format string
    argument and the format parameters.

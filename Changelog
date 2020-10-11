@@ -2,6 +2,10 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2020-1011:
+
+ * context manager temporary_alert_level()
+
 2020-920:
 
  * Singleton metaclass

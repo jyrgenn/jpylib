@@ -4,6 +4,8 @@ import os
 import sys
 import syslog
 import inspect
+from contextlib import contextmanager
+
 import jpylib as y
 from .config import Config
 
@@ -149,6 +151,17 @@ def is_debug():
 def is_trace():
     """Return True iff the alert level is at least at tracing."""
     return cfg.level >= L_TRACE
+
+
+@contextmanager
+def temporary_alert_level(level):
+    """Context manager to temporarily raise the alert level."""
+    savedLevel = alert_level()
+    alert_level(level)
+    try:
+        yield
+    finally:
+        alert_level(savedLevel)
 
 
 def alert_if_level(level, *msgs):

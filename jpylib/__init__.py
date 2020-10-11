@@ -10,7 +10,7 @@ from .alerts import L_ERROR, L_NOTICE, L_INFO, L_DEBUG, L_TRACE, \
     alert_config, alert_level, alert_level_name, \
     alert_level_up, alert_level_zero, is_notice, is_info, is_debug, is_trace, \
     debug_vars, fatal, err, notice, info, debug, trace, \
-    tracef, debugf, infof, noticef, errorf, fatalf
+    tracef, debugf, infof, noticef, errorf, fatalf, temporary_alert_level
 from .fntrace import tracefn
 from .stringreader import StringReader
 from .kvs import parse_kvs

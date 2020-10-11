@@ -263,3 +263,16 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
             self.assertTrue(line.endswith(msg[lineno]))
             lineno += 1
             
+    def test_temp_alert_level(self):
+        the_level = 2
+        temp_level = 3
+        y.alert_level(the_level)
+        self.assertEqual(y.alert_level(), the_level)
+        try:
+            with temporary_alert_level(temp_level):
+                self.assertEqual(y.alert_level(), temp_level)
+                raise NotImplementedError()
+        except NotImplementedError:
+            pass
+        self.assertEqual(y.alert_level(), the_level)
+            

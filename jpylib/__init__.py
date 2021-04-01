@@ -16,7 +16,8 @@ from .stringreader import StringReader
 from .kvs import parse_kvs
 from .namespace import Namespace
 from .config import Config
-from .secrets import putsecret, getsecret, getsecret_main, putsecret_main
+from .secrets import putsecret, getsecret, getsecret_main, putsecret_main, \
+     FileModeError
 from .sighandler import sanesighandler
 from .terminal import ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured

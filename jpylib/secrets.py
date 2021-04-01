@@ -3,6 +3,7 @@
 import os
 import sys
 import zlib
+import errno
 import fcntl
 import base64
 import shutil
@@ -24,6 +25,29 @@ end_prefix = "# written by putsecret() "
 # Default character encoding to use; this *should* depend on the environment,
 # but I am too lazy to do that now.
 default_char_encoding = "utf-8"
+
+# Be able to catch this, if nexeccary
+class FileModeError(Exception):
+    """An exception raised when a file has the wrong access mode."""
+    pass
+
+def checkFileMode(fname):
+    """Check the file for basic suitablility as a secrets file.
+    
+    Return the lower file mode bits if it exists, or None.
+    """
+    try:
+        if os.path.isdir(fname):
+            raise IsADirectoryError(errno.EISDIR, fname, "must be a file")
+        statinfo = os.stat(fname)
+        access_mode = statinfo.st_mode & 0o777
+        if statinfo.st_mode & 0x6:
+            raise FileModeError(fname, "is world-accessible: 0{:o}".format(
+                access_mode))
+        return access_mode
+    except FileNotFoundError:
+        return None
+    
 
 # En- and decoder functions. The names must be {en,de}code_{tag}, so they can be
 # found in globals().
@@ -182,8 +206,12 @@ def putsecret(key, value, fname=None, options=None,
     newfile = os.path.join(os.path.dirname(fname),
                            "." + os.path.basename(fname) + ".newtmp")
     try:
+        os.umask(0o077)
+        access_mode = checkFileMode(fname)
         with open(newfile, "x") as out:
-            os.chmod(newfile, 0o600)
+            if access_mode is not None:
+                # see that the new file has the same access mode
+                os.chmod(newfile, access_mode)
             # now, read in entries, change/set new one, write out again
             entries = read_secrets(fname, get_invalids=True)
             entries[key] = (options, value)
@@ -227,10 +255,7 @@ def getsecret(key, fname=None, char_encoding=None, error_exception=True):
     """
     if fname is None:
         fname = default_filename
-    try:
-        os.chmod(fname, 0o600)
-    except:
-        pass
+    checkFileMode(fname)
     
     data = read_secrets(fname).get(key)
     if data and data[0] is not None:

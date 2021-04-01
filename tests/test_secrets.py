@@ -35,6 +35,7 @@ class SecretsTestcase(unittest.TestCase):
     def setUp(self):
         os.makedirs(tmpdir, exist_ok=True)
         shutil.copyfile("lib/secrets", default_secrets)
+        os.chmod(default_secrets, 0o640)
         y.secrets.default_filename = default_secrets
         self.data = self.getdata() 
 
@@ -46,7 +47,7 @@ class SecretsTestcase(unittest.TestCase):
         with y.outputCaptured() as (out, err):
             y.putsecret(key, secret, options=["zip"])
             self.assertEqual(y.getsecret(key, error_exception=False), secret)
-        self.assertEqual(os.stat(default_secrets).st_mode & 0o777, 0o600)
+        self.assertEqual(os.stat(default_secrets).st_mode & 0o777, 0o640)
 
     def test_unknown_option_put(self):
         with self.assertRaises(y.secrets.OptionUnknownError):
@@ -87,6 +88,17 @@ class SecretsTestcase(unittest.TestCase):
                             options=self.data[key]["opts"])
         newdata = self.getdata()
         self.assertEqual(self.data, newdata)
+
+    def test_permissions(self):
+        with self.assertRaises(y.FileModeError):
+            os.chmod(default_secrets, 0o666)
+            value = y.getsecret("hamwanich")
+        with self.assertRaises(y.FileModeError):
+            os.chmod(default_secrets, 0o662)
+            value = y.getsecret("hamwanich")
+        with self.assertRaises(y.FileModeError):
+            os.chmod(default_secrets, 0o664)
+            value = y.getsecret("hamwanich")
 
     def test_unknown_getsecret(self):
         with self.assertRaises(KeyError) as ctx:

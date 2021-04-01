@@ -10,11 +10,11 @@ options, while striking the right balance between simplicity and
 clarity of the user interface, brevity of the code, and the
 implemented capabilities.
 
+  * [pgetopt module](#pgetopt-module)
   * [Motivation](#motivation)
   * [POSIX Conformance](#posix-conformance)
   * [Usage](#usage)
   * [Argument count checking](#argument-count-checking)
-  * [The parse() function](#the-parse-function)
   * [Exceptions](#exceptions)
   * [The OptionValueContainer](#the-optionvaluecontainer)
   * [Limitations](#limitations)

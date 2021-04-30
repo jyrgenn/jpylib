@@ -42,12 +42,210 @@ See https://pypi.org/project/jpylib-jyrgenn
 `alerts` – print messages depending on an alert level
 -----------------------------------------------------
 
+Print alerts and other messages depending on an alert level. Current
+levels:
+
+ L_ERROR   0
+ L_NOTICE  1
+ L_INFO    2
+ L_DEBUG   3
+ L_TRACE   4
+
+Defaults:
+
+    Config(
+            # decoration to print before a message, per level
+            decoration=["{cfg.program}: Error:", None, None, "DBG", "TRC"]
+
+            # program name to use in a message
+            program=os.path.basename(sys.argv[0]),
+            
+            # syslog facility; if set, syslog will be used
+            syslog_facility=None,
+
+            # syslog priority, per level
+            syslog_prio = [
+                syslog.LOG_ERR,
+                syslog.LOG_NOTICE,
+                syslog.LOG_INFO,
+                syslog.LOG_DEBUG,
+                None,                   # don't let this go to syslog
+            ],
+            
+            # status: syslog has been opened
+            syslog_opened=False,
+            
+            # fd to print message to, per level
+            fd=[2, 2, 2, 2, 2]
+
+            # current alert level
+            level=L_NOTICE,
+            
+            # maximum alert level
+            max_level=len(alert_levels)-1,
+
+            # print timestamps with messages (false, or a function)
+            timestamps=False,
+
+            # had any errors yet?
+            had_errors=False,
+        )
+
+Functions:
+
+    alert_config(*, decoration=None, fd=None, level=None, program=None,
+                 syslog_facility=None, syslog_prio=None, reset_defaults=None,
+                 timestamps=None):
+        Reset everything to the specified or default values.
+
+    alert_redirect(level, file):
+        Redirect printing of alerts from `level` to `file`.
+
+    alert_level(level=None):
+        Get or set the verbosity level for the alert functions.
+
+        err() will print something with level 0 (and greater), i.e. always.
+        notice() will print something with level 1 (and greater).
+        info() will print something with level 2 (and greater).
+        debug() will print something with level 3 (and greater).
+        trace() will print something with level 4 (and greater).
+
+        This function can be used to set the default alert level in
+        a pgetopts() option descriptor, e.g. for the "-v" option.
+
+    alert_level_name(level=None):
+        Return the name of the specified (or current) level number.
+
+    alert_level_up():
+        Increase the alert level by one.
+
+        This is intended to be used as the callback function for the
+        value of a pgetopt option to increase the verbosity.
+
+    alert_level_zero():
+        Set the alert level to zero (errors only).
+
+        This is intended to be used as the callback function for the
+        value of a pgetopt option to set the verbosity to zero.
+
+    is_notice():
+        Return True iff the alert level is at least at notice.
+
+    is_info():
+        Return True iff the alert level is at least at info.
+
+    is_debug():
+        Return True iff the alert level is at least at debugging.
+
+    is_trace():
+        Return True iff the alert level is at least at tracing.
+
+    temporary_alert_level(level):
+        Context manager to temporarily change the alert level.
+
+    debug_vars(*vars):
+        Print debug output for the named variables if is_debug().
+
+The following functions print a message according to the alerts
+setup if the respective alert level is given. With the simple
+functions, the arguments are joined with blanks; the *f() variants
+take a format string and the values to be formatted as arguments.
+
+    err(*msgs), errf(template, *args):
+        Print error level output.
+
+    fatal(*msgs, exit_status=1), fatalf(template, *args, exit_status=1):
+        Print error level output and terminate the program.
+
+    notice(*msgs), noticef(template, *args):
+        Print notice level output according to alert level.
+
+    info(*msgs), infof(template, *args):
+        Print info level output according to alert level.
+
+    debug(*msgs), debugf(template, *args):
+        Print debug level output according to alert level.
+
+    trace(*msgs), tracef(template, *args):
+        Print debug level output according to alert level.
+
 
 `config` — reading configuration values from files
 --------------------------------------------------
 
 Supports config files as Python code and strings in a simple
-`key=value` syntax.
+`key=value` syntax. The Config object is a namespace, so values can
+be retrieved using both `cfg.get("key")` or, often more convenient
+and clear, `cfg.key`.
+
+The Config object is initialised with `**kwargs`, denoting the
+config variables and their values. A loaded config file is run as
+Python code (and so must not contain untrusted contents), and all
+variables defined in its global level are seen as updates to the
+config variables as long as their names do not begin with an
+underscore (`_`). By default, all keys that are not already
+contained in the initialised Config object are seen as errors
+(unless `reject_unknown` is false).
+
+Usage pattern:
+
+    cfg = y.Config(                           # define default configuration
+        threads_max = 10,                     # maximum number of threads
+        default_interval = 60,                # check run interval in seconds
+        external_from = "external_checks",    # in the config dir
+    )
+
+    cfg.load_from(config_path)
+    cfg.update_from_string("threads_max=20")
+
+Config class:
+
+    class Config(Namespace):
+        Name space class used to build a config object.
+
+        def update(self, new_values, reject_unknown=True):
+            Update the Config with new values.
+
+            If reject_unknown is True (which is the default), keys
+            that do not yet exist will be rejected.
+
+        def set(self, key, value, reject_unknown=True):
+            Set a config value for a key.
+
+            If reject_unknown is True (which is the default), keys
+            that do not yet exist will be rejected.
+
+        def get(self, key):
+            Get a value from the config.
+
+        def load_from(self, filename, reject_unknown=True,
+                      file_must_exist=True):
+            Load a configuration from file 'filename'.
+
+            If reject_unknown is True (which is the default), keys
+            that do not yet exist will be rejected.
+
+        def load_config_files(self, config_files, notice_func=None,
+                              reject_unknown=True, files_must_exist=False):
+            Read the configuration from the config files.
+
+            If reject_unknown is True (which is the default), keys
+            that do not yet exist will be rejected.
+
+            Optional "notice_func" is a function to print a message
+            about a config file being loaded.
+
+        def update_from_string(self, cfgstring,
+                               reject_unknown=True, intvals=True):
+            Update the configuration from a key-value string.
+
+            This can be used to pass config snippets on the command
+            line. The string can look like e.g. this:
+
+            "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not"
+
+            If reject_unknown is True (which is the default), keys
+            that do not yet exist will be rejected.
 
 
 `fntrace` — function call tracing decorator

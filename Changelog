@@ -2,6 +2,10 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2021-0430:
+
+ * started more detailed jpylib documentation
+
 2020-1011:
 
  * context manager temporary_alert_level()

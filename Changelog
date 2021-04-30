@@ -6,6 +6,8 @@ Also see Changelog-pgetopt for pgetopt changes.
 
  * started more detailed jpylib documentation
 
+ * isotime_ms()
+
 2020-1011:
 
  * context manager temporary_alert_level()

@@ -14,6 +14,10 @@ def isotime(time=None):
     return time_format("%Y%m%d:%H%M%S", time)
 
 
+def isotime_ms(time=None, sep="T"):
+    return time_format("%Y%m%d:%H%M%S.%f".format(sep), time)[:-3]
+
+
 def iso_time(time=None, sep="T"):
     return time_format("%Y-%m-%d{}%H:%M:%S".format(sep), time)
 

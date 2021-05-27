@@ -81,6 +81,7 @@ refer to the source code, in particular to the function docstrings.
 
 This is what is already there:
 
+* [jpylib](doc/jpylib.md)
 * [pgetopt](doc/pgetopt.md)
 
 

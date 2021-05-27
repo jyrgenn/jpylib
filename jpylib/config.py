@@ -10,21 +10,39 @@ class Config(Namespace):
     """Name space class used to build a config object."""
 
     def update(self, new_values, reject_unknown=True):
+        """Update the Config with new values.
+
+        If reject_unknown is True (which is the default), keys that do not yet
+        exist will be rejected.
+
+        """
         super().update(new_values, skip_underscore=True,
                        reject_unknown=reject_unknown)
 
     def set(self, key, value, reject_unknown=True):
+        """Set a config value for a key.
+
+        If reject_unknown is True (which is the default), keys that do not yet
+        exist will be rejected.
+
+        """
         if key not in self.__dict__ and reject_unknown:
             raise KeyError("variable not in config: " + repr(key))
         self.__dict__[key] = value
 
     def get(self, key):
+        """Get a value from the config."""
         if key not in self.__dict__:
             raise KeyError("variable not in config: " + repr(key))
         return self.__dict__[key]
 
     def load_from(self, filename, reject_unknown=True, file_must_exist=True):
-        """Read a configuration from file 'filename'."""
+        """Load a configuration from file 'filename'.
+
+        If reject_unknown is True (which is the default), keys that do not yet
+        exist will be rejected.
+
+        """
         try:
             with open(filename, "r") as f:
                 contents = f.read()
@@ -47,8 +65,11 @@ class Config(Namespace):
                           reject_unknown=True, files_must_exist=False):
         """Read the configuration from the config files.
 
-        Optional "notice_func" is a function to print a message
-        about a config file being loaded.
+        If reject_unknown is True (which is the default), keys that do not yet
+        exist will be rejected.
+
+        Optional "notice_func" is a function to print a message about a config
+        file being loaded.
 
         """
         loaded = 0
@@ -67,6 +88,9 @@ class Config(Namespace):
         The string can look like e.g. this:
 
         "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not"
+
+        If reject_unknown is True (which is the default), keys that do not yet
+        exist will be rejected.
 
         """
         self.update(parse_kvs(cfgstring, intvals=intvals),

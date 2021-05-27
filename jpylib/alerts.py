@@ -14,7 +14,7 @@ from .config import Config
 alert_levels = (
     # level name, message decoration, fd (will look up later to make output
     # capturing work)
-    ("L_ERROR", "{cfg.program}: Error:", 2),
+    ("L_ERROR", "{cfg.program}: Error:",   2),
     ("L_NOTICE", None,                     2),
     ("L_INFO",   None,                     2),
     ("L_DEBUG",  "DBG",                    2),
@@ -43,7 +43,7 @@ def alert_config(*, decoration=None, fd=None, level=None, program=None,
             # syslog facility; if set, syslog will be used
             syslog_facility=None,
 
-            # syslog priority
+            # syslog priority, per level
             syslog_prio = [
                 syslog.LOG_ERR,
                 syslog.LOG_NOTICE,
@@ -89,7 +89,7 @@ def alert_redirect(level, file):
 
 
 def alert_level(level=None):
-    """Get or set the verbosity level for the alert functions.
+    """Get and/or set the verbosity level for the alert functions.
 
     err() will print something with level 0 (and greater), i.e. always.
     notice() will print something with level 1 (and greater).
@@ -116,8 +116,8 @@ def alert_level_name(level=None):
 def alert_level_up():
     """Increase the alert level by one.
 
-    This is intended to be used as the callback function for the default value
-    of a pgetopt option to increase the verbosity.
+    This is intended to be used as the callback function for the type of a
+    pgetopt option to increase the verbosity.
 
     """
     if cfg.level < cfg.max_level:
@@ -128,8 +128,8 @@ def alert_level_up():
 def alert_level_zero():
     """Set the alert level to zero (errors only).
 
-    This is intended to be used as the callback function for the default value
-    of a pgetopt option to set the verbosity to zero.
+    This is intended to be used as the callback function for the type of a
+    pgetopt option to set the verbosity to zero.
 
     """
     cfg.level = 0

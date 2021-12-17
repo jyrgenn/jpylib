@@ -9,7 +9,7 @@ def avg_midrange(values):
     return (vmin + vmax) / 2
 
 
-def sans_outliers(values):
+def remove_outliers(values):
     """Return a copy of the values with the highest and lowest value removed.
 
     If there is more than one highest or lowest value, only one of them is

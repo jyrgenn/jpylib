@@ -1,35 +1,6 @@
 
 import collections
 
-def avg_median(values):
-    """Return the median value of the passed numeric values."""
-    n = len(values)
-    half = int(n / 2)
-    if n % 2:
-        return values[half]
-    return (values[half] + values[half-1]) / 2
-
-
-def avg_mean(values):
-    """Return the mean value of the passed numeric values."""
-    return sum(values) / len(values)
-
-
-def avg_mode(values):
-    """Return the mode (most frequent) value of the passed numeric values.
-
-    If there are multiple values occuring most frequently, return any of them.
-    For an empty sequence of values, return None.
-    """
-    counts = collections.Counter(values)
-    mode = None
-    cmax = 0
-    for value, count in counts.items():
-        if count > cmax:
-            mode = value
-            cmax = count
-    return mode
-
 
 def avg_midrange(values):
     """Return the arithmetic mean of the highest and lowest value of values."""

@@ -26,8 +26,8 @@ class ProcessTestcase(unittest.TestCase):
         self.assertEqual(backquote("echo dumi$_", shell=False), "dumi$_\n")
         
     def test_shell_true(self):
-        self.assertEqual(backquote("echo domi$_", shell=True),
-                         "domi/usr/bin/make\n")
+        self.assertEqual(backquote("foo=bar; echo domi$foo", shell=True),
+                         "domibar\n")
 
     def test_no_shell_l(self):
         self.assertEqual(backquote(["echo", "dami$_"]), "dami$_\n")

@@ -35,4 +35,4 @@ install:
 	python3 -m pip install -U --index-url $(PYPIDNLD) --no-deps $(PKGNAME)
 
 clean:
-	-rm -rf $(PRODUCTS) *~
+	-rm -rf $(PRODUCTS) .eggs *~

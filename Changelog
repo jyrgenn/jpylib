@@ -2,6 +2,21 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2021-1217:
+
+ * inputFrom() context manager to redirect sys.stdin
+
+ * all_input_lines() returns input from all file arguments, or
+   stdin, like Perl's diamond operator (<>)
+
+ * get/putsecret() check secrets file mode
+
+ * a few numeric/statistics functions
+
+ * improved documentation
+
+ * increased test coverage to 100 %
+
 2021-0430:
 
  * started more detailed jpylib documentation

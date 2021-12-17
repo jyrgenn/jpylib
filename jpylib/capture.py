@@ -1,6 +1,6 @@
 #!python3
 
-"""This module implements two context managers. outputCaptured()
+"""This module implements three context managers. outputCaptured()
 captures output to stdout and stderr from the code run in the
 context; in addition, outputAndExitCaptured() also captures a
 sys.exit() call from the code run in the context and the status
@@ -9,6 +9,9 @@ value passed to sys.exit().
 The latter will fail if the code run in the context catches
 _SysExitException, which can be the case if the code catches all
 of class Exception.
+
+Finally, inputFrom() is a context manager to redirect sys.stdin
+temporarily to an open file.
 """
 
 # The meat of the first part is from Rob Kennedy on stackoverflow:
@@ -51,7 +54,7 @@ def inputFrom(input):
     Typical code would look like this:
 
         with open(inputFile) as input:
-            with inputFrom():
+            with inputFrom(input):
                 ...                       # code with input as sys.stdin
     """
     saved_stdin = sys.stdin

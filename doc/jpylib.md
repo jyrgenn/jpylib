@@ -448,8 +448,19 @@ process. This may be different from $HOME when running `sudo -s`.
 `y.version`: the version number of the `jpylib` package.
 
 
-`outputCaptured`, `outputAndExitCaptured` – context managers
-------------------------------------------------------------
+`input_from`, `outputCaptured`, `outputAndExitCaptured` – context managers
+--------------------------------------------------------------------------
+
+    inputFrom(input)
+        Context manager to redirect stdin from an open file.
+
+        This works by temporarily replacing sys.stdin with an open file.
+        Typical code would look like this:
+
+            with open(inputFile) as input:
+                with inputFrom(input):
+                    ...                       # code with input as sys.stdin
+
 
     outputCaptured():
         Context manager to capure output to stdout and stderr.
@@ -539,10 +550,6 @@ recognised strings for False: no n nope nein nee off non f false nay
 adapted to application needs.
 
 
-`flatten` — generator, flatten a sequence (except strings
----------------------------------------------------------
-
-
 `maybe_int`, `maybe_num` — return number represented by a string
 ----------------------------------------------------------------
 
@@ -551,6 +558,19 @@ adapted to application needs.
 
     maybe_num(arg):
         Return the corresponding int or float if arg represents one, or None.
+
+
+`remove_outliers`, `avc_midrange` — statistics functions
+--------------------------------------------------------
+
+    remove_outliers(values):
+        Return a copy of the values with the highest and lowest value removed.
+
+        If there is more than one highest or lowest value, only one of them is
+        removed.
+
+    avg_midrange(values):
+        Return the arithmetic mean of the highest and lowest value of values.
 
 
 `is_int`, `is_num` — check if the argument is a number
@@ -601,4 +621,17 @@ adapted to application needs.
         All parameters can be tweaked through the kwargs, which are
         passed to the Table constructor (see there).
 
+
+`all_input_lines` — re-implement Perl's diamond operator (<>)
+-------------------------------------------------------------
+
+    all_input_lines(fnames=[], cont_err=False):
+        Like Perl's diamond operator <>, return lines from files or stdin.
+
+        (Generator) If fnames is empty, return lines from stdin, otherwise
+        lines from the named files, in succession. The file name "-" stands
+        for stdin. Typically, something like sys.argv[1:] would be passed
+        as an argument. If cont_err is true, continue after an error,
+        printing an error message. If cont_err is a callable, call it with
+        the file name and the exception on error.
 

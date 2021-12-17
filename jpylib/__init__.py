@@ -20,7 +20,7 @@ from .secrets import putsecret, getsecret, getsecret_main, putsecret_main, \
      FileModeError
 from .sighandler import sanesighandler
 from .terminal import ttyi, ttyo, ptty
-from .capture import outputCaptured, outputAndExitCaptured
+from .capture import outputCaptured, outputAndExitCaptured, inputFrom
 from .process import backquote
 from .assorted import boolish, flatten, is_sequence
 from .numeric import maybe_int, is_int, maybe_num, is_num, \

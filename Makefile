@@ -1,6 +1,7 @@
 # Makefile for the pgetopt Python module
 
 PREVIEW = tmp/pgetopt.html
+TESTINPUT = examples/testdata/input_lines_stdin
 
 default: documentation test
 
@@ -8,7 +9,7 @@ documentation:
 	cd doc && $(MAKE)
 
 test:
-	python3 -m unittest discover tests
+	python3 -m unittest discover tests < $(TESTINPUT)
 
 coverage:
 	coverage run -m unittest discover tests

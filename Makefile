@@ -12,7 +12,7 @@ test:
 	python3 -m unittest discover tests < $(TESTINPUT)
 
 coverage:
-	coverage run -m unittest discover tests
+	coverage run -m unittest discover tests < $(TESTINPUT)
 	coverage report -m
 
 pkg-pgetopt: test

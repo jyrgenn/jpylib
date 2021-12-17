@@ -4,6 +4,23 @@ import jpylib as y
 import unittest
 
 
+avg_data = [24289, 22071, 6436, 22019, 10069, 13505, 17707, 20720, 11461,
+            19624, 1990, 2416, 2374, 17237, 1947, 25304, 29098, 8972, 28219,
+            1269, 1162, 11021, 3083, 3968, 32278, 1390]
+avg_d_so = [24289, 22071, 6436, 22019, 10069, 13505, 17707, 20720, 11461,
+            19624, 1990, 2416, 2374, 17237, 1947, 25304, 29098, 8972, 28219,
+            1269, 11021, 3083, 3968, 1390]
+avg_d_mr = (1162 + 32278) / 2
+
+
+class averageTestcase(unittest.TestCase):
+
+    def test_sans_outliers(self):
+        self.assertEqual(y.sans_outliers(avg_data), avg_d_so)
+
+    def test_midrange(self):
+        self.assertEqual(y.avg_midrange(avg_data), avg_d_mr)
+
 class IntTestcase(unittest.TestCase):
 
     pairs = ((" ", None), ("23", 23), (" 23", 23), ("23x", None), ([], None), 

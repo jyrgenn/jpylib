@@ -8,6 +8,7 @@ import json
 import shutil
 import unittest
 
+# [x] raises exception when named file is dir
 # [x] single colon, just read
 # [x] single colon, put and get
 # [x] with skipping non-entry lines
@@ -38,6 +39,10 @@ class SecretsTestcase(unittest.TestCase):
         os.chmod(default_secrets, 0o640)
         y.secrets.default_filename = default_secrets
         self.data = self.getdata() 
+
+    def test_file_is_dir(self):
+        with self.assertRaises(IsADirectoryError):
+            y.getsecret("foo", fname="/etc")
 
     def test_putsecret0(self):
         # should not trigger an error, wouldn't that be nice

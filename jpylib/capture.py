@@ -20,7 +20,7 @@ from contextlib import contextmanager
 
 @contextmanager
 def outputCaptured():
-    """Context manager to capure output to stdout and stderr.
+    """Context manager to capture output to stdout and stderr.
 
     This works by temporarily replacing sys.stdout and sys.stderr with
     StringIO ports; these are both returned, so the output of the code

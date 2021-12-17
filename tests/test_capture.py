@@ -1,6 +1,9 @@
 import sys
 import unittest
-from jpylib.capture import outputCaptured, outputAndExitCaptured
+from jpylib.capture import outputCaptured, outputAndExitCaptured, inputFrom
+
+stdin_file = "examples/testdata/input_lines_stdin"
+stdin_text = "prplfrps\n"
 
 class CaptureTest(unittest.TestCase):
 
@@ -11,6 +14,12 @@ class CaptureTest(unittest.TestCase):
             print("hihi", file=sys.stderr)
         self.assertEqual(err.getvalue(), "hihi\n")
         self.assertEqual(out.getvalue(), "huhu\n")
+
+    def test_inputfrom(self):
+        with open(stdin_file) as input:
+            with inputFrom(input):
+                result = sys.stdin.read()
+        self.assertEqual(result, stdin_text)
 
     def test_capture_exit(self):
         with outputAndExitCaptured() as (out, err, status):

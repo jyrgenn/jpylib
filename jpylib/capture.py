@@ -43,6 +43,26 @@ def outputCaptured():
         sys.stderr = saved_err
 
 
+@contextmanager
+def inputFrom(input):
+    """Context manager to redirect stdin from an open file.
+
+    This works by temporarily replacing sys.stdin with an open file.
+    Typical code would look like this:
+
+        with open(inputFile) as input:
+            with inputFrom():
+                ...                       # code with input as sys.stdin
+    """
+    saved_stdin = sys.stdin
+    try:
+        sys.stdin = input
+        
+        yield
+    finally:
+        sys.stdin = saved_stdin
+
+
 # From here, it's my own, built on the above. I feel pretty smug not only
 # capturing the sys.exit(), but also the exit status value at the first
 # attempt. ¡yay Python!

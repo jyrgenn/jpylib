@@ -16,7 +16,7 @@ avg_d_mr = (1162 + 32278) / 2
 class averageTestcase(unittest.TestCase):
 
     def test_remove_outliers(self):
-        self.assertEqual(y.sans_outliers(avg_data), avg_d_so)
+        self.assertEqual(y.remove_outliers(avg_data), avg_d_so)
 
     def test_midrange(self):
         self.assertEqual(y.avg_midrange(avg_data), avg_d_mr)

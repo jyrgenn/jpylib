@@ -48,13 +48,13 @@ See https://pypi.org/project/jpylib-jyrgenn
 Print alerts and other messages depending on an alert level. Current
 levels:
 
- Level     | value
- -----------------
- L_ERROR   | 0
- L_NOTICE  | 1
- L_INFO    | 2
- L_DEBUG   | 3
- L_TRACE   | 4
+Level     | value
+-----------------
+L_ERROR   | 0
+L_NOTICE  | 1
+L_INFO    | 2
+L_DEBUG   | 3
+L_TRACE   | 4
 
 Defaults:
 

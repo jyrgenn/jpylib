@@ -6,10 +6,13 @@ The `jpylib` package is meant to be a library of things I want to
 have at hand for my own daily python programming. It shall include
 all the things I have developed and want to re-use — modules, small
 utility functions, and things. These are more or less independent
-functionalisties that I didn't find readily available in the usual
+functionalities that I didn't find readily available in the usual
 libraries in the way I like them. Some are present, like
 command-line option argument parsing, but not in a way that I find
 convenient to use; others are not found at all.
+
+(If any of this is indeed in the standard library and I just missed
+it, I'll appreciate a hint.)
 
 This documentation is a work in progress.
 
@@ -45,6 +48,8 @@ See https://pypi.org/project/jpylib-jyrgenn
 Print alerts and other messages depending on an alert level. Current
 levels:
 
+ Level     | value
+ -----------------
  L_ERROR   | 0
  L_NOTICE  | 1
  L_INFO    | 2

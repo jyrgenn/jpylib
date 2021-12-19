@@ -2,6 +2,10 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+ * more dict-like methods for Namespace
+
+ * smallish aesthetic fixes and doc improvements
+
 2021-1217:
 
  * inputFrom() context manager to redirect sys.stdin

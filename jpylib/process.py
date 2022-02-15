@@ -59,9 +59,10 @@ def backquote(command, shell=None, full_result=False, silent=False):
     with subprocess.Popen(command, stdin=subprocess.DEVNULL,
                           stderr=subprocess.PIPE,
                           stdout=subprocess.PIPE) as proc:
+        stdout, stderr = proc.communicate()
         proc.wait()
-        result = (proc.stdout.read().decode("utf-8"),
-                  proc.stderr.read().decode("utf-8"),
+        result = (stdout.decode("utf-8"),
+                  stderr.decode("utf-8"),
                   proc.returncode)
     if full_result:
         if full_result == "plus":

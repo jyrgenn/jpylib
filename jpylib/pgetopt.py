@@ -156,7 +156,7 @@ class OptionValueContainer:
             arg = ""
             if desc[1] in (str, int):
                 arg = " " + (desc[4] if len(desc) == 5 else "ARG")
-            msg += " -%s, --%s%s:\n    %s" % (
+            msg += " -%s, --%s%s:\n       %s" % (
                 opt, desc[0].replace('_', '-'), arg, desc[3])
             if desc[1] in (int, str):
                 msg += " (%s arg, default %s)" % (

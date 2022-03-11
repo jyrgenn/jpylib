@@ -23,7 +23,7 @@ setuptools.setup(
     url=repository,
     packages=setuptools.find_packages(),
     project_urls=dict(
-        Documentation="{}/-/blob/v{}/README.md".format(repository, pkg_version),
+        Documentation="{}/-/blob/v{}/doc/jpylib.md".format(repository, pkg_version),
         Source=repository,
     ),
     classifiers=[
@@ -31,5 +31,5 @@ setuptools.setup(
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.5",
+    python_requires=">=3.6",
 )

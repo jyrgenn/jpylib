@@ -125,17 +125,17 @@ usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help:
-    show help on options and things
+       show help on options and things
  -d, --debug DEBUG_TOPIC:
-    debug topics (str arg, default [])
+       debug topics (str arg, default [])
  -h, --help:
-    show help on options and things
+       show help on options and things
  -n, --repetitions ARG:
-    number of repetitions (int arg, default 3)
+       number of repetitions (int arg, default 3)
  -o, --output-file NAME:
-    output file (or stdout) (str arg, default None)
+       output file (or stdout) (str arg, default None)
  -s, --schmooze:
-    more schmooziness
+       more schmooziness
 
 This is just an example program.""")
 
@@ -161,17 +161,17 @@ usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help:
-    show help on options and things
+       show help on options and things
  -d, --debug DEBUG_TOPIC:
-    debug topics (str arg, default [])
+       debug topics (str arg, default [])
  -h, --help:
-    show help on options and things
+       show help on options and things
  -n, --repetitions ARG:
-    number of repetitions (int arg, default 3)
+       number of repetitions (int arg, default 3)
  -o, --output-file NAME:
-    output file (or stdout) (str arg, default None)
+       output file (or stdout) (str arg, default None)
  -s, --schmooze:
-    more schmooziness
+       more schmooziness
 
 This is just an example program.
 """)
@@ -200,17 +200,17 @@ usage: schmooze [-ns] [-o NAME] [-d DEBUG_TOPIC] string_to_print ...
 print a string a number of times
 
  -?, --help:
-    show help on options and things
+       show help on options and things
  -d, --debug DEBUG_TOPIC:
-    debug topics (str arg, default [])
+       debug topics (str arg, default [])
  -h, --help:
-    show help on options and things
+       show help on options and things
  -n, --repetitions ARG:
-    number of repetitions (int arg, default 3)
+       number of repetitions (int arg, default 3)
  -o, --output-file NAME:
-    output file (or stdout) (str arg, default None)
+       output file (or stdout) (str arg, default None)
  -s, --schmooze:
-    more schmooziness
+       more schmooziness
 
 This is just an example program.
 """)

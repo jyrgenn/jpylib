@@ -12,8 +12,8 @@ test:
 	python3 -m unittest discover tests
 
 coverage:
-	coverage run -m unittest discover tests
-	coverage report -m
+	python3 -m coverage run -m unittest discover tests
+	python3 -m coverage report -m
 
 pkg-pgetopt: test
 	cd package-pgetopt && $(MAKE) pkg

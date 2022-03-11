@@ -27,15 +27,25 @@ class Multiset:
 
     def remove(self, thing, completely=False):
         """Remove one of or all of a specific thing from the Multiset."""
-        self.elems[thing] -= 1
-        if self.elems[thing] == 0 or completely:
-            del self.elems[thing]
+        if thing in self.elems:
+            self.elems[thing] -= 1
+            if self.elems[thing] == 0 or completely:
+                del self.elems[thing]
 
     def items(self):
-        """Return all items in the Multiset. Also, iteration helper."""
+        """Return all items in the Multiset (generator).
+
+        Also, iteration helper."""
         for thing, count in self.elems.items():
             for _ in range(count):
                 yield thing
+
+    def __len__(self):
+        """Return the number of items in the Multiset."""
+        count = 0
+        for value in self.elems.values():
+            count += value
+        return count
 
     def __iter__(self):
         """Iterate over the items in the Multiset, for `for t in ...`."""

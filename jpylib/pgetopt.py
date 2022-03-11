@@ -14,7 +14,10 @@ ErrorArg = "option does not take an argument"      # option
 ErrorNoarg = "option needs argument"               # option
 ErrorIntarg = "option argument must be integer"    # option
 ErrorMinarg = "too few arguments, needs at least"  # minimum
-ErrorMaxarg = "too many arguments, at most"        # maximum
+ErrorMaxarg = "too many arguments, takes at most"  # maximum
+
+class ArgumentError(Exception):
+    pass
 
 class OptionError(Exception):
     pass
@@ -91,9 +94,9 @@ class OptionValueContainer:
                 while arg:
                     arg = self._have_opt(arg[0], arg[1:])
         if self._min is not None and len(self._args) < self._min:
-            raise OptionError(ErrorMinarg, self._min)
+            raise ArgumentError(ErrorMinarg, self._min)
         if self._max is not None and len(self._args) > self._max:
-                raise OptionError(ErrorMaxarg, self._max)
+                raise ArgumentError(ErrorMaxarg, self._max)
 
 
     def _have_opt(self, opt, arg=None):
@@ -301,12 +304,21 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
     """
     ovc = OptionValueContainer(descriptors, args)
+    exception = None
     try:
         ovc._parse()
         return ovc, ovc._args
     except OptionError as e:
-        if exit_on_error:
-            ovc.ovc_usage(e.args[0] + ": " + repr(e.args[1]))
-        raise(e)
+        exception = e
+        msg, opt = e.args
+        dash = "-" if len(opt) == 1 else "--"
+        message = f"{msg}: {dash}{opt}"
+    except ArgumentError as e:
+        exception = e
+        message = f"{e.args[0]} {e.args[1]}"
+    if exit_on_error:
+        ovc.ovc_usage(message)
+    else:
+        raise(exception)
 
 # EOF

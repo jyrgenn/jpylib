@@ -50,7 +50,7 @@ class ErrorTestCase(unittest.TestCase):
                                                 exit_on_error=False)
                         self.assertEqual(args, argv)
                     else:
-                        with self.assertRaises(OptionError) as cm:
+                        with self.assertRaises(ArgumentError) as cm:
                             parse(optdesc, argv, exit_on_error=False)
 
 
@@ -105,7 +105,7 @@ class ErrorTestCase(unittest.TestCase):
             }, ["-x", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
+        self.assertEqual(err.getvalue(), """bungabunga: {}: -x
 
 usage: bungabunga [-i] bunga
 use '-?' option to get more help
@@ -120,7 +120,7 @@ use '-?' option to get more help
             }, ["-x", "3", "bunga"])
         self.assertEqual(status.value, 64)
         self.assertEqual(out.getvalue(), "")
-        self.assertEqual(err.getvalue(), """bungabunga: {}: 'x'
+        self.assertEqual(err.getvalue(), """bungabunga: {}: -x
 
 usage: bungabunga [-i] <arguments>
 use '-?' option to get more help

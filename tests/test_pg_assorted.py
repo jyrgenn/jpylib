@@ -39,7 +39,7 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_noArgs(self):
         """no arguments (needs 1)"""
-        with self.assertRaises(OptionError) as cm:
+        with self.assertRaises(ArgumentError) as cm:
             parse(schmooze_descs, [], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorMinarg, 1))
 

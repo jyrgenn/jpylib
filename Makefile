@@ -18,13 +18,13 @@ coverage:
 pkg-pgetopt: test
 	cd package-pgetopt && $(MAKE) pkg
 
-pkg-jpylib: test
+pkg: test
 	cd package-jpylib && $(MAKE) pkg
 
 upload-pgetopt:
 	cd package-pgetopt && $(MAKE) upload
 
-upload-jpylib:
+upload:
 	cd package-jpylib && $(MAKE) upload
 
 install-pgetopt:

@@ -200,12 +200,11 @@ makes these functions called when their respective option is seen on
 the command line. This sets the alert level directly, with no
 further action from the program needed.
 
-Please note that if both the `-v` and the `-q` options are used, the
-option value container fields `ovc.quiet` and `ovc.verbose` no
-longer reflect the actual alert level setting. But because the
-occurences of the options alone set the alert level through the
-function calls `alert_level_zero()` and `alert_level_up()` already,
-this is no longer necessary.
+Please note that in this usage, the option value container fields
+`ovc.quiet` and `ovc.verbose` no longer reflect the actual alert
+level setting. But because the occurences of the options alone set
+the alert level through the function calls `alert_level_zero()` and
+`alert_level_up()` already, this is no longer necessary.
 
 
 `config` — reading configuration values from files

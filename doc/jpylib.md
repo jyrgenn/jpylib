@@ -643,3 +643,40 @@ adapted to application needs.
         printing an error message. If cont_err is a callable, call it with
         the file name and the exception on error.
 
+
+`Multiset` — a multiset implementation
+--------------------------------------
+
+A multiset is similar to a set, only it can keep multiples of one
+thing.
+
+    class Multiset:
+        """A multiset implementation."""
+
+    __init__(self, things=()):
+        Initialise a Multiset with, optionally, a bunch of things.
+
+    add(self, thing):
+        Add a thing to the Multiset.
+
+    count(self, thing):
+        Get the number of a specific thing in the Multiset.
+
+    set_count(self, thing, count):
+        Set the number of a specific thing in the Multiset.
+
+    remove(self, thing, completely=False):
+        Remove one of or all of a specific thing from the Multiset.
+
+    items(self):
+        Return all items in the Multiset. Also, iteration helper.
+
+    __iter__(self):
+        Iterate over the items in the Multiset, for `for t in ...`.
+
+    __str__(self):
+        Return a string representation of the Multiset (parsable).
+
+    __repr__(self):
+        Return a string representation of the Multiset (parsable).
+

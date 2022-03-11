@@ -29,6 +29,7 @@ from .iohelper import all_input_lines
 from .time import isotime, isotime_ms, iso_time, iso_time_ms, iso_time_us
 from .table import format_table
 from .singleton import Singleton
+from .multiset import Multiset
 
 version = "$__package_version$"
 program = os.path.basename(sys.argv[0])

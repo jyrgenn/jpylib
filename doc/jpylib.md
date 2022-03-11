@@ -178,6 +178,36 @@ take a format string and the values to be formatted as arguments.
         Print debug level output according to alert level.
 
 
+Together with the `pgetopts()` function for option parsing ([see
+there for
+details](./pgetopt.md#semi-hidden-feature-option-value-callbacks)),
+a useful pattern of alerts usage in the options specification of a
+simple CLI program goes like this:
+
+    ovc, args = y.pgetopts({
+        "q": ("quiet", y.alert_level_zero, y.alert_level(y.L_NOTICE),
+              "be quiet (no output except error messages)"),
+        "v": ("verbose", y.alert_level_up, y.alert_level(y.L_NOTICE),
+              "increase verbosity (up to 3 make sense)"),
+        ...
+    })
+
+Here, `y.alert_level(y.L_NOTICE)` sets the initial alert level
+value. (It does that twice, but this redundancy can be tolerated to
+benefit the clarity of expression.) Using the functions
+`alert_level_zero` and `alert_level_up` instead of an option type
+makes these functions called when their respective option is seen on
+the command line. This sets the alert level directly, with no
+further action from the program needed.
+
+Please note that if both the `-v` and the `-q` options are used, the
+option value container fields `ovc.quiet` and `ovc.verbose` no
+longer reflect the actual alert level setting. But because the
+occurences of the options alone set the alert level through the
+function calls `alert_level_zero()` and `alert_level_up()` already,
+this is no longer necessary.
+
+
 `config` — reading configuration values from files
 --------------------------------------------------
 

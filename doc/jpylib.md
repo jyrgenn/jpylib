@@ -380,7 +380,7 @@ the `-v` option – variable name "verbose", default value is
 L_NOTICE, each occurence of `-v` increases the alert level.
 
 
-See the [`pgetopt`](./pgetopt.html) documentation for details.
+See the [`pgetopt`](./pgetopt.md) documentation for details.
 
 
 `getsecret` — read a secret from a secrets file

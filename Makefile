@@ -5,6 +5,8 @@ PREVIEW = tmp/pgetopt.html
 
 default: documentation test
 
+release: documentation test coverage pkg upload
+
 documentation:
 	cd doc && $(MAKE)
 

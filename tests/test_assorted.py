@@ -113,3 +113,19 @@ class SequenceTestcase(unittest.TestCase):
     def test_isseq_es(self):
         self.assertFalse(y.is_sequence(""))
         
+
+class IdentityTestcase(unittest.TestCase):
+
+    def test_identity_0(self):
+        self.assertEqual(1, y.identity(1))
+
+    def test_identity_1(self):
+        self.assertEqual("lala", y.identity("lala"))
+
+    def test_identity_2(self):
+        self.assertEqual(y.identity, y.identity(y.identity))
+
+    def test_identity_3(self):
+        obj1 = { 3, 4, 5, 6 }
+        self.assertEqual(id(obj1), id(y.identity(obj1)))
+        

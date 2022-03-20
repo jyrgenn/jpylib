@@ -49,3 +49,8 @@ def is_sequence(arg):
     if isinstance(arg, (str, collections.UserString)):
         return False
     return isinstance(arg, collections.abc.Sequence)
+
+
+def identity(arg):
+    """Return `arg`."""
+    return arg

@@ -644,6 +644,16 @@ adapted to application needs.
         Return True iff the argument is a sequence other than string.
 
 
+`identity` — return just the argument
+-------------------------------------
+
+    identity(arg):
+        Return `arg`.
+
+This can be helpful to avoid special-casing where a transformation
+function can be used, but in some cases none is required.
+
+
 `Table` — an ASCII table formatter, with optional templates
 -----------------------------------------------------------
 
@@ -671,6 +681,37 @@ adapted to application needs.
         as an argument. If cont_err is true, continue after an error,
         printing an error message. If cont_err is a callable, call it with
         the file name and the exception on error.
+
+
+`read_items` — read lines/items from a file
+-------------------------------------------
+
+    read_items(fname, lstrip=True, rstrip=True, comments_re="^\\s*#",
+               skip_empty=True, skip_comments=True, cont_err=False):
+        Read lines/items from one or more files (generator).
+
+        With the defaults, comment ("# ...") and empty lines are skipped, and
+        whitespace is stripped from the left and right ends of each line.
+
+        `fname` is the name of the file to read; "-" may be used for stdin.
+
+        If `lstrip` is True, whitespace will be stripped from the left side of
+        each line. If it is a string, it specifies the characters to be stripped.
+
+        If `rstrip` is True, whitespace will be stripped from the right side of
+        each line. If it is a string, it specifies the characters to be stripped.
+
+        `comments_re` is used to match comment lines to be skipped (after the
+        stripping of whitespace or other characterns is done). If it is false,
+        no comment lines will be stripped.
+
+        If `skip_empty` is true, lines that are empty after the stripping of
+        whitespace (or what else is specified) are skipped.
+
+        If `cont_err` is true, continue after a file open or read error, printing
+        an error message. If `cont_err` is a callable, call it with the file name
+        and the exception on error.
+
 
 
 `Multiset` — a multiset implementation

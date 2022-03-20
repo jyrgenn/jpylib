@@ -68,3 +68,123 @@ class IOHelperTestcase(unittest.TestCase):
         self.assertEqual(data, result)
         self.assertEqual(handler_run,
                          "handled examples/testdata/input_lines_nonex")
+
+
+class ReadItemsTestcase(unittest.TestCase):
+
+    def test_read_items_defaults(self):
+        expect = "one two three five seven nine ten".split()
+        fname = "lib/items"
+        result = list(y.read_items(fname))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_no_empty(self):
+        expect = ["one",
+                  "two",
+                  "three",
+                  "five",
+                  "seven",
+                  "",
+                  "nine",
+                  "ten",
+                  "",
+                  "",
+                  ]
+        fname = "lib/items"
+        result = list(y.read_items(fname, skip_empty=False))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_lstrip(self):
+        expect = "one,,,, two three five seven nine,,,, ten".split()
+        fname = "lib/items.left"
+        result = list(y.read_items(fname, lstrip=",."))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_no_lstrip(self):
+        expect = [" one",
+                  "  two",
+                  " three",
+                  "five",
+                  "seven",
+                  "nine",
+                  "ten",
+                  ]    
+        fname = "lib/items"
+        result = list(y.read_items(fname, lstrip=False))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_rstrip(self):
+        expect = ",one ,.,two ,three five seven ..nine ten".split()
+        expect.insert(4, ',,.,,,,,,# no six (space indented)')
+        fname = "lib/items.left"
+        result = list(y.read_items(fname, rstrip=",.\t"))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_no_rstrip(self):
+        expect = ["one    ",
+                  "two	",
+                  "three",
+                  "five",
+                  "seven",
+                  "nine    ",
+                  "ten",
+                  ]    
+        fname = "lib/items"
+        result = list(y.read_items(fname, rstrip=False))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_no_rstrip_no_comments(self):
+        expect = ["# This is a test file for read_items()",
+                  "one    ",
+                  "two	",
+                  "three",
+                  "# no four (tab indented)",
+                  "five",
+                  "# no six (space indented)",
+                  "seven",
+                  "nine    ",
+                  "ten",
+                  "# EOF",
+]    
+        fname = "lib/items"
+        result = list(y.read_items(fname, rstrip=False, comments_re=False))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_no_rstrip_no_newline(self):
+        expect = ["one    \n",
+                  "two	\n",
+                  "three\n",
+                  "five\n",
+                  "seven\n",
+                  "nine    \n",
+                  "ten\n",
+                  ]    
+        fname = "lib/items"
+        result = list(y.read_items(fname, rstrip=False, strip_newline=False))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+
+    def test_read_items_other_comment(self):
+        expect = ["# This is a test file for read_items()",
+                  "one",
+                  "two",
+                  "three",
+                  "five",
+                  "/ no six (space indented)",
+                  "seven",
+                  "nine",
+                  "ten",
+                  "# EOF",
+                  ]    
+        fname = "lib/items.comments"
+        result = list(y.read_items(fname, comments_re="//"))
+        # y.debug("result", result)
+        self.assertEqual(result, expect)
+

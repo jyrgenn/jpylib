@@ -1,0 +1,14 @@
+# This is a test file for read_items()
+ one    
+  two	
+ three
+	// no four (tab indented)
+five
+        / no six (space indented)
+seven
+
+nine    
+ten
+
+
+# EOF

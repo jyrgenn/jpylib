@@ -690,10 +690,10 @@ function can be used, but in some cases none is required.
                skip_empty=True, skip_comments=True, cont_err=False):
         Read lines/items from one or more files (generator).
 
-        With the defaults, comment ("# ...") and empty lines are skipped, and
+        With the defaults, comment (`# ...`) and empty lines are skipped, and
         whitespace is stripped from the left and right ends of each line.
 
-        `fname` is the name of the file to read; "-" may be used for stdin.
+        `fname` is the name of the file to read; `-` may be used for stdin.
 
         If `lstrip` is True, whitespace will be stripped from the left side of
         each line. If it is a string, it specifies the characters to be stripped.
@@ -701,16 +701,17 @@ function can be used, but in some cases none is required.
         If `rstrip` is True, whitespace will be stripped from the right side of
         each line. If it is a string, it specifies the characters to be stripped.
 
+        If `strip_newline` is true, newlines will be stripped from the line even
+        if `rstrip` does not contain the newline character.
+
         `comments_re` is used to match comment lines to be skipped (after the
-        stripping of whitespace or other characterns is done). If it is false,
-        no comment lines will be stripped.
+        stripping of whitespace or other characterns is done).
+
+        If `skip_comments` is false, comments will be skipped without regard
+        for `comments_re`.
 
         If `skip_empty` is true, lines that are empty after the stripping of
         whitespace (or what else is specified) are skipped.
-
-        If `cont_err` is true, continue after a file open or read error, printing
-        an error message. If `cont_err` is a callable, call it with the file name
-        and the exception on error.
 
 
 

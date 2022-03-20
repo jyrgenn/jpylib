@@ -243,15 +243,14 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
          - a normal string counts as one argument towards minimum and
            maximum
 
-         - if it contains '...', there is no maximum the number of
-           arguments
+         - if it contains '...', there is no maximum number of arguments
 
          - if it begins with '[', it is optional; if it can be split by
            blanks into multiple words, each one counts toward the
            maximum; e.g. "[param1 param2 param3]" increases the maximum
            by 3, but not the minimum
 
-      "_help_footer": string to print with 'help' after the option
+      `_help_footer`: string to print with 'help' after the option
       explanations
 
       "_help_header": string to print with 'help' before the option

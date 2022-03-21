@@ -236,70 +236,76 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
 
     A key may also be one of these keywords:
 
-      "_arguments": string to print in the usage to describe the
-      non-option arguments, or, for argument count checking, a sequence
-      with the argument names:
-    
-         - a normal string counts as one argument towards minimum and
-           maximum
+    `_arguments`: string to print in the usage to describe the
+    non-option arguments, or, for argument count checking, a sequence
+    with the argument names:
 
-         - if it contains '...', there is no maximum number of arguments
+     - a normal string counts as one argument towards minimum and
+       maximum
 
-         - if it begins with '[', it is optional; if it can be split by
-           blanks into multiple words, each one counts toward the
-           maximum; e.g. "[param1 param2 param3]" increases the maximum
-           by 3, but not the minimum
+     - if it contains '...', there is no maximum number of arguments
 
-      `_help_footer`: string to print with 'help' after the option
-      explanations
+     - if it begins with '[', it is optional; if it can be split by
+       blanks into multiple words, each one counts toward the
+       maximum; e.g. "[param1 param2 param3]" increases the maximum
+       by 3, but not the minimum
 
-      "_help_header": string to print with 'help' before the option
-      explanations
+    `_help_footer`: string to print with 'help' after the option
+    explanations
 
-      "_program": string to use as program name for help and usage
-      message instead of sys.argv[0]
+    `_help_header`: string to print with 'help' before the option
+    explanations
 
-      "_usage": string to use as usage message instead of the default
-      constructed one
+    `_program`: string to use as program name for help and usage
+    message instead of sys.argv[0]
 
-    If no '?' or 'h' option is specified, they will default to a long
-    form of '--help' and a 'help' function, which will be called
+    `_usage`: string to use as usage message instead of the default
+    constructed one
+
+    If no `-?` or `-h` option is specified, they will default to a long
+    form of `--help` and a `help` function, which will be called
     immediately when the option is seen. It prints a brief summary of
     the program's parameters and a description of the options, framed
-    by the _help_header and the _help_footer; it terminates the program
+    by the `_help_header` and the `_help_footer`; it terminates the program
     after printing the message.
 
     In case of a normal return of parse() (i.e. options and number of
-    arguments okay), it returns an OptionValueContainer and a list of
+    arguments okay), it returns an `OptionValueContainer` and a list of
     the remaining command line arguments. Example:
 
-      ovc, args = pgetopt.parse({
-      # opt: (name,          type, default value, helptext[, arg name])
-        "s": ("schmooze",    bool, 0,    "more schmooziness"),
-        "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
-        "n": ("repetitions", int,  3,    "number of repetitions"),
-        "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
-      # keyword:        value
-        "_arguments":   ["string_to_print", "..."],
-        "_help_header": "print a string a number of times",
-        "_help_footer": "This is just an example program.",
-      }
+        ovc, args = pgetopt.parse({
+        # opt: (name,          type, default value, helptext[, arg name])
+          "s": ("schmooze",    bool, 0,    "more schmooziness"),
+          "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
+          "n": ("repetitions", int,  3,    "number of repetitions"),
+          "d": ("debug",       str, [],    "debug topics", "DEBUG_TOPIC"),
+        # keyword:        value
+          "_arguments":   ["string_to_print", "..."],
+          "_help_header": "print a string a number of times",
+          "_help_footer": "This is just an example program.",
+        }
 
-      On return, ovc has the following fields:
-        ovc.schmooze:    number of -s options counted,
-        ovc.output_file: parameter of -o or --output-file, or None
-        ovc.repetitions: parameter of -n or --repetitions, or 3
-        ovc.debug:       list with all parameters given to -d or --debug
+    On return, `ovc` has the following fields:
 
-    Parameters to int or str options are taken from the next argument;
-    with long options, "--option=parameter" is also possible.
+      `ovc.schmooze`:    number of `-s` options counted,
+
+      `ovc.output_file`: parameter of `-o` or `--output-file`, or `None`
+
+      `ovc.repetitions`: parameter of `-n` or `--repetitions`, or `3`
+
+      `ovc.debug`:       list with all parameters given to `-d` or `--debug`
+
+    Parameters to `int` or `str` options are taken from the next argument;
+    with long options, `--option=parameter` is also possible.
 
     Other potentially useful fields of ovc:
-      ovc.ovc_help():  help function
-      ovc.ovc_usage(): usage function
+
+      `ovc.ovc_help()`:  help function
+
+      `ovc.ovc_usage()`: usage function
     
-      ovc.ovc_help_msg(),
-      ovc.ovc_usage_msg(): get corresponding messages as strings
+      `ovc.ovc_help_msg(),
+      ovc.ovc_usage_msg()`: get corresponding messages as strings
 
     """
     ovc = OptionValueContainer(descriptors, args)

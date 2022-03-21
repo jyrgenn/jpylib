@@ -1,46 +1,5 @@
 # parser for key=value strings
 
-"""Parser for key-value strings like "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f]}".
-
-The data is returned as a Python data structure composed of strings,
-dictionaries, and lists. It is used to set configuration values from
-command-line arguments with a syntax more compact than e.g. JSON.
-
-Syntax:
-
- * On the top level, the key-value string is a kvpairs list.
-
- * A kvpairs list is a list of zero or more key=value pairs separated by commas.
-   It is mapped to a Python dictionary. Example:
-   "signals=[1,2,15],action=terminate"
-
- * A key is a string that does not contain curly brackes, brackets, a comma, or
-   an equals sign. Leading whitespace is not considered part of the key;
-   trailing or embedded whitespace is a syntax error. For configuration values,
-   it is helpful to match the syntax of Python identifiers, i.e. first character
-   an underscore or a letter, following characters, if any, underscore, letter,
-   or digit. These are mapped to Python dictionary keys. Example: "key_file"
-
- * A value can be a literal, a dictionary, or a list of values.
-
- * A literal value is a string of characters that doesn't contain curly brackes,
-   brackets, a comma, or an equals sign. Whitespace is considered part of the
-   literal. These are mapped to Python strings. Example: "Radio Dos"
-
- * A dictionary is a kvpairs list enclosed by curly braces. Example:
-   "{file=~/etc/foo.conf,syntax=INI}"
-
- * A list is a list of zero or more values separated by commas and enclosed in
-   brackets. Example: "[HUP,INTR,TERM]"
-
-This syntax is obviously limited, but sufficient to express complex data
-structures with (some) string values as leaves. It is mainly meant to be compact
-for use on the command line.
-
-The parser is somewhat sloppy and will accept some deviations from this
-descriptsion, but exploiting this sloppyness will not be of any use.
-
-"""
 
 from .stringreader import StringReader
 
@@ -162,5 +121,51 @@ def parse_kvpairs(buf, need_brace=False, intvals=False):
 
 
 def parse_kvs(string, intvals=False):
-    """Parse a key=value string and return the data structure."""
+    """Parse a key-value string and return the resulting data structure.
+
+    A key-value string may look like `foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f]}`.
+
+    The data is returned as a Python data structure composed of strings,
+    dictionaries, and lists. It is used to set configuration values from
+    command-line arguments with a syntax more compact than e.g. JSON.
+
+    On syntax errors, a `SyntaxError` exception is raised.
+
+    Syntax:
+
+     * On the top level, the key-value string is a *kvpairs* list.
+
+     * A *kvpairs* list is a list of zero or more `key=value` pairs separated
+       by commas. It is mapped to a Python dictionary. Example:
+       `signals=[1,2,15],action=terminate`
+
+     * A *key* is a string that does not contain curly brackes, brackets, a
+       comma, or an equals sign. Leading whitespace is not considered part of
+       the key; trailing or embedded whitespace is a syntax error. For
+       configuration values, it is helpful to match the syntax of Python
+       identifiers, i.e. first character an underscore or a letter, following
+       characters, if any, underscore, letter, or digit. These are mapped to
+       Python dictionary keys. Example: `key_file`
+
+     * A *value* can be a literal, a dictionary, or a list of values.
+
+     * A *literal* value is a string of characters that doesn't contain curly
+       brackes, brackets, a comma, or an equals sign. Whitespace is considered
+       part of the literal. These are mapped to Python strings. Example:
+       `"Radio Dos"`
+
+     * A *dictionary* is a kvpairs list enclosed by curly braces. Example:
+       `{file=~/etc/foo.conf,syntax=INI}`
+
+     * A *list* is a list of zero or more values separated by commas and
+       enclosed in brackets. Example: `[HUP,INTR,TERM]`
+
+    This syntax is obviously limited, but sufficient to express complex data
+    structures with (some) string values as leaves. It is mainly meant to be
+    compact for use on the command line.
+
+    The parser is somewhat sloppy and will accept some deviations from this
+    description, but exploiting this sloppyness is unlikely to be useful.
+
+    """
     return parse_kvpairs(StringReader(string), intvals=intvals)

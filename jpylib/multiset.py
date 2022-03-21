@@ -1,5 +1,11 @@
 class Multiset:
-    """A multiset implementation."""
+    """A multiset implementation.
+
+    Works fine as an iterable, and len() as well as str/repr() give sensible
+    results. The latter is parseable to a copy of the Multiset — in theory;
+    actually, the class name will be jpylib.multiset.Multiset, which is most
+    likely not how that as which the Multiset can be recreated.
+    """
 
     def __init__(self, things=()):
         """Initialise a Multiset with, optionally, a bunch of things."""

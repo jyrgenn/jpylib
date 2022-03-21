@@ -30,7 +30,7 @@ def outputCaptured():
     run on the context can be retrieved from them:
 
         with outputCaptured() as (out, err):
-            ...
+            <code with output captured>
         theOutput = out.getvalue()        # stdout output as string
         theErrout = err.getvalue()        # stderr outout as string
     """
@@ -110,7 +110,7 @@ def outputAndExitCaptured():
     status object:
 
         with outputAndExitCaptured() as (out, err, status):
-            ...
+            <code with output and exit status captured>
         theOutput = out.getvalue()    # stdout output as string
         theErrout = err.getvalue()    # stderr outout as string
         theStatus = status.value      # sys.exit() argument (or 0 or None)

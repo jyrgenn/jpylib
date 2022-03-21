@@ -34,9 +34,19 @@ from .singleton import Singleton
 from .multiset import Multiset
 
 version = "$__package_version$"
+"""The version of the `jpylib` package."""
+
 program = os.path.basename(sys.argv[0])
-real_home = pwd.getpwuid(os.getuid()).pw_dir
+"""The name of the current program without its directory path."""
+
 home = os.environ.get("HOME") or real_home
+"""The home directory of the current user as defined in the environment or for
+its user id.
+"""
+
+real_home = pwd.getpwuid(os.getuid()).pw_dir
+"""The home directory of the current user as defined for its user id."""
+
 
 __all__ = sorted("""pgetopts L_ERROR L_NOTICE L_INFO L_DEBUG L_TRACE
   alert_config alert_level alert_level_name

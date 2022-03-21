@@ -7,6 +7,9 @@ default: documentation test
 
 release: documentation test coverage pkg upload
 
+pdoc:
+	python3 -m pdoc jpylib
+
 documentation:
 	cd doc && $(MAKE)
 

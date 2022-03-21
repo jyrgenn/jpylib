@@ -1,4 +1,84 @@
-# print alerts and other messages depending on a verbosity level
+"""Print alerts and other messages depending on a level of verbosity.
+
+This module works on the idea of a numeric *alert level*, which determines the
+amount of output generated. On each alert level, the associated messages are
+printed, as well as those of the lower levels.
+
+For each alert level, there are one or more functions to print messages at
+that level. The functions with a name ending with `f` take a format string
+and positional arguments to format a message; most of the others take any
+number of arguments, which will be stringified and concatenated to print
+the message.
+
+`L_ERROR`: alert level 0. On this level, only error messages are
+printed, including fatal error messages. In the default configuration,
+these messages are tagged with the program name and `Error:`. Functions
+printing at that level: `err()`, `error()` (an alias for `err`), `errf()`,
+`errorf()` (an alias for `errf`), `fatal()`, `fatalf()`.
+
+`L_NOTICE`: alert level 1. It includes `L_ERROR`. Error messages and
+messages of some importance are printed. Functions printing at that level:
+`notice()`, `noticef()`.
+
+`L_INFO`: alert level 2. It includes `L_NOTICE` and `L_ERROR`. In addition
+to those of the lower levels, informational messages of possible interest
+are printed, e.g. something indicating a program's progress through its
+operation. Functions printing at that level: `info()`, `infof()`.
+
+`L_DEBUG`: alert level 3. It includes `L_INFO`, `L_NOTICE` and `L_ERROR`.
+In addition to those of the lower levels, messages intended to help
+debugging the program are printed. In the default configuration,
+these messages are tagged with `DBG`. Functions printing at that level:
+`dbg()`, `debug()` (an alias for `dbg`), `debugf()`, `debug_vars()`.
+
+`L_TRACE`: alert level 4. It includes `L_DEBUG`, `L_INFO`, `L_NOTICE` and
+`L_ERROR`. In addition to those of the lower levels, high-volume trace
+messages may be printed. In the default configuration, these messages are
+tagged with `TRC`. Functions printing at that level: `trace()`, `tracef()`.
+
+Some aspects of the module can be customised using a configuration that looks
+like this:
+
+    Config(
+        # decoration to print before a message, per level
+        decoration=[""{cfg.program}: Error:", None, None, "DBG", TRC"]
+
+        # program name to use in a message
+        program=os.path.basename(sys.argv[0]),
+
+        # syslog facility; if set, syslog will be used
+        syslog_facility=None,
+
+        # syslog priority, per level
+        syslog_prio = [
+            syslog.LOG_ERR,
+            syslog.LOG_NOTICE,
+            syslog.LOG_INFO,
+            syslog.LOG_DEBUG,
+            None,                   # don't let this go to syslog
+        ],
+
+        # status: syslog has been opened
+        syslog_opened=False,
+
+        # fd to print message to, per level
+        fd=[2, 2, 2, 2, 2],
+
+        # current alert level
+        level=L_NOTICE,
+
+        # maximum alert level
+        max_level=4,
+
+        # print timestamps with messages
+        timestamps=False,
+
+        # had any errors yet?
+        had_errors=False,
+    )
+
+
+"""
 
 import os
 import sys
@@ -30,7 +110,11 @@ cfg = None
 def alert_config(*, decoration=None, fd=None, level=None, program=None,
                  syslog_facility=None, syslog_prio=None, reset_defaults=None,
                  timestamps=None):
-    """Reset everything to the specified or default values."""
+    """Customise the alerts configuration with the given values.
+
+    If `reset_defaults` is true, reset everything to the specified or
+    default values.
+    """
     global cfg
     if not any(locals().values()) or reset_defaults:
         cfg = Config(
@@ -78,24 +162,19 @@ def alert_config(*, decoration=None, fd=None, level=None, program=None,
         cfg.timestamps = y.isotime
 
 def alert_init(**kwargs):
+    """Initialise the module to default or given values."""
     alert_config(reset_defaults=True, **kwargs)
 
 alert_init()
 
 
 def alert_redirect(level, file):
-    """Redirect printing of alerts from `level` to `file`."""
+    """Redirect printing of alerts from `level` to `file` (a file handle)."""
     cfg.fd[level] = file
 
 
 def alert_level(level=None):
     """Get and/or set the verbosity level for the alert functions.
-
-    err() will print something with level 0 (and greater), i.e. always.
-    notice() will print something with level 1 (and greater).
-    info() will print something with level 2 (and greater).
-    debug() will print something with level 3 (and greater).
-    trace() will print something with level 4 (and greater).
     """
     if level is not None:
         if type(level) is str:
@@ -104,6 +183,7 @@ def alert_level(level=None):
     return cfg.level
 
 def alcf():
+    """Return the alerts configuration (used for testing)."""
     return cfg
 
 def alert_level_name(level=None):
@@ -117,7 +197,7 @@ def alert_level_up():
     """Increase the alert level by one.
 
     This is intended to be used as the callback function for the type of a
-    pgetopt option to increase the verbosity.
+    `pgetopt` option to increase the verbosity. Returns the new level.
 
     """
     if cfg.level < cfg.max_level:
@@ -129,7 +209,7 @@ def alert_level_zero():
     """Set the alert level to zero (errors only).
 
     This is intended to be used as the callback function for the type of a
-    pgetopt option to set the verbosity to zero.
+    `pgetopt` option to set the verbosity to zero. Returns the new level.
 
     """
     cfg.level = 0
@@ -137,19 +217,19 @@ def alert_level_zero():
 
 
 def is_notice():
-    """Return True iff the alert level is at least at notice."""
+    """Return `True` iff the alert level is at least at `L_NOTICE`."""
     return cfg.level >= L_NOTICE
 
 def is_info():
-    """Return True iff the alert level is at least at info."""
+    """Return `True` iff the alert level is at least at `L_INFO`."""
     return cfg.level >= L_INFO
 
 def is_debug():
-    """Return True iff the alert level is at least at debugging."""
+    """Return `True` iff the alert level is at least at `L_DEBUG`."""
     return cfg.level >= L_DEBUG
 
 def is_trace():
-    """Return True iff the alert level is at least at tracing."""
+    """Return `True` iff the alert level is at least at `L_TRACE`."""
     return cfg.level >= L_TRACE
 
 
@@ -175,6 +255,10 @@ def alert_if_level(level, *msgs):
     arguments to get the value of the element. This way, compute-intensive task
     can be delayed to the alerting moment, meaning they don't need to be done if
     not called for.
+
+    This function provides the meat of the module's functionality for the
+    convenience functions `debug()`, `info()`, etc. It is not intended to be
+    called directly by the user.
 
     """
     # return fast if not needed
@@ -210,7 +294,11 @@ def alert_if_level(level, *msgs):
 
 
 def debug_vars(*vars):
-    """Print debug output for the named variables if alert level >= L_DEBUG."""
+    """Print debug output for the named variables if alert level >= `L_DEBUG`.
+
+    The arguments are the variable names (strings). Each variable will be
+    printed as a debug message with its name and value on a separate line.
+    """
     if cfg.level >= L_DEBUG:
         context = inspect.currentframe().f_back.f_locals
         for var in vars:
@@ -218,58 +306,77 @@ def debug_vars(*vars):
 
 
 def err(*msgs):
-    """Print error level output."""
+    """Print `L_ERROR` level output."""
     cfg.had_errors = True
     alert_if_level(L_ERROR, *msgs)
 error = err                             # alias
 
 def errf(template, *args):
-    """Print error level output."""
+    """Print `L_ERROR` level output as a formatted string.
+
+    `template` is the format template, `args` are its arguments.
+    """
     err(template.format(*args))
 errorf = errf
 
 def fatal(*msgs, exit_status=1):
-    """Print error level output."""
+    """Print `L_ERROR` level output and end the program with `exit_status`."""
     alert_if_level(L_ERROR, "Fatal", *msgs)
     sys.exit(exit_status)
 
 def fatalf(template, *args, exit_status=1):
+    """Print `L_ERROR` level output and end the program with `exit_status`.
+
+    `template` is the format template, `args` are its arguments.
+    """
     fatal(template.format(*args), exit_status=exit_status)
 
 def notice(*msgs):
-    """Print notice level output according to alert level."""
+    """Print `L_NOTICE` level output."""
     alert_if_level(L_NOTICE, *msgs)
 
 def noticef(template, *args):
-    """Print notice level output according to alert level."""
+    """Print `L_NOTICE` level output as a formatted string.
+
+    `template` is the format template, `args` are its arguments.
+    """
     if is_notice():
         alert_if_level(L_NOTICE, template.format(*args))
 
 def info(*msgs):
-    """Print info level output according to alert level."""
+    """Print `L_INFO` level output."""
     alert_if_level(L_INFO, *msgs)
 
 def infof(template, *args):
-    """Print info level output according to alert level."""
+    """Print `L_INFO` level output as a formatted string.
+
+    `template` is the format template, `args` are its arguments.
+    """
     if is_info():
         info(template.format(*args))
 
 def debug(*msgs):
-    """Print debug level output according to alert level."""
+    """Print `L_DEBUG` level output."""
     alert_if_level(L_DEBUG, *msgs)
 dbg = debug                             # alias
 
 def debugf(template, *args):
-    """Print debug level output according to alert level."""
+    """Print `L_DEBUG` level output as a formatted string.
+
+    `template` is the format template, `args` are its arguments.
+    """
     if is_debug():
         debug(template.format(*args))
 
 def trace(*msgs):
-    """Print debug level output according to alert level."""
+    """Print `L_TRACE` level output."""
     alert_if_level(L_TRACE, *msgs)
 
 def tracef(template, *args):
-    """Print debug level output according to alert level."""
+    """Print `L_TRACE` level output as a formatted string.
+
+    `template` is the format template, `args` are its arguments.
+    """
     if is_trace():
         trace(template.format(*args))
 

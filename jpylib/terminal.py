@@ -11,6 +11,10 @@ ttyo_file = None
 ttyi_file = None
 
 def ttyo(close=False):
+    """Return an open output file handle to the process's controlling terminal.
+
+    If `close` is true, close that file handle.
+    """
     global ttyo_file
     if close:
         if ttyo_file:
@@ -22,6 +26,10 @@ def ttyo(close=False):
     return ttyo_file
 
 def ttyi(close=False):
+    """Return an open input file handle to the process's controlling terminal.
+
+    If `close` is true, close that file handle.
+    """
     global ttyi_file
     if close:
         if ttyi_file:
@@ -33,6 +41,10 @@ def ttyi(close=False):
     return ttyi_file
 
 def ptty(*args, **kwargs):
+    """Print something to the process's controlling terminal.
+
+    `args` and `kwargs` are passed to `print()`.
+    """
     print(*args, file=ttyo(), **kwargs)
 
 # EOF

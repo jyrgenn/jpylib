@@ -87,7 +87,7 @@ class Config(Namespace):
         This can be used to pass config snippets on the command line.
         The string can look like e.g. this:
 
-        "foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not"
+        `foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not`
 
         If reject_unknown is True (which is the default), keys that do not yet
         exist will be rejected.

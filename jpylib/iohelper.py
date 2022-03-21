@@ -64,7 +64,7 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     if `rstrip` does not contain the newline character.
 
     `comments_re` is used to match comment lines to be skipped (after the
-    stripping of whitespace or other characterns is done).
+    above stripping is done).
 
     If `skip_comments` is false, comments will be skipped without regard
     for `comments_re`.

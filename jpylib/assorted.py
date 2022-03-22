@@ -35,7 +35,7 @@ def boolish(value, default=None):
 
 
 def flatten(seq):
-    """Flatten a nested sequence into a flat one with the same elements.
+    """Flatten a nested sequence into a flat one with the same leaf elements.
 
     Return a flat generator object containing just the elements. If the
     argument is a string or not a sequence, the generator object will

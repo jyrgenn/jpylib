@@ -3,16 +3,16 @@
 class Namespace:
     """Simple name space class as a key-value store.
 
-    Values can be assigned and read directly (ns.key = value) or using the
-    set()/get() methods or the ns[key] indexing. An update() method (as with a
-    dictionary) has the options to skip keys beginning with an underscore, or
-    raise a KeyError if a key is not previously known. Actually most things
-    work as with a dict -- iter(ns), len(ns) etc.
+    Values can be assigned and read directly (`ns.key = value`) or using the
+    `set()`/`get()` methods or the `ns[key]` indexing. An `update()` method
+    (as with a dictionary) has the options to skip keys beginning with an
+    underscore, or raise a `KeyError` if a key is not previously known.
+    Actually most things work as with a dict -- `iter(ns)`, `len(ns)` etc.
 
     """
 
     def __init__(self, **kwargs):
-        """Initialize a Namespace object from the 'kwargs' mapping."""
+        """Initialize a Namespace object from the `kwargs` mapping."""
         self.__dict__.update(kwargs)
 
     def update(self, new_values, skip_underscore=False, reject_unknown=False):
@@ -21,7 +21,7 @@ class Namespace:
         If `reject_unknown` is true, it is an error if the argument dictionary
         contains keys that are not in the object's key set.
 
-        If `skip_underscore` is true, keys that start with an underscore ("_")
+        If `skip_underscore` is true, keys that start with an underscore (`_`)
         are not considered for update.
 
         """
@@ -38,7 +38,7 @@ class Namespace:
         self.__dict__[key] = value
 
     def set(self, key, value):
-        """Set a value."""
+        """Set a value for `key`."""
         self.__dict__[key] = value
 
     def __getitem__(self, key):
@@ -46,7 +46,7 @@ class Namespace:
         return self.__dict__[key]
 
     def get(self, key, default=None):
-        """Get a value; default if key is not present."""
+        """Get the value for `key`; return `default` if `key` is not present."""
         return self.__dict__.get(key, default)
 
     def __delitem__(self, key):

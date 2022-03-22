@@ -3,7 +3,8 @@
 from jpylib import is_trace, trace
 
 def tracefn(func):
-    """Decorator: trace decorated function's calls if trace level is set."""
+    """Decorator: trace function's calls if alert level is `L_TRACE` or higher.
+    """
     def wrapper(*args, **kwargs):
         if is_trace():
             s = "call {}({}".format(func.__name__, ', '.join(map(repr, args)))

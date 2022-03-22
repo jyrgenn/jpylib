@@ -7,26 +7,21 @@ import re
 from .assorted import identity
 
 def all_input_lines(fnames=[], cont_err=False):
-    """Like Perl's diamond operator <>, return lines from files or stdin.
+    """Like Perl's diamond operator `<>`, return lines from files or stdin.
 
-    (Generator) If fnames is empty, return lines from stdin, otherwise
-    lines from the named files, in succession. The file name "-" stands
-    for stdin. Typically, something like sys.argv[1:] would be passed
-    as an argument. If cont_err is true, continue after an error,
-    printing an error message. If cont_err is a callable, call it with
+    (Generator) If `fnames` is empty, return lines from stdin, otherwise
+    lines from the named files, in succession. The file name `-` stands
+    for stdin. Typically, something like `sys.argv[1:]` would be passed
+    as an argument. If `cont_err` is true, continue after a file open error,
+    printing an error message. If `cont_err` is a callable, call it with
     the file name and the exception on error.
     """
-    # The following looks like a needless duplication of code. But in the
-    # spirit of "it is more important for the interface to be simple than the
-    # implementation", it must be like this. Factoring out the reading or the
-    # exception handling would make the resulting exception stack more
-    # complicated, which I want to avoid. Also, I want it to read stdin from
-    # sys.stdin so I can easier redirect the input for testing.
     if not fnames:
         fnames = ["-"]
     for fname in fnames:
         try:
             if fname == "-":
+                # Read from sys.stdin (not "/dev/stdin") for easier testing.
                 for line in sys.stdin:
                     yield line
             else:
@@ -49,7 +44,7 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     
     """Read lines/items from one or more files (generator).
 
-    With the defaults, comment (`# ...`) and empty lines are skipped, and
+    With the defaults, comment like `# ...` and empty lines are skipped, and
     whitespace is stripped from the left and right ends of each line.
 
     `fname` is the name of the file to read; `-` may be used for stdin.

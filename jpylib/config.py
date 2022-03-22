@@ -10,10 +10,10 @@ class Config(Namespace):
     """Name space class used to build a config object."""
 
     def update(self, new_values, reject_unknown=True):
-        """Update the Config with new values.
+        """Update the Config with `new_values` (a dict).
 
-        If reject_unknown is True (which is the default), keys that do not yet
-        exist will be rejected.
+        If `reject_unknown` is `True` (which is the default), keys that do
+        not yet exist will be rejected.
 
         """
         super().update(new_values, skip_underscore=True,
@@ -22,8 +22,8 @@ class Config(Namespace):
     def set(self, key, value, reject_unknown=True):
         """Set a config value for a key.
 
-        If reject_unknown is True (which is the default), keys that do not yet
-        exist will be rejected.
+        If `reject_unknown` is `True` (which is the default), keys that do
+        not yet exist will be rejected.
 
         """
         if key not in self.__dict__ and reject_unknown:
@@ -31,16 +31,16 @@ class Config(Namespace):
         self.__dict__[key] = value
 
     def get(self, key):
-        """Get a value from the config."""
+        """Get a value for `key` from the config."""
         if key not in self.__dict__:
             raise KeyError("variable not in config: " + repr(key))
         return self.__dict__[key]
 
     def load_from(self, filename, reject_unknown=True, file_must_exist=True):
-        """Load a configuration from file 'filename'.
+        """Load a configuration from file `filename`.
 
-        If reject_unknown is True (which is the default), keys that do not yet
-        exist will be rejected.
+        If `reject_unknown` is `True` (which is the default), keys that do
+        not yet exist will be rejected.
 
         """
         try:
@@ -63,13 +63,13 @@ class Config(Namespace):
 
     def load_config_files(self, config_files, notice_func=None,
                           reject_unknown=True, files_must_exist=False):
-        """Read the configuration from the config files.
+        """Read the configuration from the `config_files`.
 
-        If reject_unknown is True (which is the default), keys that do not yet
-        exist will be rejected.
+        If `reject_unknown` is `True` (which is the default), keys that do
+        not yet exist will be rejected.
 
-        Optional "notice_func" is a function to print a message about a config
-        file being loaded.
+        Optional `notice_func` may be a function to print a message about
+        a config file being loaded.
 
         """
         loaded = 0
@@ -81,7 +81,7 @@ class Config(Namespace):
                     notice_func("configuration loaded from", file)
         return loaded
 
-    def update_from_string(self, cfgstring, reject_unknown=True, intvals=True):
+    def update_from_string(self, kv_string, reject_unknown=True, intvals=True):
         """Update the configuration from a key-value string.
 
         This can be used to pass config snippets on the command line.
@@ -89,9 +89,9 @@ class Config(Namespace):
 
         `foo=bar,dang=[1,2,15],d={a=b,c=[d,e,f],quux=blech},e=not`
 
-        If reject_unknown is True (which is the default), keys that do not yet
-        exist will be rejected.
+        If `reject_unknown` is `True` (which is the default), keys that do
+        not yet exist will be rejected.
 
         """
-        self.update(parse_kvs(cfgstring, intvals=intvals),
+        self.update(parse_kvs(kv_string, intvals=intvals),
                     reject_unknown=reject_unknown)

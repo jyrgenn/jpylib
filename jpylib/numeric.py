@@ -3,14 +3,17 @@ import collections
 
 
 def avg_midrange(values):
-    """Return the arithmetic mean of the highest and lowest value of values."""
+    """Return the arithmetic mean of the highest and lowest value of `values`
+
+    (an iterable of numbers).
+    """
     vmin = min(values)
     vmax = max(values)
     return (vmin + vmax) / 2
 
 
 def remove_outliers(values):
-    """Return a copy of the values with the highest and lowest value removed.
+    """Return a copy of the `values` with the highest and lowest value removed.
 
     If there is more than one highest or lowest value, only one of them is
     removed.
@@ -32,7 +35,9 @@ def remove_outliers(values):
 
 
 def maybe_int(arg):
-    """Return the corresponding int if the arguments represents one, or None."""
+    """Return the corresponding int if `arg` represents one, or `None`.
+
+    `arg` could be a string or a number."""
     try:
         return int(arg)
     except:
@@ -40,7 +45,8 @@ def maybe_int(arg):
 
 
 def maybe_num(arg):
-    """Return the corresponding int or float if arg represents one, or None."""
+    """Return the corresponding int or float if `arg` represents one, or `None`.
+    """
     the_int = maybe_int(arg)
     if the_int is None:
         try:
@@ -51,9 +57,9 @@ def maybe_num(arg):
 
 
 def is_int(arg):
-    """Return True if the arguments represents an int, or False.
+    """Return `True` if `arg` represents an `int`, or `False`.
     
-    The argument may be not an int (maybe e.g. a string), but if it
+    `arg` may be not an int (maybe e.g. a string), but if it
     can be read as an int, it represents an int.
 
     """
@@ -61,9 +67,9 @@ def is_int(arg):
 
 
 def is_num(arg):
-    """Return True if the arguments represents a number, or False.
+    """Return `True` if `arg` represents a number, or False.
     
-    The argument may be not numeric (maybe e.g. a string), but if it
+    `arg` may be not numeric (maybe e.g. a string), but if it
     can be read as a number, it represents a number.
 
     """

@@ -31,7 +31,7 @@ def backquote(command, shell=None, full_result=False, silent=False):
     is non-zero or stderr is not empty. This can be suppressed by setting
     `silent` to true.
 
-    If zfull_resultz is true, return a tuple of (stdout, stderr, exit status).
+    If `full_result` is true, return a tuple of (stdout, stderr, exit status).
     No exception for exit status or stderr is raised, regardless of the value
     of `silent`.
 

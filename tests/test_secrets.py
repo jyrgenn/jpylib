@@ -157,6 +157,15 @@ class SecretsTestcase(unittest.TestCase):
         #self.assertEqual(out.getvalue(), "")
         self.assertEqual(status.value, None)
 
+    def test_puts_main_nonexisting_file(self):
+        key = "p-convention"
+        value = "ITS"
+        with y.outputAndExitCaptured() as (out, err, status):
+            sys.argv = ["putsecret", key, value, default_secrets + "nonex"]
+            y.secrets.putsecret_main()
+        #self.assertEqual(out.getvalue(), "")
+        self.assertEqual(status.value, None)
+
     def test_puts_main_options_1(self):
         key = "p-convention"
         value = "ITS"

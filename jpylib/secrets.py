@@ -191,7 +191,10 @@ def putsecret(key, value, fname=None, options=None,
     
     fname = fname or default_filename
     entries = collections.OrderedDict()
-    shutil.copy2(fname, fname + backup_suffix)
+    try:
+        shutil.copy2(fname, fname + backup_suffix)
+    except FileNotFoundError:
+        pass
 
     options = set(options or [])
     if "zip" in options:
@@ -213,7 +216,10 @@ def putsecret(key, value, fname=None, options=None,
                 # see that the new file has the same access mode
                 os.chmod(newfile, access_mode)
             # now, read in entries, change/set new one, write out again
-            entries = read_secrets(fname, get_invalids=True)
+            try:
+                entries = read_secrets(fname, get_invalids=True)
+            except FileNotFoundError:
+                entries = {}
             entries[key] = (options, value)
             for key, data in entries.items():
                 options, value = data

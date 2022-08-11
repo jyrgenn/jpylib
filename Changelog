@@ -2,6 +2,10 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2022.811:
+
+ * fix: have putsecret() cope with non-existing secrets file
+
  * more dict-like methods for Namespace
 
  * smallish aesthetic fixes and doc improvements

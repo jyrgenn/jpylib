@@ -2,6 +2,10 @@
 # first non-comment line must be the short description:
 POSIX-conformant command-line option parser (plus long options)
 
+[This project is now integrated into `jpylib` and will no longer be
+released separately. Actually, the `jpylib.pgetopts` is already more
+up to date than this.]
+
 Use it like this:
 
     import pgetopt
@@ -35,4 +39,4 @@ More information at <https://git.w21.org/ni/jpylib/>
 The full documentation for this version is at
 <https://git.w21.org/ni/jpylib/-/blob/v$__package_version$/doc/pgetopt.md>
 
-[ni@w21.org 2020-08-09]
+[ni@w21.org 2022-08-12]

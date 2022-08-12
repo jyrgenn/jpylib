@@ -152,6 +152,7 @@ class OptionValueContainer:
         msg = self.ovc_usage_msg() + "\n"
         if self._help_header:
             msg += self._help_header + "\n\n"
+        optparts = []
         for opt in sorted(self._opts.keys()):
             if opt.startswith("_"):
                 continue
@@ -159,8 +160,13 @@ class OptionValueContainer:
             arg = ""
             if desc[1] in (str, int):
                 arg = " " + (desc[4] if len(desc) == 5 else "ARG")
-            msg += " -%s, --%s%s:\n       %s" % (
-                opt, desc[0].replace('_', '-'), arg, desc[3])
+            optparts.append(f" -{opt}, --{desc[0].replace('_', '-')}{arg}:")
+        maxoptpartlen = max(map(len, optparts))
+        for opt in sorted(self._opts.keys()):
+            if opt.startswith("_"):
+                continue
+            desc = self._opts[opt]
+            msg += f"{optparts.pop(0):{maxoptpartlen}} {desc[3]}"
             if desc[1] in (int, str):
                 msg += " (%s arg, default %s)" % (
                     desc[1].__name__, repr(desc[2]))

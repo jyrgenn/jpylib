@@ -1,5 +1,8 @@
 ;; -*- text -*-
 
+There will be no further separate pgetopt releases. It is part of
+jpylib, and development will continue there.
+
 2020-808:
 
  * In the usage message, instead of just "[options]", all options

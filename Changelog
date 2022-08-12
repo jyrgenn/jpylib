@@ -2,6 +2,12 @@
 
 Also see Changelog-pgetopt for pgetopt changes.
 
+2022.812:
+
+ * document end of separate pgetopt releases
+
+ * more compact pgetopts help (close issue #27)
+
 2022.811:
 
  * fix: have putsecret() cope with non-existing secrets file

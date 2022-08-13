@@ -19,6 +19,7 @@ with open(sys.argv[1]) as f:
             for i, el in enumerate(elems):
                 elems[i] = el.strip()
                 widths[i] = max(widths[i], len(elems[i]))
+            elems[0] = f"`{elems[0]}`"
             lines.append(elems)
 
 for line in lines:

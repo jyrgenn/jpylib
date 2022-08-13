@@ -29,10 +29,10 @@ class ReadmeTestcase(unittest.TestCase):
         """Check if the generated error table is present and complete."""
         source = "jpylib/pgetopt.py"
         errors = y.backquote("sed -n '/^Error/s/ .*//p' " + source)
-        errorset = set(errors.split())
+        errorset = set(map(lambda x: f"`{x}`", errors.split()))
         with open(docfile) as f:
             for line in f:
-                if line.startswith("| Error"):
+                if line.startswith("| `Error"):
                     the_error = line.split()[1]
                     # will raise KeyError if the_error is not in the errorset
                     errorset.remove(the_error)

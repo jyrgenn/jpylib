@@ -34,7 +34,8 @@ class SecretsTestcase(unittest.TestCase):
         return json.loads(y.backquote("lib/read-secrets.py"))
 
     def setUp(self):
-        os.makedirs(tmpdir, exist_ok=True)
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        os.makedirs(tmpdir, exist_ok=False)
         shutil.copyfile("lib/secrets", default_secrets)
         os.chmod(default_secrets, 0o640)
         y.secrets.default_filename = default_secrets
@@ -158,12 +159,11 @@ class SecretsTestcase(unittest.TestCase):
         self.assertEqual(status.value, None)
 
     def test_puts_main_nonexisting_file(self):
-        key = "p-convention"
-        value = "ITS"
+        key = "l-convention"
+        value = "leckmich"
         with y.outputAndExitCaptured() as (out, err, status):
             sys.argv = ["putsecret", key, value, default_secrets + "nonex"]
             y.secrets.putsecret_main()
-        #self.assertEqual(out.getvalue(), "")
         self.assertEqual(status.value, None)
 
     def test_puts_main_options_1(self):

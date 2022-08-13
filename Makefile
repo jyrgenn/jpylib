@@ -29,7 +29,8 @@ upload:
 install:
 	cd package && $(MAKE) install
 
-preview: doc/pgetopt.md
+preview:
+	cd doc && $(MAKE)
 	markdown doc/pgetopt.md > $(PREVIEW)
 	open $(PREVIEW)
 

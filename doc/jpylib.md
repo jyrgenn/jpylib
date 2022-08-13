@@ -53,11 +53,11 @@ levels:
 
 |Level     | value |
 |----------|------:|
-|L_ERROR   | 0     |
-|L_NOTICE  | 1     |
-|L_INFO    | 2     |
-|L_DEBUG   | 3     |
-|L_TRACE   | 4     |
+|`L_ERROR`   | 0     |
+|`L_NOTICE`  | 1     |
+|`L_INFO`    | 2     |
+|`L_DEBUG`   | 3     |
+|`L_TRACE`   | 4     |
 
 Defaults:
 
@@ -406,7 +406,7 @@ Usage pattern:
 
 Also, `y.verbosity_option` can be used as the option description for
 the `-v` option – variable name "verbose", default value is
-L_NOTICE, each occurence of `-v` increases the alert level.
+`L_NOTICE`, each occurence of `-v` increases the alert level.
 
 
 See the [`pgetopt`](./pgetopt.md) documentation for details.

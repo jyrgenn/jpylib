@@ -1,5 +1,6 @@
 <!-- GENERATED FILE, DO NOT EDIT -->
-<!--*- text -*-->
+<!--*- text -*- This is written for GitLab Flavored Markdown and may not
+                render correctly with other Markdown implementations. -->
 
 `pgetopts`
 ==========
@@ -122,7 +123,7 @@ key/value pairs, where the key is one of these keywords:
 
 | Key | Meaning |
 |-------|---------|
-| `_arguments` |: either a string describing the command's arguments, or a list with those. In the latter case, it is used to determine the minimum and maximum number of arguments. See below at "Argument count checking" for more information. |
+| `_arguments` | either a string describing the command's arguments, or a list with those. In the latter case, it is used to determine the minimum and maximum number of arguments. See below at "Argument count checking" for more information. |
 | `_help_header` | a string that will be printed at the top of the help message. |
 | `_help_footer` | a string that will be printed at the bottom of the help message. |
 | `_program` | the program name to use in usage and help message instead of `sys.argv[0]`. |
@@ -130,12 +131,12 @@ key/value pairs, where the key is one of these keywords:
 
 The two values returned are an option value container — a namespace
 in which the values can be accessed using the option name (e.g. as
-`ovc.verbose`, `ovc.output_file`) — and a list with the remaining
-arguments.
+`ovc.verbose`, `ovc.output_file`) — and a list containing the
+remaining arguments.
 
 And that is indeed all you need to know for the majority of
-applications. One simple example exercises nearly all features of
-this module:
+applications. One simple example exercises nearly all `pgetopts()`
+features:
 
     import jpylib as y
 
@@ -167,7 +168,7 @@ this in the context of a program.)
 When the program is called with an invalid option or the wrong
 number of arguments (in this case: none), a corresponding error and
 a brief usage message are printed and the program exits with an exit
-status of 64 (that is EX_USAGE in <sysexits.h> as defined in BSD
+status of 64 (that is `EX_USAGE` in `<sysexits.h>` as defined in BSD
 Unix). When the program is called with `-?` or `-h` or `--help`, a
 more detailed help message is printed, consisting of the usage, the
 `_help_header` value (if present), an explanation of the options
@@ -175,9 +176,10 @@ constructed from the option descriptors, and the `_help_footer`
 value (if present).
 
 The help and usage messages are available from the option value
-container by calling the `ovc_help_msg` and `ovc_usage_msg` methods,
-which return the respective message. Or call the `ovc_help` and
-`ovc_usage` methods, which print their message and end the program.
+container by calling the `ovc_help_msg()` and `ovc_usage_msg()`
+methods, which return the respective message. Or call the
+`ovc_help()` and `ovc_usage()` methods, which print their message
+and end the program.
 
 You can override the `-?`/`--help` and the `-h` options by
 specifying your own descriptor for these options in the descriptors
@@ -232,10 +234,10 @@ either have made the interface or the implementation more complex,
 and given that this is rarely needed, I chose to omit that. It can
 be done in the application just as well.
 
-Change: the `_arguments` value must now be a list if it is not a
-string (was tuple before). Reason: `("arg1", )` is a tuple, but
-`("arg1")` is not, it is a string in parentheses. This is too easy
-to confuse, and that cannot happen with a list.
+Changed at some point: the `_arguments` value must now be a list if
+it is not a string (was tuple before). Reason: `("arg1", )` is a
+tuple, but `("arg1")` is not, it is a string in parentheses. This is
+too easy to confuse, and that cannot happen with a list.
 
 
 The `pgetopts()` function
@@ -285,12 +287,12 @@ as text constants, so they can be used for comparison:
 
 | Constant    | Message                             | Argument |
 |-------------|-------------------------------------|----------|
-| ErrorNotopt | "unknown option"                    | option   |
-| ErrorArg    | "option does not take an argument"  | option   |
-| ErrorNoarg  | "option needs argument"             | option   |
-| ErrorIntarg | "option argument must be integer"   | option   |
-| ErrorMinarg | "too few arguments, needs at least" | minimum  |
-| ErrorMaxarg | "too many arguments, takes at most" | maximum  |
+| `ErrorNotopt` | "unknown option"                    | option   |
+| `ErrorArg`  | "option does not take an argument"  | option   |
+| `ErrorNoarg` | "option needs argument"             | option   |
+| `ErrorIntarg` | "option argument must be integer"   | option   |
+| `ErrorMinarg` | "too few arguments, needs at least" | minimum  |
+| `ErrorMaxarg` | "too many arguments, takes at most" | maximum  |
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)
@@ -336,7 +338,7 @@ versions.
 | Field | Meaning |
 |-------|---------|
 | `ovc._args` | The arguments as passed to the `pgetopts()` function or, by default, taken from `sys.argv[]` |
-| `ovc._arguments`, `ovc._help_footer`, `ovc._help_header`, `ovc._usage` | The corresponding fields of the descriptors argument. |
+| `ovc._arguments`, `ovc._help_footer`, `ovc._help_header`, `ovc._usage` | The corresponding fields of the descriptors dictionary passed to `pgtopts()`. |
 | `ovc._have_opt` | Method used internally during option parsing. |
 | `ovc._long` | Option descriptors dictionary by long option name. |
 | `ovc._max` | Maximum number of arguments as calculated from the `_arguments` description, or None. |
@@ -402,7 +404,7 @@ the current alert level. Every time the `-v` option is seen,
 alert level to zero. The actual option values returned in `ovc`
 needn't even be used any more, as the alert level is already set.
 
-I have been using this in a number of programs in between -- so
+I have been using this in a number of programs in between — so
 often indeed that I am thinking of implementing a shorthand for this
 pattern.
 

@@ -1,13 +1,13 @@
 <!--*- text -*-->
 
-pgetopt module
-==============
+`pgetopts`
+==========
 
-This module implements a command-line option parser. The underlying
-idea was to have it POSIX conformant, additionally implement long
-options, while striking the right balance between simplicity and
-clarity of the user interface, brevity of the code, and the
-implemented capabilities.
+This module, part of the jpylib library, implements a command-line
+option parser. The underlying idea was to have it POSIX conformant,
+additionally implement long options, while striking the right
+balance between simplicity and clarity of the user interface,
+brevity of the code, and the implemented capabilities.
 
 #include !../lib/make-toc $SOURCE
 
@@ -48,8 +48,8 @@ words, the whitespace separating option and argument is optional.
 Thus, `-o foo` and `-ofoo` are equivalent.[1]
 
 But mainly, option parsing stops when the first `argv[]` element is
-encountered that is neither an option or an option argument, i.e. a
-regular argument. Example:
+seen that is neither an option or an option argument, i.e. a regular
+argument. Example:
 
     blark -v -o /tmp/blark.out -i 3 gnuddle fuddle -a ruddle
 
@@ -62,10 +62,10 @@ this is where Argparse, Optparse, and Click all fall short.
 (Option parsing also stops when a `--` argument is found, which can
 be useful if a regular argument follows that starts with a `-`.)
 
-[1] The Open Group Base Specifications Issue 7, 2018 edition
-    IEEE Std 1003.1-2017
-    https://pubs.opengroup.org/onlinepubs/9699919799/
-    12. Utility Conventions
+[1] The Open Group Base Specifications Issue 7, 2018 edition,
+    IEEE Std 1003.1-2017.
+    <https://pubs.opengroup.org/onlinepubs/9699919799/>,
+    12. Utility Conventions
 
 
 Usage
@@ -77,16 +77,16 @@ option parsing will do, but I found a balance that feels right to
 me. To specify and parse the options of the hypothetical `blark`
 program used as example above, all we need is this:
 
-    import pgetopt
+    import jpylib as y
 
-    ovc, args = pgetopt.parse({
+    ovc, args = y.pgetopts({
         "v": ("verbose", bool, False, "be verbose"),
         "o": ("output_file", str, "/dev/stdout", "output file", "PATHNAME"),
         "i": ("iterations", int, 1, "number of iterations"),
         "_arguments": ["gnumm", "..."],
     })
 
-The `parse()` function has, in the usual case, one argument, a
+The `pgetopts()` function has, in the usual case, one argument, a
 dictionary describing the options. The single-letter string key is
 the option letter; its value is the option descriptor, a tuple of
 four or five elements. These are:
@@ -107,25 +107,16 @@ use. So, as there are no named parameters, there is little clutter,
 keeping the whole thing short and easy to read.
 
 
-Then, there may be a few key/value pairs where the key is one of
-these keywords:
+Besides the option specifications, there may be a few other
+key/value pairs, where the key is one of these keywords:
 
-`_arguments` : either a string describing the command's arguments,
-or a list with those. In the latter case, it is used to determine
-the minimum and maximum number of arguments. See below at "Argument
-count checking" for more information.
-
-`_help_header`: a string that will be printed at the top of the help
-message.
-
-`_help_footer`: a string that will be printed at the bottom of the
-help message.
-
-`_program`: the program name to use in usage and help message
-instead of `sys.argv[0]`.
-
-`_usage`: a string to use as the usage message instead of the one
-constructed from the program name and `_arguments`.
+| Key | Meaning |
+|-------|---------|
+| `_arguments` |: either a string describing the command's arguments, or a list with those. In the latter case, it is used to determine the minimum and maximum number of arguments. See below at "Argument count checking" for more information. |
+| `_help_header` | a string that will be printed at the top of the help message. |
+| `_help_footer` | a string that will be printed at the bottom of the help message. |
+| `_program` | the program name to use in usage and help message instead of `sys.argv[0]`. |
+| `_usage` | a string to use as the usage message instead of the one constructed from the program name and `_arguments`. |
 
 The two values returned are an option value container — a namespace
 in which the values can be accessed using the option name (e.g. as
@@ -136,9 +127,9 @@ And that is indeed all you need to know for the majority of
 applications. One simple example exercises nearly all features of
 this module:
 
-    import pgetopt
+    import jpylib as y
 
-    ovc, args = pgetopt.parse({
+    ovc, args = y.pgetopts({
         # opt: (name,        type, default value, helptext[, arg name])
         "s": ("schmooze",    bool, 0,    "increase schmooziness"),
         "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
@@ -237,11 +228,11 @@ string (was tuple before). Reason: `("arg1", )` is a tuple, but
 to confuse, and that cannot happen with a list.
 
 
-The `parse()` function
-----------------------
+The `pgetopts()` function
+-------------------------
 
-Above, the `parse()` function has been shown to be called with one
-argument only, the option descriptors dictionary. There are two
+Above, the `pgetopts()` function has been shown to be called with
+one argument only, the option descriptors dictionary. There are two
 optional arguments that can be useful in some applications:
 
 `args`: The actual argument list from which the options shall be
@@ -260,8 +251,8 @@ exception is raised instead. These exceptions are listed below.
 Exceptions
 ----------
 
-The `parse()` function checks for a number of errors in the passed
-descriptors dictionary. If any of these are found, an
+The `pgetopts()` function checks for a number of errors in the
+passed descriptors dictionary. If any of these are found, an
 `AssertionError` is raised:
 
  * The key of an entry is not an option string of length 1 or a
@@ -290,7 +281,7 @@ as text constants, so they can be used for comparison:
 meaning it can be the short form or the long form.)
 
 If you want to handle these exceptions by yourself, see the
-`parse()` function for an example.
+`pgetopts()` function for an example.
 
 In addition to these exceptions, an `AssertionError` exception can
 be thrown in the following cases:
@@ -305,68 +296,40 @@ The OptionValueContainer
 ------------------------
 
 The `OptionValueContainer`, short OVC and in my code often `ovc`, is
-the first of the two values returned by the `pgetopt.parse()`
-function. When it is returned, it contains the option values as
-attributes with the names of the options. So, if an option has been
-specified as `"v": ("verbose", bool, False, "turn on verbose mode")`
-in the option descriptors argument, its value is available as
-`ovc.verbose` in the returned OVC.
+the first of the two values returned by the `pgetopts()` function.
+When it is returned, it contains the option values as attributes
+with the names of the options. So, if an option has been specified
+as `"v": ("verbose", bool, False, "turn on verbose mode")` in the
+option descriptors argument, its value is available as `ovc.verbose`
+in the returned OVC.
 
 Besides that, there are a few other fields in the OVC that may be of
 interest. Their names begin with `ovc_` or `_` to avoid conflicts
 with option names.
 
-`ovc.ovc_usage`: Method that prints a brief usage message. This is
-the function invoked by default on an option or argument error. The
-message describes the command arguments (from the `_arguments`
-value), prints a hint at the `-?` option, and then exits the
-program. This is used internally when the given options or the
-number of arguments are incorrect, but it can also be used by the
-user. Optional argument `error` may contain an error message that is
-printed with the usage message; optional argument `exit_status` may
-specify the exit status used (default: 64, the usual EX_USAGE value)
-
-`ovc.ovc_usage_msg`: Method that returns the usage message mentioned
-above as a string.
-
-`ovc.ovc_help`: Method that prints a more detailed help message and
-exits the program. This is the function invoked with the default
-`-?` or `--help` option. The help message consists of the usage
-message (see above), the `_help_header` argument of the descriptors
-dictionary to `parse()`, a description of the options (constructed
-from the descriptors), and the `_help_footer` argument.
-
-`ovc.ovc_help_msg`: Method that returns the above help message as a
-string.
+| Field | Meaning |
+|-------|---------|
+| `ovc.ovc_usage` | Method that prints a brief usage message. This is the function invoked by default on an option or argument error. The message describes the command arguments (from the `_arguments` value), prints a hint at the `-?` option, and then exits the program. This is used internally when the given options or the number of arguments are incorrect, but it can also be used by the user. Optional argument `error` may contain an error message that is printed with the usage message; optional argument `exit_status` may specify the exit status used (default: 64, the usual `EX_USAGE` value) |
+| `ovc.ovc_usage_msg` | Method that returns the usage message mentioned above as a string. |
+| `ovc.ovc_help` | Method that prints a more detailed help message and exits the program. This is the function invoked with the default `-?` or `--help` option. The help message consists of the usage message (see above), the `_help_header` argument of the descriptors dictionary to `pgetopts()`, a description of the options (constructed from the descriptors), and the `_help_footer` argument. |
+| `ovc.ovc_help_msg` | Method that returns the above help message as a string. |
 
 The other fields, whose names begin with `_`, are not meant as
 official interfaces, but could be subject to change in future
 versions.
 
-`ovc._args`: The arguments as passed to the `parse()` function or,
-by default, taken from `sys.argv[]`.
-
-`ovc._arguments`, `ovc._help_footer`, `ovc._help_header`,
-`ovc._usage`: The corresponding fields of the descriptors argument.
-
-`ovc._have_opt`: Method used internally during option parsing.
-
-`ovc._long`: Option descriptors dictionary by long option name.
-
-`ovc._max`: Maximum number of arguments as calculated from the
-`_arguments` description, or None.
-
-`ovc._min`: Minimum number of arguments as calculated from the
-`_arguments` description, or None.
-
-`ovc._opts`: Option descriptors dictionary by short option name.
-
-`ovc._parse`: Method used internally for option parsing.
-
-`ovc._program`: The name of the program, from `sys.argv[0]` or the
-descriptors argument.
-
-`ovc._set_optarg`: Method used internally during option parsing.
+| Field | Meaning |
+|-------|---------|
+| `ovc._args` | The arguments as passed to the `pgetopts()` function or, by default, taken from `sys.argv[]` |
+| `ovc._arguments`, `ovc._help_footer`, `ovc._help_header`, `ovc._usage` | The corresponding fields of the descriptors argument. |
+| `ovc._have_opt` | Method used internally during option parsing. |
+| `ovc._long` | Option descriptors dictionary by long option name. |
+| `ovc._max` | Maximum number of arguments as calculated from the `_arguments` description, or None. |
+| `ovc._min` | Minimum number of arguments as calculated from the `_arguments` description, or None. |
+| `ovc._opts` | Option descriptors dictionary by short option name. |
+| `ovc._parse` | Method used internally for option parsing. |
+| `ovc._program` | The name of the program, from `sys.argv[0]` or the descriptors argument. |
+| `ovc._set_optarg` | Method used internally during option parsing. |
 
 
 Limitations
@@ -389,55 +352,66 @@ a few limitations.
 Semi-hidden feature: option value callbacks
 -------------------------------------------
 
-A feature not mentioned so far is the ability to call a function
-when an option is encountered. If the type field of an option
+A feature not mentioned so far is the ability to have a function
+called when an option is seen. If the type field of an option
 descriptor contains not a type, but a callable function, this
-function will be called without arguments when the option is
-encountered on the command line, and its return value (which must
-not be `None`) will be used as the option's value.
+function will be called without arguments when the option is seen on
+the command line, and its return value (which must not be `None`)
+will be used as the option's value.
 
 This is not a fully planned feature; rather, it fell more or less
 accidentally out of the implementation of the default `help` option.
-At the beginning I did not even really see a useful application, but
-in between one has dawned on me.
+At the beginning I did not even really see another useful
+application, but in between I have found one.
 
-I have to admit this feature isn't the prime example for clarity of
+I have to admit this feature isn't the prime example of clarity in
 the user interface. But then it was an afterthought, and it can
 safely be just ignored anyway.
+
+This is one application I find useful:
+
+    import jpylib as y
+
+    ovc, args = y.pgetopts({
+        "v": ("verbose", y.alert_level_up, y.alert_level(),
+              "make output more verbose"),
+        "q": ("quiet", y.alert_level_zero, y.alert_level(),
+              "print errors only"),
+        ...
+    })
+
+The `-v` option initialises its value from `y.alert_level()`, i.e.
+the current alert level. Every time the `-v` option is seen,
+`y.alert_level_up()` is called, increasing the alert level. When the
+`-q` option is seen, `y.alert_level_zero()` is called, setting the
+alert level to zero. The actual option values returned in `ovc`
+needn't even be used any more, as the alert level is already set.
+
+I have been using this in a number of programs in between -- so
+often indeed that I am thinking of implementing a shorthand for this
+pattern.
 
 
 Documentation, Examples and Testing
 -----------------------------------
 
-This README file is the main documentation. The source is in the
-`lib/` directory; run `make` in the main directory to update the
-`README.md` with a table of contents. `gh-md-toc` is used to
-generate the table of contents of the README
-(<https://github.com/ekalinin/github-markdown-toc.go.git>).
+This `pgetopt.md` file is the main documentation. The source is in
+the `doc/source/` directory; run `make` in the main directory to
+update the `pgetopt.md` with a table of contents and the error
+constants.
 
-The package README in `package/` contains the "schmooze" example.
-The docstring of the `parse()` function contains a summary of the
-main features and usage of the module.
+The docstring of the `pgetopts()` function contains a summary of the
+main features and usage.
 
 The examples shown above can also be found in the `examples/`
 directory.
 
-The directory `tests/` contains a test suite. It can be invoked by
-running `make test` in the main directory. The `coverage` package/tool
-to run test coverage analysis. (The Debian/Ubuntu package installs
-the command as `python3-coverage`, same as the package name.)
+The directory `tests/` contains a test suite to be used with
+Python's `unittest` module; the `test_pg_*.py` files contain
+`pgetopts` tests. The tests can be invoked (together with the other
+`jpylib` tests) by running `make test` in the main directory, and
+`make coverage` to run test coverage analysis (uses Python's
+`coverage` module).
 
 
-The PyPi package
-----------------
-
-The PyPi package is built and uploaded to PyPi by running `make
-pkg-pgetopt` and `make upload-pgetopts`, respectively. The package
-URL is <https://pypi.org/project/pgetopt-jyrgenn/>.
-
-To build the package, you need `setuptools` and `twine` (see
-<https://packaging.python.org/tutorials/packaging-projects/> for
-details).
-
-
-[Juergen Nickelsen <ni@w21.org> 2020-06]
+[Juergen Nickelsen <ni@w21.org> 2022-08]

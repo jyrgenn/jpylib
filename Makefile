@@ -35,6 +35,6 @@ preview:
 	open $(PREVIEW)
 
 clean:
-	-rm -rf tmp .coverage
+	-rm -rf tmp .coverage TAGS
 	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +
 	cd package && $(MAKE) clean

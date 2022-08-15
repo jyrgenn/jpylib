@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# This is a number of tests I implemented before I started using the (much
+# better suited) unittest framework.
 
 import pgetopt
 

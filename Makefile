@@ -1,6 +1,6 @@
-# Makefile for the pgetopt Python module
+# Makefile for the jpylib Python library
 
-PREVIEW = tmp/pgetopt.html
+PREVIEW = tmp/pgetopts.html
 
 
 default: documentation test
@@ -31,7 +31,7 @@ install:
 
 preview:
 	cd doc && $(MAKE)
-	markdown doc/pgetopt.md > $(PREVIEW)
+	markdown doc/pgetopts.md > $(PREVIEW)
 	open $(PREVIEW)
 
 clean:

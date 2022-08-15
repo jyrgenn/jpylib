@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from jpylib.pgetopt import *
+from jpylib.options import *
 import unittest
 
 # assorted tests from the docs
@@ -28,7 +28,7 @@ class BlarkTestcase(unittest.TestCase):
     def test_fromREADME(self):
         """blark example from the README"""
         argv = "-v -o /tmp/blark.out -i 3 gnuddle fuddle -a ruddle".split(" ")
-        ovc, args = parse(blark_descs, argv, exit_on_error=False)
+        ovc, args = pgetopts(blark_descs, argv, exit_on_error=False)
         self.assertEqual(ovc.ovc_values(),
                          dict(verbose=1, output_file="/tmp/blark.out",
                               iterations=3))
@@ -40,12 +40,12 @@ class SchmoozeTestcase(unittest.TestCase):
     def test_noArgs(self):
         """no arguments (needs 1)"""
         with self.assertRaises(ArgumentError) as cm:
-            parse(schmooze_descs, [], exit_on_error=False)
+            pgetopts(schmooze_descs, [], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorMinarg, 1))
 
     def test_OneArg(self):
         """one argument, no options"""
-        ovc, args = parse(schmooze_descs, ["huhu"], exit_on_error=False)
+        ovc, args = pgetopts(schmooze_descs, ["huhu"], exit_on_error=False)
         self.assertEqual(ovc.ovc_values(),
                          dict(schmooze=0, output_file=None,
                               repetitions=3, debug=[]))
@@ -53,7 +53,7 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_fiveArgs(self):
         """5 args"""
-        ovc, args = parse(schmooze_descs,
+        ovc, args = pgetopts(schmooze_descs,
                           ["huhu", "haha", "dada", "dodo", "bu"],
                           exit_on_error=False)
         self.assertEqual(ovc.ovc_values(),
@@ -64,7 +64,7 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_oneArg_ss(self):
         """1 arg -ss"""
-        ovc, args = parse(schmooze_descs,
+        ovc, args = pgetopts(schmooze_descs,
                           ["-ss", "huhu"],
                           exit_on_error=False)
         self.assertEqual(ovc.ovc_values(),
@@ -76,7 +76,7 @@ class SchmoozeTestcase(unittest.TestCase):
     def test_wrongOpt(self):
         """wrong opt"""
         with self.assertRaises(OptionError) as cm:
-            ovc, args = parse(schmooze_descs,
+            ovc, args = pgetopts(schmooze_descs,
                               ["-d", "print", "--output_file=hamburg",
                                "haha", "dada"],
                               exit_on_error=False)
@@ -84,7 +84,7 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_moreOpts(self):
         """more opts"""
-        ovc, args = parse(schmooze_descs,
+        ovc, args = pgetopts(schmooze_descs,
                           ["-d", "print", "--output-file=hamburg",
                            "haha", "dada"],
                           exit_on_error=False)
@@ -95,7 +95,7 @@ class SchmoozeTestcase(unittest.TestCase):
 
     def test_noOpts_dashdash(self):
         """no opts"""
-        ovc, args = parse(schmooze_descs,
+        ovc, args = pgetopts(schmooze_descs,
                           ["--", "-d", "print", "--output_file=hamburg",
                            "haha", "dada"],
                           exit_on_error=False)

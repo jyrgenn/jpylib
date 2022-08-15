@@ -7,7 +7,7 @@ import os
 import pwd
 import sys
 
-from .pgetopt import parse as pgetopts
+from .options import pgetopts
 from .alerts import L_ERROR, L_NOTICE, L_INFO, L_DEBUG, L_TRACE, \
     alert_config, alert_level, alert_level_name, \
     alert_level_up, alert_level_zero, is_notice, is_info, is_debug, is_trace, \

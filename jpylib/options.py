@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Juergen Nickelsen <ni@w21.org>, see LICENSE.
 
-"""POSIX-conformant command-line option parser (plus long options)
-See the parse() function for details. Build $__package_version$
+"""POSIX-conformant command-line option pgetoptsr (plus long options)
+See the pgetopts() function for details. Build $__package_version$
 """
 
 import os
@@ -26,7 +26,7 @@ class OptionValueContainer:
     def __init__(self, descriptors, args):
         """Arguments: dict optchar => descriptor; command-line args.
 
-        See the parse() function below for details.
+        See the pgetopts() function below for details.
 
         """
         self._opts = copy.deepcopy(descriptors)
@@ -215,7 +215,7 @@ class OptionValueContainer:
                  if not key.startswith("_") }
 
 
-def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
+def pgetopts(descriptors, args=sys.argv[1:], exit_on_error=True):
     """Parse the command line options according to the specified descriptors.
 
     Keys of the descriptors dictionary are options or keywords. In case
@@ -275,11 +275,11 @@ def parse(descriptors, args=sys.argv[1:], exit_on_error=True):
     by the `_help_header` and the `_help_footer`; it terminates the program
     after printing the message.
 
-    In case of a normal return of parse() (i.e. options and number of
+    In case of a normal return of pgetopts() (i.e. options and number of
     arguments okay), it returns an `OptionValueContainer` and a list of
     the remaining command line arguments. Example:
 
-        ovc, args = pgetopt.parse({
+        ovc, args = pgetopts({
         # opt: (name,          type, default value, helptext[, arg name])
           "s": ("schmooze",    bool, 0,    "more schmooziness"),
           "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),

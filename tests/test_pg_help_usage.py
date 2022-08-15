@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from jpylib.pgetopt import parse
+from jpylib import pgetopts
 from jpylib.capture import outputAndExitCaptured
 
 # test replacing the default usage message
@@ -10,7 +10,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage0(self):
         """test usage output 0 args to err"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -26,7 +26,7 @@ use '-?' option to get more help""".format(ovc._program))
 
     def test_usage1(self):
         """test usage output 0 args, to err, other exit status"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -41,7 +41,7 @@ use '-?' option to get more help""".format(ovc._program))
 
     def test_usage2(self):
         """test usage output 0 args, to err, message, other exit status"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -58,7 +58,7 @@ use '-?' option to get more help""".format(ovc._program, ovc._program))
 
     def test_usage3(self):
         """test usage output 0 args, to err, message"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -75,7 +75,7 @@ use '-?' option to get more help""".format(ovc._program, ovc._program))
 
     def test_usage4(self):
         """test usage output 0 args, to stdout, no message"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -90,7 +90,7 @@ use '-?' option to get more help""".format(ovc._program))
 
     def test_usage5(self):
         """test usage output 3 args, to stdout, no message"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["1", "2", "drei"],
@@ -108,7 +108,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_help_msg(self):
         """Test help message."""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             # opt: (name,        type, default value, helptext[, arg name])
             "s": ("schmooze",    bool, 0,    "more schmooziness"),
             "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
@@ -136,7 +136,7 @@ This is just an example program.""")
     def test_help_out(self):
         """Test help message with -h."""
         with outputAndExitCaptured() as (out, err, status):
-            ovc, args = parse({
+            ovc, args = pgetopts({
                 # opt: (name,        type, default value, helptext[, arg name])
                 "s": ("schmooze",    bool, 0,    "more schmooziness"),
                 "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),
@@ -168,7 +168,7 @@ This is just an example program.
     def test_called_help(self):
         """Test called ovc_help()."""
         with outputAndExitCaptured() as (out, err, status):
-            ovc, args = parse({
+            ovc, args = pgetopts({
                 # opt: (name,        type, default value, helptext[, arg name])
                 "s": ("schmooze",    bool, 0,    "more schmooziness"),
                 "o": ("output_file", str,  None, "output file (or stdout)", "NAME"),

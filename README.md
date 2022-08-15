@@ -37,7 +37,7 @@ Documentation
 * [jpylib](doc/jpylib.md): brief documentation of the jpylib
   functionality.
 
-* [pgetopt](doc/pgetopt.md): somewhat more extensive documentation
+* [pgetopts](doc/pgetopts.md): somewhat more extensive documentation
   of the `pgetopts()` function, the library's most complex component
 
 

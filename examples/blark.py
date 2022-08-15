@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import pgetopt
+import jpylib as y
 
-ovc, args = pgetopt.parse({
+ovc, args = y.pgetopts({
     "v": ("verbose", bool, False, "be verbose"),
     "o": ("output_file", str, "/dev/stdout", "output file", "PATHNAME"),
     "i": ("iterations", int, 1, "number of iterations"),

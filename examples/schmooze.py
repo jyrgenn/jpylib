@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# pgetopt example program [ni@w21.org 2020-05-22]
+# pgetopts example program [ni@w21.org 2020-05-22]
 
 import sys
 import jpylib as y

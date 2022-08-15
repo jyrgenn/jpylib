@@ -128,13 +128,13 @@ Functions:
         Increase the alert level by one.
 
         This is intended to be used as the callback function for the
-        value of a pgetopt option to increase the verbosity.
+        value of a pgetopts option to increase the verbosity.
 
     alert_level_zero():
         Set the alert level to zero (errors only).
 
         This is intended to be used as the callback function for the
-        value of a pgetopt option to set the verbosity to zero.
+        value of a pgetopts option to set the verbosity to zero.
 
     is_notice():
         Return True iff the alert level is at least at notice.
@@ -180,7 +180,7 @@ take a format string and the values to be formatted as arguments.
 
 Together with the `pgetopts()` function for option parsing ([see
 there for
-details](./pgetopt.md#semi-hidden-feature-option-value-callbacks)),
+details](./pgetopts.md#semi-hidden-feature-option-value-callbacks)),
 a useful pattern of alerts usage in the options specification of a
 simple CLI program goes like this:
 
@@ -386,8 +386,8 @@ use.
 Also `__str__` and `__repr__`.
 
 
-`pgetopt` — a submodule `pgetopt` as used elsewhere
----------------------------------------------------
+`pgetopts` — PODIX-compliant command-line options parsing
+---------------------------------------------------------
 
 Usage pattern:
 
@@ -409,7 +409,7 @@ the `-v` option – variable name "verbose", default value is
 `L_NOTICE`, each occurence of `-v` increases the alert level.
 
 
-See the [`pgetopt`](./pgetopt.md) documentation for details.
+See the [`pgetopts`](./pgetopts.md) documentation for details.
 
 
 `getsecret` — read a secret from a secrets file

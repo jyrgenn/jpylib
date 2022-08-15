@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from jpylib.pgetopt import parse
+from jpylib import pgetopts
 import unittest
 
 # test replacing the default help/usage options
@@ -16,7 +16,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_hounds(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "h": ("hounds", int, 1, "number of hounds"),
             "_arguments": [],
@@ -25,7 +25,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_help_int5(self):
         """-h/--help option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("help", int, 1, "number of hounds"),
             "_arguments": [],
@@ -34,7 +34,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_help_def(self):
         """-h/--help default"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "h": ("help", int, 1, "number of hounds"),
             "_arguments": [],
@@ -43,7 +43,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_help_bool(self):
         """-h/--help option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "h": ("own_help", bool, 1, "number of hounds"),
             "_arguments": [],
@@ -52,7 +52,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_help_func(self):
         """call help function"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("help", my_help, None, "number of hounds"),
             "_arguments": [],
@@ -62,7 +62,7 @@ class HelpTestcase(unittest.TestCase):
         
     def test_usage_short0(self):
         """own usage option 0"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", bool, False, "opposite of overly"),
             "_arguments": [],
@@ -71,7 +71,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_usage_short1(self):
         """own usage option 1"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", int, 2, "opposite of overly"),
             "_arguments": [],
@@ -80,7 +80,7 @@ class HelpTestcase(unittest.TestCase):
 
     def test_usage_short2(self):
         """own usage option 2"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "?": ("usage", int, 2, "opposite of overly"),
             "_arguments": [],

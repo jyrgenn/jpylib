@@ -1,3 +1,4 @@
+<!-- GENERATED FILE, DO NOT EDIT -->
 <!--*- text -*- This is written for GitLab Flavored Markdown and may not
                 render correctly with other Markdown implementations. -->
 
@@ -10,7 +11,16 @@ additionally implement long options, while striking the right
 balance between simplicity and clarity of the user interface,
 brevity of the code, and the implemented capabilities.
 
-#include !../lib/make-toc $SOURCE
+  * [Motivation](#motivation)
+  * [POSIX Conformance](#posix-conformance)
+  * [Usage](#usage)
+  * [Argument count checking](#argument-count-checking)
+  * [The pgetopts() function](#the-pgetopts-function)
+  * [Exceptions](#exceptions)
+  * [The OptionValueContainer](#the-optionvaluecontainer)
+  * [Limitations](#limitations)
+  * [Semi-hidden feature: option value callbacks](#semi-hidden-feature-option-value-callbacks)
+  * [Documentation, Examples and Testing](#documentation-examples-and-testing)
 
 Motivation
 ----------
@@ -277,7 +287,12 @@ as text constants, so they can be used for comparison:
 
 | Constant    | Message                             | Argument |
 |-------------|-------------------------------------|----------|
-#include !../lib/generrtable.py jpylib/pgetopt.py
+| `ErrorNotopt` | "unknown option"                    | option   |
+| `ErrorArg`  | "option does not take an argument"  | option   |
+| `ErrorNoarg` | "option needs argument"             | option   |
+| `ErrorIntarg` | "option argument must be integer"   | option   |
+| `ErrorMinarg` | "too few arguments, needs at least" | minimum  |
+| `ErrorMaxarg` | "too many arguments, takes at most" | maximum  |
 
 (The option argument is the option as found on the command line,
 meaning it can be the short form or the long form.)
@@ -397,9 +412,9 @@ pattern.
 Documentation, Examples and Testing
 -----------------------------------
 
-This `pgetopt.md` file is the main documentation. The source is in
+This `pgetopts.md` file is the main documentation. The source is in
 the `doc/source/` directory; run `make` in the main directory to
-update the `pgetopt.md` with a table of contents and the error
+update the `pgetopts.md` with a table of contents and the error
 constants.
 
 The docstring of the `pgetopts()` function contains a summary of the

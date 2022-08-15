@@ -1,5 +1,5 @@
 
-all: pgetopt.md
+all: pgetopts.md
 
 %.md: source/%.source ../lib/include.py ../lib/make-toc ../lib/generrtable.py \
       Makefile

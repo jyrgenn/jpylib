@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from jpylib.pgetopt import *
+from jpylib.options import *
 from jpylib.capture import outputAndExitCaptured
 
 # try to trigger all error conditions handled in the code (except the
@@ -46,37 +46,37 @@ class ErrorTestCase(unittest.TestCase):
                 with self.subTest(sub=name+"_"+str(num)):
                     argv = mklist(num, name)
                     if ok:
-                        _, args = parse(optdesc, argv,
+                        _, args = pgetopts(optdesc, argv,
                                                 exit_on_error=False)
                         self.assertEqual(args, argv)
                     else:
                         with self.assertRaises(ArgumentError) as cm:
-                            parse(optdesc, argv, exit_on_error=False)
+                            pgetopts(optdesc, argv, exit_on_error=False)
 
 
     def test_unknownOpt(self):
         """encounter unknown option"""
         with self.assertRaises(OptionError) as cm:
-            parse({ "v": ("verbose", bool, 1, "increase verbosity") },
+            pgetopts({ "v": ("verbose", bool, 1, "increase verbosity") },
                   ["-d", "nunga"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorNotopt, "d"))
 
     def test_falseArgument(self):
         """argument supplied to bool option"""
         with self.assertRaises(OptionError) as cm:
-            parse({ "v": ("verbose", bool, 1, "increase verbosity") },
+            pgetopts({ "v": ("verbose", bool, 1, "increase verbosity") },
                           ["--verbose=19", "nunga"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorArg, "verbose"))
 
     def test_missingArgument(self):
         """missing argument to int option"""
         with self.assertRaises(OptionError) as cm:
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations")
             }, ["-i"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorNoarg, "i"))
         with self.assertRaises(OptionError) as cm:
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations")
             }, ["--iterations"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorNoarg, "iterations"))
@@ -84,12 +84,12 @@ class ErrorTestCase(unittest.TestCase):
     def test_wrongArgument(self):
         """wrong option argument type"""
         with self.assertRaises(OptionError) as cm:
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations")
             }, ["-i", "bunga"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorIntarg, "i"))
         with self.assertRaises(OptionError) as cm:
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations")
             }, ["--iterations", "bunga"], exit_on_error=False)
         self.assertEqual(cm.exception.args, (ErrorIntarg, "iterations"))
@@ -98,7 +98,7 @@ class ErrorTestCase(unittest.TestCase):
     def test_err_exit(self):
         """exit due to error"""
         with outputAndExitCaptured() as (out, err, status):
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations"),
                 "_program": "bungabunga",
                 "_arguments": ["bunga"],
@@ -114,7 +114,7 @@ use '-?' option to get more help
     def test_err_exit_noargs(self):
         """exit due to error"""
         with outputAndExitCaptured() as (out, err, status):
-            parse({
+            pgetopts({
                 "i": ("iterations", int, 1, "number of iterations"),
                 "_program": "bungabunga",
             }, ["-x", "3", "bunga"])

@@ -4,7 +4,7 @@ import jpylib as y
 
 import unittest
 
-docfile = "doc/pgetopt.md"
+docfile = "doc/pgetopts.md"
 
 class ReadmeTestcase(unittest.TestCase):
 
@@ -27,7 +27,7 @@ class ReadmeTestcase(unittest.TestCase):
 
     def test_errtable(self):
         """Check if the generated error table is present and complete."""
-        source = "jpylib/pgetopt.py"
+        source = "jpylib/options.py"
         errors = y.backquote("sed -n '/^Error/s/ .*//p' " + source)
         errorset = set(map(lambda x: f"`{x}`", errors.split()))
         with open(docfile) as f:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from jpylib.pgetopt import parse
+from jpylib import pgetopts
 import unittest
 
 
@@ -10,7 +10,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage0(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": [],
@@ -20,7 +20,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage1(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia"],
@@ -30,7 +30,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage2(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
@@ -41,7 +41,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage_own(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
@@ -53,7 +53,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage_program(self):
         """-h/--hounds option"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 1, "increase verbosity"),
             "z": ("zounds", int, 1, "number of zounds"),
             "_arguments": ["mangia", "[file1 ...]"],
@@ -65,7 +65,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage_string_arguments(self):
         """_arguments as string"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 0, "increase verbosity"),
             "_arguments": "...",
             "_program": "lala",
@@ -75,7 +75,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage_empty_string_arguments(self):
         """_arguments as string"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 0, "increase verbosity"),
             "_arguments": "",
             "_program": "lala",
@@ -84,7 +84,7 @@ class UsageTestcase(unittest.TestCase):
 
     def test_usage_empty_list_arguments(self):
         """_arguments as string"""
-        ovc, args = parse({
+        ovc, args = pgetopts({
             "v": ("verbose", bool, 0, "increase verbosity"),
             "_arguments": [],
             "_program": "lala",

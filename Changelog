@@ -1,10 +1,14 @@
 ;; -*- text -*-
 
-Also see Changelog-pgetopt for pgetopt changes.
+2022.815:
+
+ * finalise the assimilation of the former pgetopt package: renamed
+   jpylib/pgetopt.py => jpylib/options.py, replaced pgetopt.parse
+   references by pgetopts
 
 2022.812:
 
- * pgetops() documentation improvements
+ * pgetopts() documentation improvements
 
  * document end of separate pgetopt releases
 

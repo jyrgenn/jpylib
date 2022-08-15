@@ -197,7 +197,7 @@ def alert_level_up():
     """Increase the alert level by one.
 
     This is intended to be used as the callback function for the type of a
-    `pgetopt` option to increase the verbosity. Returns the new level.
+    `pgetopts` option to increase the verbosity. Returns the new level.
 
     """
     if cfg.level < cfg.max_level:
@@ -209,7 +209,7 @@ def alert_level_zero():
     """Set the alert level to zero (errors only).
 
     This is intended to be used as the callback function for the type of a
-    `pgetopt` option to set the verbosity to zero. Returns the new level.
+    `pgetopts` option to set the verbosity to zero. Returns the new level.
 
     """
     cfg.level = 0

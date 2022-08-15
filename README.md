@@ -1,13 +1,13 @@
 My Python Library
 =================
 
-This is meant to be a library package of things I want to have at
-hand for my own daily python programming. It shall include all the
-things I have developed and want to re-use — modules, small utility
-functions, and things.
+`jpylib` is a library package of things I want to have at hand for
+my own daily Python programming. It includes a number of programming
+utilities I have developed and want to re-use.
 
-This is a PyPi package so I can access it from everywhere and import
-it into programs as a whole. That could look like this:
+This is a PyPi package, named `jpylib-jyrgenn` so I can access it
+from everywhere as <https://pypi.org/ and import it into programs as a whole. That could
+look like this:
 
     import jpylib as y
 
@@ -20,79 +20,31 @@ it into programs as a whole. That could look like this:
         "v": (...),
     })
 
-The two functions called above, the `tracefn` decorator and
-`pgetopts` were indeed the first two I had in mind. Quite a few more
-followed in between.
+The two functions called above, the `tracefn` decorator and the
+`pgetopts()` function were indeed the first two I had in mind. Quite
+a few more followed in between.
 
 
 Components
 ----------
 
-* `fntrace` — function call tracing decorator.
-
-* `pgetopt` — a submodule `pgetopt` as used elsewhere.
-
-* `kvs` — simple key-value string parser.
-
-* `alerts` – print messages depending on an alert level.
-
-* `namespace` — a value container class with **kwargs initialisation
-  and things.
-
-* `config` — reading configuration values from files in Python
-  syntax and strings in a simple `key=value` syntax.
-
-* `getsecret` — read a secret from a secrets file
-
-* `sanesighandler` — a decorator to handle SIGINT and SIGPIPE
-  signals (or rather the corresponding KeyboardInterrupt and
-  BrokenPipeError exceptions) as they should be.
-
-* `program`, `home`, `real_home` — basename of `argv[0]`, `$HOME`,
-  and the uid's home dir as variables
-
-* `outputCaptured`, `outputAndExitCaptured` – context managers to
-  capture the output and/or system exit status of some code.
-
-* `backquote` — get the output of an external command as simple as
-  with the Perl backquote construct.
-
-* `boolish` — a function to make bool values from strings like
-  "yes", "no", "on", "off", etc. that are potentially used in
-  interactive answers and some config files.
-
-* `flatten` — generator, flatten a sequence (except strings)
-
-* `maybe_int` — return the corresponding int if the argument (e.g. a
-  string) represents an integer, or None. `maybe_num` for ints and
-  floats.
-
-* `is_int` — return True iff if the argument (e.g. a string)
-  represents an integer, False otherwise. `is_num` for ints and floats.
-
-* `Table` — an ASCII table formatter.
-
+See the documentation (referenced below) for a list of the
+components.
 
 Documentation
 -------------
 
-Real documentation is still to be written for most things. For now,
-refer to the source code, in particular to the function docstrings.
+* [jpylib](doc/jpylib.md): brief documentation of the jpylib
+  functionality.
 
-This is what is already there:
-
-* [jpylib](doc/jpylib.md)
-* [pgetopt](doc/pgetopt.md)
+* [pgetopt](doc/pgetopt.md): somewhat more extensive documentation
+  of the `pgetopts()` function, the library's most complex component
 
 
 To Do Next
 ----------
 
-* real documentation
-
 * maybe some directory hierarchy traversing support (the need to do
   that comes up again and again)
 
-* table formatting
-
-[ni 2020-07-02] started
+[ni 2022-08-13] started

@@ -714,6 +714,16 @@ function can be used, but in some cases none is required.
         whitespace (or what else is specified) are skipped.
 
 
+`read_mapping` – read a key/value mapping from a file
+-----------------------------------------------------
+
+    read_mapping(fname, sep=None, skip_fails=False):
+        Read a key/value mapping from `fname`.
+
+        The input are lines of the form "key value", with key and value
+        separated by `sep` or whitespace. Comment and empty lines are skipped
+        as per the default behaviour of `read_items()`.
+
 
 `Multiset` — a multiset implementation
 --------------------------------------

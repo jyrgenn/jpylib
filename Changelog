@@ -1,5 +1,9 @@
 ;; -*- text -*-
 
+2022.904:
+
+ * read_mapping()
+
 2022.815:
 
  * remove the remains of the pgetopt package in _morgue/

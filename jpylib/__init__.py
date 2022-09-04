@@ -27,7 +27,7 @@ from .process import backquote
 from .assorted import boolish, flatten, is_sequence, identity
 from .numeric import maybe_int, is_int, maybe_num, is_num, \
      avg_midrange, remove_outliers
-from .iohelper import all_input_lines, read_items
+from .iohelper import all_input_lines, read_items, read_mapping
 from .time import isotime, isotime_ms, iso_time, iso_time_ms, iso_time_us
 from .table import format_table
 from .singleton import Singleton

@@ -6,6 +6,27 @@ import sys
 import re
 from .assorted import identity
 
+def read_mapping(fname, sep=None, skip_fails=False):
+    """Read a key/value mapping from `fname`.
+
+    The input are lines of the form "key value", with key and value
+    separated by `sep` or whitespace. Comment and empty lines are skipped
+    as per the default behaviour of `read_items()`.
+    """
+    result = {}
+    for line in read_items(fname):
+        key, *rest = line.split(sep, 1)
+        if len(rest) == 1:
+            value = rest[0]
+        elif skip_fails:
+            pass
+        else:
+            raise ValueError("key/value line has only one field: "
+                             + repr(line))
+        result[key] = value
+    return result
+
+
 def all_input_lines(fnames=[], cont_err=False):
     """Like Perl's diamond operator `<>`, return lines from files or stdin.
 

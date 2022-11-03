@@ -321,7 +321,7 @@ errorf = errf
 
 def fatal(*msgs, exit_status=1):
     """Print `L_ERROR` level output and end the program with `exit_status`."""
-    alert_if_level(L_ERROR, "Fatal", *msgs)
+    alert_if_level(L_ERROR, "Fatal,", *msgs)
     sys.exit(exit_status)
 
 def fatalf(template, *args, exit_status=1):

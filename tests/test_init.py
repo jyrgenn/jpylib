@@ -36,13 +36,14 @@ class InitTestcase(unittest.TestCase):
     def test_vars(self):
         self.assertTrue(re.match(version_re, version))
         self.assertEqual(program, sys.argv[0].split("/")[-1])
-        
-        proc = subprocess.Popen(["sh", "-c", "echo $HOME"],
-                                stdout=subprocess.PIPE)
-        proc.wait()
-        result = str(proc.stdout.read(), "utf-8").strip()
-        proc.stdout.close()
-        self.assertEqual(real_home, result)
+
+        if os.environ.get("HOME"):
+            proc = subprocess.Popen(["sh", "-c", "echo $HOME"],
+                                    stdout=subprocess.PIPE)
+            proc.wait()
+            result = str(proc.stdout.read(), "utf-8").strip()
+            proc.stdout.close()
+            self.assertEqual(real_home, result)
         self.assertEqual(real_home, home)
 
 

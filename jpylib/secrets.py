@@ -13,7 +13,7 @@ from datetime import datetime
 from jpylib import info, notice, pgetopts
 
 # Where to look for the secrets file.
-basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME')
+basedir = "/" if os.geteuid() == 0 else os.environ.get('HOME') or "."
 default_filename = os.path.join(basedir, "etc/secrets")
 
 # suffix of backup file

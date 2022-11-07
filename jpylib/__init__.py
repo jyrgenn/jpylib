@@ -39,13 +39,13 @@ version = "$__package_version$"
 program = os.path.basename(sys.argv[0])
 """The name of the current program without its directory path."""
 
+real_home = pwd.getpwuid(os.getuid()).pw_dir
+"""The home directory of the current user as defined for its user id."""
+
 home = os.environ.get("HOME") or real_home
 """The home directory of the current user as defined in the environment or for
 its user id.
 """
-
-real_home = pwd.getpwuid(os.getuid()).pw_dir
-"""The home directory of the current user as defined for its user id."""
 
 
 __all__ = sorted("""pgetopts L_ERROR L_NOTICE L_INFO L_DEBUG L_TRACE

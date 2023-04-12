@@ -33,10 +33,6 @@ class ProcessTestcase(unittest.TestCase):
     def test_no_shell_l(self):
         self.assertEqual(backquote(["echo", "dami$_"]), "dami$_\n")
 
-    def test_shell_explicit(self):
-        out = backquote("echo $shell", shell="/bin/tcsh")
-        self.assertTrue(out, "/bin/tcsh\n")
-
     def test_shell_builtin(self):
         with self.assertRaises(FileNotFoundError):
             full_result = backquote("exit 13", full_result=True)

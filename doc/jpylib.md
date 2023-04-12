@@ -386,7 +386,7 @@ use.
 Also `__str__` and `__repr__`.
 
 
-`pgetopts` — PODIX-compliant command-line options parsing
+`pgetopts` — POSIX-compliant command-line options parsing
 ---------------------------------------------------------
 
 Usage pattern:

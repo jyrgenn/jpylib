@@ -15,6 +15,7 @@ documentation:
 
 test:
 	python3 -m unittest discover tests
+	unset HOME; python3 -m unittest discover tests
 
 coverage:
 	python3 -m coverage run -m unittest discover tests

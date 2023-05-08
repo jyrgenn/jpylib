@@ -109,7 +109,7 @@ cfg = None
 
 def alert_config(*, decoration=None, fd=None, level=None, program=None,
                  syslog_facility=None, syslog_prio=None, reset_defaults=None,
-                 timestamps=None):
+                 timestamps=None, fatal_label="Fatal,"):
     """Customise the alerts configuration with the given values.
 
     If `reset_defaults` is true, reset everything to the specified or
@@ -150,6 +150,9 @@ def alert_config(*, decoration=None, fd=None, level=None, program=None,
 
             # print timestamps with messages
             timestamps=False,
+
+            # print "Fatal" label for fatal errors
+            fatal_label=fatal_label,
 
             # had any errors yet?
             had_errors=False,
@@ -321,7 +324,10 @@ errorf = errf
 
 def fatal(*msgs, exit_status=1):
     """Print `L_ERROR` level output and end the program with `exit_status`."""
-    alert_if_level(L_ERROR, "Fatal,", *msgs)
+    if cfg.fatal_label:
+        alert_if_level(L_ERROR, cfg.fatal_label, *msgs)
+    else:
+        alert_if_level(L_ERROR, *msgs)
     sys.exit(exit_status)
 
 def fatalf(template, *args, exit_status=1):

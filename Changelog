@@ -3,6 +3,7 @@
 2023.508:
 
  * take "-" as a normal argument that stops option processing
+ * make "Fatal" error label configurable
 
 2022.904:
 

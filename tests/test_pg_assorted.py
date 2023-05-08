@@ -33,7 +33,13 @@ class BlarkTestcase(unittest.TestCase):
                          dict(verbose=1, output_file="/tmp/blark.out",
                               iterations=3))
         self.assertEqual(args, "gnuddle fuddle -a ruddle".split(" "))
-    
+
+    def test_single_dash(self):
+        """Test if "-" stops option processing"""
+        argv = "-v -o /tmp/blark.out - -i 3 gnuddle fuddle -a ruddle".split(" ")
+        ovc, args = pgetopts(blark_descs, argv, exit_on_error=False)
+        self.assertEqual(args, "- -i 3 gnuddle fuddle -a ruddle".split(" "))
+
 
 class SchmoozeTestcase(unittest.TestCase):
 

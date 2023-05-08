@@ -86,8 +86,11 @@ class OptionValueContainer:
     def _parse(self):
         while self._args and self._args[0].startswith("-"):
             arg = self._args.pop(0)
-            if arg == "--": break
+            if arg == "-":
+                self._args.insert(0, arg)
+                break
             if arg.startswith("--"):
+                if arg == "--": break
                 self._have_opt(arg[2:])
             else:
                 arg = arg[1:]

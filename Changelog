@@ -1,5 +1,9 @@
 ;; -*- text -*-
 
+2023.508:
+
+ * take "-" as a normal argument that stops option processing
+
 2022.904:
 
  * read_mapping()

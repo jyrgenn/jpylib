@@ -6,23 +6,23 @@ import sys
 import re
 from .assorted import identity
 
-def read_mapping(fname, sep=None, skip_fails=False):
+def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#"):
     """Read a key/value mapping from `fname`.
 
     The input are lines of the form "key value", with key and value
     separated by `sep` or whitespace. Comment and empty lines are skipped
-    as per the default behaviour of `read_items()`.
+    as per the behaviour of `read_items()`.
     """
     result = {}
-    for line in read_items(fname):
+    for line in read_items(fname, comments_re=comments_re):
         key, *rest = line.split(sep, 1)
         if len(rest) == 1:
             value = rest[0]
         elif skip_fails:
-            pass
+            continue
         else:
-            raise ValueError("key/value line has only one field: "
-                             + repr(line))
+            raise ValueError(f"{fname}:{line}: "
+                             + "key/value line has only one field")
         result[key] = value
     return result
 

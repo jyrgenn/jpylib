@@ -3,6 +3,7 @@
 import jpylib as y
 
 import os
+import re
 import sys
 import unittest
 import collections
@@ -12,6 +13,32 @@ files = ["examples/testdata/input_lines_a",
 nonex = ["examples/testdata/input_lines_a",
          "examples/testdata/input_lines_nonex"]
 fstdin = "examples/testdata/input_lines_stdin"
+
+mapfile = "lib/mapping"
+mapfile_c = "lib/mapping.comments"
+dnsfile = "lib/dnszone"
+dnsfile_b = "lib/dnszone.botched"
+
+
+def read_map(fname, sep=None, comments_re="^\\s*#", skip_fails=False):
+    result = {}
+    with open(fname) as f:
+        for line in f:
+            if comments_re and re.search(comments_re, line):
+                continue
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                key, value = line.split(sep, 1)
+                result[key] = value
+            except Exception as e:
+                if skip_fails:
+                    pass
+                else:
+                    raise e
+    return result
+
 
 class IOHelperTestcase(unittest.TestCase):
 
@@ -187,4 +214,38 @@ class ReadItemsTestcase(unittest.TestCase):
         result = list(y.read_items(fname, comments_re="//"))
         # y.debug("result", result)
         self.assertEqual(result, expect)
+
+
+    def test_read_mapping(self):
+        themap = read_map(mapfile)
+        tested = y.read_mapping(mapfile)
+        self.assertEqual(themap, tested)
+
+    def test_read_mapping_comments(self):
+        themap = read_map(mapfile_c)
+        tested = y.read_mapping(mapfile)
+        self.assertEqual(themap, tested)
+
+    def test_read_mapping_no_comments(self):
+        themap = read_map(mapfile_c, comments_re=None)
+        tested = y.read_mapping(mapfile)
+        self.assertNotEqual(themap, tested)
+
+    def test_read_mapping_other_comment(self):
+        themap = read_map(dnsfile, comments_re="^\\s*;;")
+        tested = y.read_mapping(dnsfile, comments_re="^\\s*;;")
+        self.assertEqual(themap, tested)
+
+    def test_read_mapping_no_skip(self):
+        with self.assertRaises(ValueError):
+            themap = read_map(dnsfile_b, comments_re="^\\s*;;")
+        with self.assertRaises(ValueError):
+            tested = y.read_mapping(dnsfile_b, comments_re="^\\s*;;")
+
+    def test_read_mapping_skip(self):
+        themap = read_map(dnsfile_b, comments_re="^\\s*;;",
+                          skip_fails=True)
+        tested = y.read_mapping(dnsfile_b, comments_re="^\\s*;;",
+                                skip_fails=True)
+        self.assertEqual(themap, tested)
 

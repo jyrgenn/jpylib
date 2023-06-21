@@ -73,3 +73,48 @@ def backquote(command, shell=None, full_result=False, silent=False):
                                     .format(command, result[2],
                                             repr(result[1])))
         return result[0]
+
+
+def system(command, shell=None):
+    """Similar to os.system(), but the way I like it.
+
+    If command is a tuple or a list, run it directly. Otherwise, make it a
+    string if necessary and:
+    
+     - If `shell` is `True`, run command as shell command line with `/bin/sh`.
+
+     - If `shell` is otherwise true, use it as the shell and run command in it.
+    
+     - If `shell` is `None` (or unspecified), run command with `/bin/sh` if it
+       contains shell meta characters. Otherwise, split the string into a list
+       and run it directly. This is the default.
+
+     - If `shell` is otherwise false, split the string into a list and run it
+       directly.
+
+    If the called programm cannot be found, an exception will be raised.
+
+    Return the exit status of the command.
+
+    """
+    run_shell = False                   # for testing
+    if not isinstance(command, (list, tuple)):
+        command = str(command)
+        if shell:
+            if shell is True:
+                shell = "/bin/sh"
+            command = [shell, "-c", command]
+            run_shell = True
+        elif shell is None:
+            if any([ ch in shellmeta for ch in command ]):
+                command = ["/bin/sh", "-c", command]
+                run_shell = True
+            else:
+                command = command.split()
+        else:
+            command = command.split()
+
+    with subprocess.Popen(command) as proc:
+        proc.wait()
+        result = proc.returncode
+    return result

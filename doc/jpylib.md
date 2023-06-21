@@ -565,6 +565,30 @@ process. This may be different from $HOME when running `sudo -s`.
         In any case, however, there will be an exception raised if the
         called program cannot be found.
 
+`system` — run external command
+-------------------------------
+
+    def system(command, shell=None)
+        Similar to os.system(), but the way I like it.
+
+        If command is a tuple or a list, run it directly. Otherwise, make it a
+        string if necessary and:
+
+         - If `shell` is `True`, run command as shell command line with `/bin/sh`.
+
+         - If `shell` is otherwise true, use it as the shell and run command in it.
+
+         - If `shell` is `None` (or unspecified), run command with `/bin/sh` if it
+           contains shell meta characters. Otherwise, split the string into a list
+           and run it directly. This is the default.
+
+         - If `shell` is otherwise false, split the string into a list and run it
+           directly.
+
+        If the called programm cannot be found, an exception will be raised.
+
+        Return the exit status of the command.
+
 
 `boolish` — make bool values from strings
 -----------------------------------------

@@ -131,7 +131,37 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
         self.assertEqual(status.value, 1)
         with outputAndExitCaptured() as (out, err, status):
             fatal("oy vey!", exit_status=13)
-        self.assertTrue(err.getvalue().endswith(" oy vey!\n"))
+        value = err.getvalue()
+        self.assertTrue(value.endswith(" oy vey!\n"))
+        self.assertTrue("Fatal" in value)
+        self.assertEqual(status.value, 13)
+        
+    def test_fatal_no_fatal(self):
+        alert_config(fatal_label=None)
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("too bad!")
+        self.assertTrue(err.getvalue().endswith(" too bad!\n"))
+        self.assertEqual(status.value, 1)
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("oy vey!", exit_status=13)
+        value = err.getvalue()
+        self.assertTrue(value.endswith(" oy vey!\n"))
+        self.assertTrue("Fatal" not in value)
+        self.assertEqual(status.value, 13)
+        
+    def test_fatal_other(self):
+        label = "exit due to"
+        alert_config(fatal_label=label)
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("too bad!")
+        self.assertTrue(err.getvalue().endswith(" too bad!\n"))
+        self.assertEqual(status.value, 1)
+        with outputAndExitCaptured() as (out, err, status):
+            fatal("oy vey!", exit_status=13)
+        value = err.getvalue()
+        self.assertTrue(value.endswith(" oy vey!\n"))
+        self.assertTrue("Fatal" not in value)
+        self.assertTrue(label in value)
         self.assertEqual(status.value, 13)
         
 

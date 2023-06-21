@@ -1,5 +1,14 @@
 ;; -*- text -*-
 
+2023.509:
+
+ * tests for read_mapping(), restoring full coverage
+
+2023.508:
+
+ * take "-" as a normal argument that stops option processing
+ * make "Fatal" error label configurable
+
 2022.904:
 
  * read_mapping()

@@ -43,7 +43,7 @@ class Table:
         * template:      a template 7 x 7 drawing describing the table
         * align:         alignment descriptor string, 1 char per column, l/r/c;
                          may be sequence of 2 for first and following rows;
-                         asterisk at the end means default for folloing columns
+                         asterisk at the end means default for following columns
                          is the character in front of the asterisk
         * data:          the data to format, as a sequence of rows, which are
                          sequences of columns (the data items)

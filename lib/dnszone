@@ -1,0 +1,10 @@
+helgoland-media         IN A    10.21.211.55
+helgoland-media4        IN A    10.21.211.55
+abro-media              IN A    10.21.211.57
+abro-media4             IN A    10.21.211.57
+
+;; core_vlan, 10.21.213.0/24
+defaultrouter-core      IN A    10.21.213.1
+defaultrouter-core4     IN A    10.21.213.1
+odense-core             IN A    10.21.213.5
+odense-core4            IN A    10.21.213.5

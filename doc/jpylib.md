@@ -402,11 +402,6 @@ Usage pattern:
     ovc.ovc_help(), ovc.ovc_help_msg(), ovc.ovc_usge_msg(),
     ovc.ovc_usage(error="", exit_status=64), ovc.ovc_values()
 
-Also, `y.verbosity_option` can be used as the option description for
-the `-v` option – variable name "verbose", default value is
-`L_NOTICE`, each occurence of `-v` increases the alert level.
-
-
 See the [`pgetopts`](./pgetopts.md) documentation for details.
 
 

@@ -2,8 +2,11 @@
 
 2023.622:
 
- * system() (but no tests yet)
  * have ovc_help() take an exit_status argument
+
+2023.621:
+
+ * system() (but no tests yet)
 
 2023.509:
 

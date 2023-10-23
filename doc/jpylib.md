@@ -594,11 +594,11 @@ process. This may be different from $HOME when running `sudo -s`.
         parsing config files (that aren't Python) or interactive
         answers or the like.
 
-recognised strings for True: yes y sure ja j jou si on oui t true
-aye 1 affirmative
+recognised strings for True: `yes y sure ja j jou si on oui t true
+aye 1 affirmative`
 
-recognised strings for False: no n nope nein nee off non f false nay
-0 negative
+recognised strings for False: `no n nope nein nee off non f false nay
+0 negative`
 
 `y.means_true` and `y.means_false` are sets of strings that can be
 adapted to application needs.

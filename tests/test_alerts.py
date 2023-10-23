@@ -133,7 +133,7 @@ DBG VAR c: 'this is a testthis is a testthis is a test'\n""")
             fatal("oy vey!", exit_status=13)
         value = err.getvalue()
         self.assertTrue(value.endswith(" oy vey!\n"))
-        self.assertTrue("Fatal" in value)
+        self.assertTrue("(fatal)" in value)
         self.assertEqual(status.value, 13)
         
     def test_fatal_no_fatal(self):

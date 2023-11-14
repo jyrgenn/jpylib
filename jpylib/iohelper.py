@@ -6,7 +6,8 @@ import sys
 import re
 from .assorted import identity
 
-def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#"):
+def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#",
+                 ign_fnf=False):
     """Read a key/value mapping from `fname`.
 
     The input are lines of the form "key value", with key and value
@@ -14,7 +15,7 @@ def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#"):
     as per the behaviour of `read_items()`.
     """
     result = {}
-    for line in read_items(fname, comments_re=comments_re):
+    for line in read_items(fname, comments_re=comments_re, ign_fnf=ign_fnf):
         key, *rest = line.split(sep, 1)
         if len(rest) == 1:
             value = rest[0]
@@ -133,7 +134,7 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     else:
         skip_re = False
 
-    for line in all_input_lines((fname,), ign_fnf):
+    for line in all_input_lines((fname,), ign_fnf=ign_fnf):
         stripped_line = rstripper(lstripper(line))
         if skip_empty and not stripped_line:
             continue

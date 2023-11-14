@@ -9,7 +9,7 @@ PYPIUPLD = https://upload.pypi.org/legacy/
 PYPIDNLD = https://pypi.org/simple/
 PRODUCTS = $(MODULE) *.egg-info build dist \
            $(shell find . -name __pycache__)
-PYPICRED = -u jyrgenn -p $$(getsecret pypi/jyrgenn)
+PYPICRED = -u __token__ -p $$(getsecret pypi-upload-jpylib)
 
 default:
 	@echo This Makefile has no actionable default target.

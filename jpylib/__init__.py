@@ -23,7 +23,7 @@ from .secrets import putsecret, getsecret, getsecret_main, putsecret_main, \
 from .sighandler import sanesighandler
 from .terminal import ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured, inputFrom
-from .process import backquote
+from .process import backquote, system
 from .assorted import boolish, flatten, is_sequence, identity
 from .numeric import maybe_int, is_int, maybe_num, is_num, \
      avg_midrange, remove_outliers

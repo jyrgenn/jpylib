@@ -1,5 +1,17 @@
 ;; -*- text -*-
 
+2023.1023:
+
+ * make default fatal error label a bit more streamlined
+
+2023.622:
+
+ * have ovc_help() take an exit_status argument
+
+2023.621:
+
+ * system() (but no tests yet)
+
 2023.509:
 
  * tests for read_mapping(), restoring full coverage

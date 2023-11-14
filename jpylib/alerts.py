@@ -109,7 +109,7 @@ cfg = None
 
 def alert_config(*, decoration=None, fd=None, level=None, program=None,
                  syslog_facility=None, syslog_prio=None, reset_defaults=None,
-                 timestamps=None, fatal_label="Fatal,"):
+                 timestamps=None, fatal_label="(fatal)"):
     """Customise the alerts configuration with the given values.
 
     If `reset_defaults` is true, reset everything to the specified or

@@ -144,10 +144,10 @@ class OptionValueContainer:
             setattr(self, desc[0], value)
 
 
-    def ovc_help(self):
+    def ovc_help(self, exit_status=0):
         """Print the help message and exit."""
         print(self.ovc_help_msg())
-        sys.exit()
+        sys.exit(exit_status)
 
         
     def ovc_help_msg(self):

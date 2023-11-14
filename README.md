@@ -6,8 +6,8 @@ my own daily Python programming. It includes a number of programming
 utilities I have developed and want to re-use.
 
 This is a PyPi package, named `jpylib-jyrgenn` so I can access it
-from everywhere as <https://pypi.org/ and import it into programs as a whole. That could
-look like this:
+from everywhere as <https://pypi.org/project/jpylib-jyrgenn/> and
+import it into programs as a whole. That could look like this:
 
     import jpylib as y
 

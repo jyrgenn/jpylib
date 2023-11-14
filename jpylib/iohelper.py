@@ -27,7 +27,7 @@ def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#"):
     return result
 
 
-def all_input_lines(fnames=[], cont_err=False):
+def all_input_lines(fnames=[], cont_err=False, ign_fnf=False):
     """Like Perl's diamond operator `<>`, return lines from files or stdin.
 
     (Generator) If `fnames` is empty, return lines from stdin, otherwise
@@ -35,7 +35,8 @@ def all_input_lines(fnames=[], cont_err=False):
     for stdin. Typically, something like `sys.argv[1:]` would be passed
     as an argument. If `cont_err` is true, continue after a file open error,
     printing an error message. If `cont_err` is a callable, call it with
-    the file name and the exception on error.
+    the file name and the exception on error. If `ign_fnf` is true, ignore
+    a FileNotFoundError and continue silently.
     """
     if not fnames:
         fnames = ["-"]
@@ -50,6 +51,8 @@ def all_input_lines(fnames=[], cont_err=False):
                     for line in f:
                         yield line
         except Exception as e:
+            if ign_fnf and isinstance(e, FileNotFoundError):
+                continue
             if cont_err:
                 if callable(cont_err):
                     cont_err(fname, e)
@@ -61,7 +64,8 @@ def all_input_lines(fnames=[], cont_err=False):
 
 
 def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
-               comments_re="^\\s*#", skip_comments=True, skip_empty=True):
+               comments_re="^\\s*#", skip_comments=True, skip_empty=True,
+               ign_fnf=False):
     
     """Read lines/items from one or more files (generator).
 
@@ -87,6 +91,8 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
 
     If `skip_empty` is true, lines that are empty after the stripping of
     whitespace (or what else is specified) are skipped.
+
+    If `ign_fnf` is true, ignore a FileNotFoundError and continue silently.
 
     """
     def lstrip_func(chars):
@@ -127,7 +133,7 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     else:
         skip_re = False
 
-    for line in all_input_lines((fname,)):
+    for line in all_input_lines((fname,), ign_fnf):
         stripped_line = rstripper(lstripper(line))
         if skip_empty and not stripped_line:
             continue

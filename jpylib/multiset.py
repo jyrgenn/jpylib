@@ -46,6 +46,10 @@ class Multiset:
             for _ in range(count):
                 yield thing
 
+    def counts(self):
+        """Return all items and their counts as (item, count) (generator)."""
+        return self.elems.items()        
+
     def __len__(self):
         """Return the number of items in the Multiset."""
         count = 0

@@ -1,5 +1,8 @@
 ;; -*- text -*-
 
+2023.1212:
+ * Multiset.counts()
+
 2023.622:
 
  * have ovc_help() take an exit_status argument

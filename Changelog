@@ -3,6 +3,9 @@
 2023.1212:
  * Multiset.counts()
 
+2023.1023:
+ * make default fatal error label a bit more streamlined
+
 2023.622:
 
  * have ovc_help() take an exit_status argument

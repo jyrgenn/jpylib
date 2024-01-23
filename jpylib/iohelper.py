@@ -5,6 +5,8 @@ import os
 import sys
 import re
 from .assorted import identity
+from .alerts import trace
+from .fntrace import tracefn
 
 def read_mapping(fname, sep=None, skip_fails=False, comments_re="^\\s*#",
                  ign_fnf=False):
@@ -49,9 +51,11 @@ def all_input_lines(fnames=[], cont_err=False, ign_fnf=False):
                     yield line
             else:
                 with open(fname) as f:
+                    print("opened", fname)
                     for line in f:
                         yield line
         except Exception as e:
+            print("ign_fnf", ign_fnf, "e", e)
             if ign_fnf and isinstance(e, FileNotFoundError):
                 continue
             if cont_err:
@@ -64,6 +68,7 @@ def all_input_lines(fnames=[], cont_err=False, ign_fnf=False):
                 raise e
 
 
+@tracefn
 def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
                comments_re="^\\s*#", skip_comments=True, skip_empty=True,
                ign_fnf=False):
@@ -96,6 +101,8 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     If `ign_fnf` is true, ignore a FileNotFoundError and continue silently.
 
     """
+    print("r-i 1")
+
     def lstrip_func(chars):
         """Return function to strip chars from the left siide of a string."""
         def lstrip_f(s):
@@ -108,6 +115,7 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
             return s.rstrip(chars)
         return rstrip_f
 
+    print("r-i 2")
     if lstrip:
         if isinstance(lstrip, str):
             lstripper = lstrip_func(lstrip)
@@ -134,12 +142,18 @@ def read_items(fname, lstrip=True, rstrip=True, strip_newline=True,
     else:
         skip_re = False
 
-    for line in all_input_lines((fname,), ign_fnf=ign_fnf):
-        stripped_line = rstripper(lstripper(line))
-        if skip_empty and not stripped_line:
-            continue
-        if skip_re and skip_re.search(stripped_line):
-            continue
-        yield(stripped_line)
+    print("r-i 3")
+    print("enter all_input_files, fname =", fname, "ign_fnf =", ign_fnf)
+    try:
+        for line in all_input_lines((fname,), ign_fnf=ign_fnf):
+            stripped_line = rstripper(lstripper(line))
+            if skip_empty and not stripped_line:
+                continue
+            if skip_re and skip_re.search(stripped_line):
+                continue
+            yield(stripped_line)
+    except Exception as e:
+        print("pass through exception for {}: {}", fname, e)
+        raise e
 
 # EOF

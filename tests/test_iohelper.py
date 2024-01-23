@@ -10,8 +10,9 @@ import collections
 
 files = ["examples/testdata/input_lines_a",
          "examples/testdata/input_lines_b"]
-nonex = ["examples/testdata/input_lines_a",
-         "examples/testdata/input_lines_nonex"]
+nonex_file = "examples/testdata/input_lines_nonex"   # non-existent
+nonex_list = ["examples/testdata/input_lines_a",
+              nonex_file]
 fstdin = "examples/testdata/input_lines_stdin"
 
 mapfile = "lib/mapping"
@@ -70,14 +71,15 @@ class IOHelperTestcase(unittest.TestCase):
 
     def test_input_lines_nonex(self):
         with self.assertRaises(FileNotFoundError) as err:
-            data = list(map(str.strip, y.all_input_lines(nonex)))
-        
+            data = list(map(str.strip, y.all_input_lines(nonex_list)))
+        data = list(map(str.strip, y.all_input_lines(nonex_list, ign_fnf=True)))
+        self.assertEqual(data, ['a', 'bb', 'ccc', 'dddd', 'eeeee', 'ffffff'])
         
     def test_input_lines_continue(self):
         result = ["a", "bb", "ccc", "dddd", "eeeee", "ffffff",]
         sys.argv[0] = "the_program"
         with y.outputCaptured() as (out, err):
-            data = list(map(str.strip, y.all_input_lines(nonex, True)))
+            data = list(map(str.strip, y.all_input_lines(nonex_list, True)))
         self.assertEqual(data, result)
         self.assertEqual(err.getvalue(),
                          "the_program: [Errno 2] No such file or directory: 'examples/testdata/input_lines_nonex'\n")
@@ -91,7 +93,7 @@ class IOHelperTestcase(unittest.TestCase):
             handler_run = "handled " + fname
             self.assertIsInstance(e, FileNotFoundError)
 
-        data = list(map(str.strip, y.all_input_lines(nonex, handler)))
+        data = list(map(str.strip, y.all_input_lines(nonex_list, handler)))
         self.assertEqual(data, result)
         self.assertEqual(handler_run,
                          "handled examples/testdata/input_lines_nonex")
@@ -99,6 +101,15 @@ class IOHelperTestcase(unittest.TestCase):
 
 class ReadItemsTestcase(unittest.TestCase):
 
+    def test_read_items_nonex(self):
+        print("AND NOW THIS")
+        y.alert_level(y.L_TRACE)
+        with self.assertRaises(FileNotFoundError) as err:
+            data = y.read_items(nonex_file)
+        y.alert_level(y.L_NOTICE)
+        data = y.read_items(nonex_file, ign_fnf=True)
+        self.assertEqual(list(data), [])        
+        
     def test_read_items_defaults(self):
         expect = "one two three five seven nine ten".split()
         fname = "lib/items"
@@ -216,6 +227,14 @@ class ReadItemsTestcase(unittest.TestCase):
         self.assertEqual(result, expect)
 
 
+class ReadMappingTestcase(unittest.TestCase):
+
+    def test_read_mapping_nonex(self):
+        with self.assertRaises(FileNotFoundError) as err:
+            data = y.read_mapping(nonex_file)
+        data = y.read_mapping(nonex_file, ign_fnf=True)
+        self.assertEqual(data, {})        
+        
     def test_read_mapping(self):
         themap = read_map(mapfile)
         tested = y.read_mapping(mapfile)

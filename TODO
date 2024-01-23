@@ -1,0 +1,6 @@
+-*- text -*-
+
+ * There is some brokenness about the iohelper functions dealing
+   with non-existent files the details of which are to be
+   rediscovered, and resolved
+   

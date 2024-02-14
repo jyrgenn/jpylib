@@ -1,5 +1,5 @@
 # time-related functions
-# (I can never remmeber them, so I'll have my own.)
+# (I can never remember them, so I'll have my own.)
 
 from datetime import datetime
 

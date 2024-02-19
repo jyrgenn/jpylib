@@ -28,8 +28,7 @@ def boolish(value, default=None):
     if val in means_false:
         return False
     if default is None:
-        raise ValueError("value '{}' cannot be understood as false or true".
-                         format(value))
+        raise ValueError(f"value '{value}' cannot be understood as false or true")
     else:
         return default
 

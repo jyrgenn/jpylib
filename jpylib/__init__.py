@@ -20,7 +20,7 @@ from .namespace import Namespace
 from .config import Config
 from .secrets import putsecret, getsecret, getsecret_main, putsecret_main, \
      FileModeError
-from .sighandler import sanesighandler
+from .sighandler import sanesighandler, exit_on_error
 from .terminal import ttyi, ttyo, ptty
 from .capture import outputCaptured, outputAndExitCaptured, inputFrom
 from .process import backquote, system

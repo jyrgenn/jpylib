@@ -35,3 +35,16 @@ def sanesighandler(func):
             sys.stderr.close()
             sys.exit(141)
     return wrapper
+
+
+def exit_on_error(func):
+    """Decorator: exit the program with error message on exception."""
+    import os
+    import sys
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            sys.exit(f"{os.path.basename(sys.argv[0])}: {e}")
+    return wrapper

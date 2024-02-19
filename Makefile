@@ -35,6 +35,9 @@ preview:
 	markdown doc/pgetopts.md > $(PREVIEW)
 	open $(PREVIEW)
 
+tags: */*.py
+	etags */*.py
+
 clean:
 	-rm -rf tmp .coverage TAGS
 	find . \( -name '*~' -o -name __pycache__ \) -exec rm -rf {} +

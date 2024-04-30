@@ -2,6 +2,7 @@
 
 # Do things with processes.
 
+import selectors
 import subprocess
 from .alerts import *
 
@@ -56,13 +57,32 @@ def backquote(command, shell=None, full_result=False, silent=False):
         else:
             command = command.split()
 
+    outbuf = []
+    errbuf = []
+
+    sel = selectors.DefaultSelector()
+    fds_active = 2
+
+    def read_callback(f, buf):
+        nonlocal fds_active
+        data = f.read().decode("utf-8")
+        if len(data) == 0:
+            fds_active -= 1
+        buf.append(data)
+
+    
     with subprocess.Popen(command, stdin=subprocess.DEVNULL,
                           stderr=subprocess.PIPE,
                           stdout=subprocess.PIPE) as proc:
+        sel.register(proc.stdout, selectors.EVENT_READ, outbuf)
+        sel.register(proc.stderr, selectors.EVENT_READ, errbuf)
+
+        while fds_active:
+            for key, mask in sel.select():
+                read_callback(key.fileobj, key.data)
+            
         proc.wait()
-        result = (proc.stdout.read().decode("utf-8"),
-                  proc.stderr.read().decode("utf-8"),
-                  proc.returncode)
+        result = ("".join(outbuf), "".join(errbuf), proc.returncode)
     if full_result:
         if full_result == "plus":
             return result, run_shell

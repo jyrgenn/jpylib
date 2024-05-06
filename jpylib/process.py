@@ -77,7 +77,7 @@ def backquote(command, shell=None, full_result=False, silent=False):
         sel.register(proc.stdout, selectors.EVENT_READ, outbuf)
         sel.register(proc.stderr, selectors.EVENT_READ, errbuf)
 
-        while fds_active:
+        while fds_active > 0:
             for key, mask in sel.select():
                 read_callback(key.fileobj, key.data)
             

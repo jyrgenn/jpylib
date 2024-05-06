@@ -1,5 +1,9 @@
 ;; -*- text -*-
 
+2024.430
+
+ * backquote: read asynchronously from subprocess and avoid blocking
+
 2024.219
 
  * have exit_on_error() decorator
@@ -7,9 +11,6 @@
 
 2023.1212:
  * Multiset.counts()
-
-2023.1023:
->>>>>>> 8f1efc4ab8cdf93875c0e5c79c73e623c81c00de
 
 2023.1023:
  * make default fatal error label a bit more streamlined

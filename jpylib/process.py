@@ -80,7 +80,8 @@ def backquote(command, shell=None, full_result=False, silent=False):
         while fds_active > 0:
             for key, mask in sel.select():
                 read_callback(key.fileobj, key.data)
-            
+        proc.stdout.close()
+        proc.stderr.close()
         proc.wait()
         result = ("".join(outbuf), "".join(errbuf), proc.returncode)
     if full_result:
@@ -112,6 +113,8 @@ def system(command, shell=None):
      - If `shell` is otherwise false, split the string into a list and run it
        directly.
 
+    The standard IO channels are not redirected.
+    
     If the called programm cannot be found, an exception will be raised.
 
     Return the exit status of the command.

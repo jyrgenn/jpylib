@@ -10,7 +10,7 @@ from .alerts import *
 shellmeta = "\"'`|&;[(<>)]*?$"
 
 def backquote(command, shell=None, full_result=False, silent=False):
-    """Similar to Perl's \`command\` feature: run process, return output.
+    """Similar to Perl's \\`command\\` feature: run process, return output.
 
     If command is a tuple or a list, run it directly. Otherwise, make it a
     string if necessary and:

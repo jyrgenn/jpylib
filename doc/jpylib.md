@@ -769,6 +769,9 @@ thing.
     items(self):
         Return all items in the Multiset. Also, iteration helper.
 
+    counts(self):
+        Return all items and their counts as (item, count) (generator).
+
     __iter__(self):
         Iterate over the items in the Multiset, for `for t in ...`.
 

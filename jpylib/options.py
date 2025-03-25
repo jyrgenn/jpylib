@@ -56,7 +56,7 @@ class OptionValueContainer:
 
         if "?" not in self._opts:
             self._opts["?"] = \
-                ("help", self.ovc_help, None, "show help on options and things")
+                ("help", self.ovc_help, None, "show help on options and usage")
         if "h" not in self._opts:
             self._opts["h"] = self._opts["?"]
         for field in _keywords:

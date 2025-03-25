@@ -1,5 +1,9 @@
 ;; -*- text -*-
 
+2025.325 (and before)
+
+ * a few small improvements
+
 2024.430
 
  * backquote: read asynchronously from subprocess and avoid blocking

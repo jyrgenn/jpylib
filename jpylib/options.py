@@ -328,11 +328,11 @@ def pgetopts(descriptors, args=sys.argv[1:], exit_on_error=True,
         from .alerts import alert_level, alert_level_zero, alert_level_up, \
           L_NOTICE
         descriptors["q"] = (
-            "quiet", y.alert_level_zero, y.alert_level(y.L_NOTICE),
+            "quiet", alert_level_zero, alert_level(L_NOTICE),
             "be quiet (no output except error messages)"
         )
         descriptors["v"] = (
-            "verbose", y.alert_level_up, y.alert_level(y.L_NOTICE),
+            "verbose", alert_level_up, alert_level(L_NOTICE),
             "increase verbosity"
         )
     ovc = OptionValueContainer(descriptors, args)

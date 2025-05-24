@@ -218,7 +218,8 @@ class OptionValueContainer:
                  if not key.startswith("_") }
 
 
-def pgetopts(descriptors, args=sys.argv[1:], exit_on_error=True):
+def pgetopts(descriptors, args=sys.argv[1:], exit_on_error=True,
+             verbosity_options=False):
     """Parse the command line options according to the specified descriptors.
 
     Keys of the descriptors dictionary are options or keywords. In case
@@ -316,7 +317,24 @@ def pgetopts(descriptors, args=sys.argv[1:], exit_on_error=True):
       `ovc.ovc_help_msg(),
       ovc.ovc_usage_msg()`: get corresponding messages as strings
 
+    If `exit_on_error` is true (the default), call ovc.ovc_usage() with
+    an appropriate error message when an error is detected. Otherwise,
+    just raise the exception.
+
+    If `verbosity_options` is true, insert `-v` and `-q` options as
+    described in the documentation.
     """
+    if verbosity_options:
+        from .alerts import alert_level, alert_level_zero, alert_level_up, \
+          L_NOTICE
+        descriptors["q"] = (
+            "quiet", y.alert_level_zero, y.alert_level(y.L_NOTICE),
+            "be quiet (no output except error messages)"
+        )
+        descriptors["v"] = (
+            "verbose", y.alert_level_up, y.alert_level(y.L_NOTICE),
+            "increase verbosity"
+        )
     ovc = OptionValueContainer(descriptors, args)
     exception = None
     try:
